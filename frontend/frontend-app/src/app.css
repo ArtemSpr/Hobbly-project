@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@500&family=Montserrat&display=swap');
+
+:root {
+    --color-dark-teal: #073b3a;
+    --color-yellow: #f5ff65;
+    --color-green: #65ff81;
+    --color-deep-dark: #021919;
+    --color-gray: #8f8f8f;
+    --color-white: #ffffff;
+}
+
+/* Об'єднані стилі для кнопок */
+.btn-style {
+    padding: 15px 16px;
+    border-radius: 50px;
+    text-align: center;
+    width: 85%;
+    margin: 0 auto 15px auto;
+    font-family: 'Kanit', sans-serif;
+    font-size: 18px;
+    cursor: pointer;
+    /* Додано, щоб було зрозуміло, що це клікабельний елемент */
+}
+
+/* Розділяємо специфічні стилі для кнопок */
+.signUp,
+.signIn {
+    background-color: var(--color-green);
+}
+
+.skipPassword {
+    padding: 13px 14px;
+    color: var(--color-green);
+    border: 2px solid var(--color-green);
+}
+
+/* Медіа-запит для мобільних пристроїв */
+@media only screen and (max-width: 425px) {
+    .app {
+        background-color: var(--color-dark-teal);
+        width: 100vw;
+        height: 100vh;
+    }
+
+    .register-page {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        width: 100%;
+    }
+
+    .logo-side {
+        width: 100%;
+        height: 425px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .logo-side img {
+        width: 70vw;
+        margin: 10vw 0 0 0;
+    }
+
+    .buttons-side {
+        padding-top: 150px;
+    }
+
+    .version {
+        text-align: center;
+        margin: 5vh auto 12px auto;
+        color: var(--color-gray);
+        font-family: 'Montserrat', sans-serif;
+    }
+}
