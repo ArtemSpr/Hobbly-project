@@ -23,7 +23,6 @@ a {
     font-family: 'Kanit', sans-serif;
     font-size: 18px;
     cursor: pointer;
-
 }
 
 .signUp,
@@ -37,43 +36,45 @@ a {
     border: 2px solid var(--color-green);
 }
 
-@media only screen and (max-width: 425px) {
-    .app {
-        background-color: var(--color-dark-teal);
-        width: 100vw;
-        height: 100vh;
-    }
+.app {
+    background-color: var(--color-dark-teal);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-    .register-page {
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-        width: 100%;
-    }
+.register-page {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 429px;
+    padding: 20px;
+    box-sizing: border-box;
+}
 
-    .logo-side {
-        width: 100%;
-        height: 425px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+.logo-side {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 0;
+}
 
-    .logo-side img {
-        width: 70vw;
-        margin: 10vw 0 0 0;
-    }
+.logo-side img {
+    max-width: 70vw;
+    height: auto;
+}
 
-    .buttons-side {
-        display: flex;
-        flex-direction: column;
-        padding-top: 150px;
-    }
+.buttons-side {
+    display: flex;
+    flex-direction: column;
+    padding-top: 100px;
+}
 
-    .version {
-        text-align: center;
-        margin: 5vh auto 12px auto;
-        color: var(--color-gray);
-        font-family: 'Montserrat', sans-serif;
-    }
+.version {
+    text-align: center;
+    margin-top: 20px;
+    color: var(--color-gray);
+    font-family: 'Montserrat', sans-serif;
 }

@@ -33,6 +33,10 @@ const UserForm = () => {
   const getStarted = (e) => {
     e.preventDefault();
 
+    if (isNameInvalid || isEmailInvalid || isPasswordInvalid) {
+      return; // блокуємо відправку, якщо є помилки
+    }
+
     console.log("Name:", NameValue);
     console.log("Email:", EmailValue);
     console.log("Password:", PasswordValue);
@@ -51,6 +55,7 @@ const UserForm = () => {
         </h2>
       </div>
       <form className="card-form" onSubmit={getStarted}>
+        {/* Full name */}
         <div className="input">
           <input
             type="text"
@@ -61,7 +66,12 @@ const UserForm = () => {
             onChange={handleNameChanges}
           />
           <label className="input-label">Full name</label>
+          {isNameInvalid && (
+            <p className="error-text">Name must be at least 3 characters</p>
+          )}
         </div>
+
+        {/* Email */}
         <div className="input">
           <input
             type="email"
@@ -72,7 +82,12 @@ const UserForm = () => {
             onChange={handleEmailChange}
           />
           <label className="input-label">Email</label>
+          {isEmailInvalid && (
+            <p className="error-text">Please enter a valid email</p>
+          )}
         </div>
+
+        {/* Password */}
         <div className="input">
           <input
             type="password"
@@ -85,7 +100,13 @@ const UserForm = () => {
             onChange={handlePasswordChange}
           />
           <label className="input-label">Password</label>
+          {isPasswordInvalid && (
+            <p className="error-text">
+              Password must be at least 8 characters and contain a number
+            </p>
+          )}
         </div>
+
         <div className="action">
           <button type="submit" className="action-button">
             Get started

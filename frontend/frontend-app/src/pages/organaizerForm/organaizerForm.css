@@ -9,30 +9,43 @@
     --color-white: #ffffff;
 }
 
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    background-color: var(--color-dark-teal);
+    font-family: Montserrat, sans-serif;
+    color: var(--color-white);
+}
+
 *,
-*::after,
-*::before {
+*:after,
+*:before {
     box-sizing: border-box;
 }
 
 img {
     max-width: 100%;
+    height: auto;
     display: block;
 }
 
 input {
     appearance: none;
     border-radius: 0;
+    font-family: inherit;
 }
 
-.card {
+.card-org {
     display: flex;
     flex-direction: column;
     width: 100%;
     max-width: 425px;
-    height: 100vh;
-    background-color: var(--color-dark-teal);
+    min-height: 100vh;
     padding: 0.75rem;
+    margin: 0 auto;
 }
 
 .card-image {
@@ -43,6 +56,8 @@ input {
     background-size: 150%;
     background-position: 0 5%;
     position: relative;
+    flex-shrink: 0;
+    /* Prevents the image from shrinking */
 }
 
 .card-heading {
@@ -64,8 +79,11 @@ input {
     margin-top: 0.25em;
 }
 
-.card-form {
-    padding: 10rem 1rem 0;
+.card-form-org {
+    padding: 0 1rem;
+    padding-top: 5rem;
+    flex-grow: 1;
+    /* Allows the form to take up available space */
 }
 
 .input {
@@ -73,7 +91,6 @@ input {
     flex-direction: column-reverse;
     position: relative;
     padding-top: 1.5rem;
-    font-family: Montserrat, sans-serif;
 }
 
 .input+.input {
@@ -111,26 +128,11 @@ input {
 }
 
 .input-field-red {
-    border: 0;
-    z-index: 1;
-    background-color: transparent;
-    border-bottom: 2px solid var(--color-gray);
-    font: inherit;
-    font-size: 1.125rem;
-    padding: 0.25rem 0;
-    color: var(--color-white);
-}
-
-.input-field-red:focus,
-.input-field-red:valid {
-    outline: 0;
     border-bottom-color: red;
 }
 
-.input-field-red:focus+.input-label,
-.input-field-red:valid+.input-label {
+.input-field-red+.input-label {
     color: red;
-    transform: translateY(-1.5rem);
 }
 
 .action {
