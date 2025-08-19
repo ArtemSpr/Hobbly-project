@@ -15,8 +15,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = "MyApp",     // твой Issuer
-            ValidAudience = "MyApp",   // твой Audience
+            ValidIssuer = "MyApp",
+            ValidAudience = "MyApp",
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("this_is_a_super_secret_key_1234567!"))
         };
     });

@@ -15,7 +15,7 @@ public class AuthController : ControllerBase
     public IActionResult Register([FromBody] UserDto request)
     {
         if (Users.Any(u => u.Email == request.Email))
-            return BadRequest("Пользователь уже существует");
+            return BadRequest("User already registered");
 
         var user = new User
         {
@@ -25,17 +25,17 @@ public class AuthController : ControllerBase
         };
 
         Users.Add(user);
-        return Ok("Регистрация успешна");
+        return Ok("Registration succesfull ");
     }
 
     [HttpPost("login")]
     public IActionResult Login([FromBody] UserDto request)
     {
         var user = Users.SingleOrDefault(u => u.Email == request.Email);
-        if (user == null) return BadRequest("Пользователь не найден");
+        if (user == null) return BadRequest("User not found");
 
         if (user.PasswordHash != HashPassword(request.Password))
-            return BadRequest("Неверный пароль");
+            return BadRequest("Wrong password");
 
         var token = CreateToken(user);
         return Ok(new { token });
@@ -53,7 +53,7 @@ public class AuthController : ControllerBase
         var claims = new List<Claim>
         {
             new Claim(ClaimTypes.Name, user.Email),
-            new Claim(ClaimTypes.Role, "User") // можно разные роли
+            new Claim(ClaimTypes.Role, "User") // different roles
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("this_is_a_super_secret_key_1234567!"));
