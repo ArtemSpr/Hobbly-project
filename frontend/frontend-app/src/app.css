@@ -9,7 +9,11 @@
     --color-white: #ffffff;
 }
 
-/* Об'єднані стилі для кнопок */
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
 .btn-style {
     padding: 15px 16px;
     border-radius: 50px;
@@ -19,10 +23,9 @@
     font-family: 'Kanit', sans-serif;
     font-size: 18px;
     cursor: pointer;
-    /* Додано, щоб було зрозуміло, що це клікабельний елемент */
+
 }
 
-/* Розділяємо специфічні стилі для кнопок */
 .signUp,
 .signIn {
     background-color: var(--color-green);
@@ -34,7 +37,6 @@
     border: 2px solid var(--color-green);
 }
 
-/* Медіа-запит для мобільних пристроїв */
 @media only screen and (max-width: 425px) {
     .app {
         background-color: var(--color-dark-teal);
@@ -63,6 +65,8 @@
     }
 
     .buttons-side {
+        display: flex;
+        flex-direction: column;
         padding-top: 150px;
     }
 

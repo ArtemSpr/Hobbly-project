@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@500&family=Montserrat&display=swap');
+
+:root {
+    --color-dark-teal: #073b3a;
+    --color-yellow: #f5ff65;
+    --color-green: #65ff81;
+    --color-deep-dark: #021919;
+    --color-gray: #8f8f8f;
+    --color-white: #ffffff;
+}
+
+
+@media only screen and (max-width: 425px) {
+
+    .sing-up {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+        background-color: var(--color-deep-dark);
+        color: var(--color-white);
+        font-family: 'Montserrat', sans-serif;
+        text-align: center;
+    }
+
+    .role-title {
+        font-size: clamp(1.8rem, 4.5vw, 2.2rem);
+        font-weight: 500;
+        font-family: kanit;
+        margin: 100px 0 230px 0;
+        color: var(--color-white);
+        line-height: 1.2;
+    }
+
+    .user-role-selector {
+        width: 100%;
+        max-width: 350px;
+    }
+
+    .role-buttons-container {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .role-button {
+        width: 100%;
+        padding: 18px;
+        border: 2px solid var(--color-gray);
+        border-radius: 50px;
+        font-size: 1.1rem;
+        font-family: 'Montserrat', sans-serif;
+        background-color: transparent;
+        color: var(--color-white);
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+}
+
+
+.role-button:hover,
+.role-button:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.role-button:active {
+    transform: translateY(-1px);
+}
+
+.user-button {
+    color: var(--color-green);
+    border-color: var(--color-green);
+}
+
+.user-button:hover,
+.user-button:focus {
+    background-color: var(--color-green);
+    color: var(--color-deep-dark);
+}
+
+.organizer-button {
+    color: var(--color-yellow);
+    border-color: var(--color-yellow);
+}
+
+.organizer-button:hover,
+.organizer-button:focus {
+    background-color: var(--color-yellow);
+    color: var(--color-deep-dark);
+}

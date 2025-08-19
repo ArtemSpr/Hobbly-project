@@ -1,22 +1,26 @@
-import "./app.css";
+// src/App.js
 
-import Logo from "./assets/icons/bigGreenLogo.png";
+import "./app.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import SignUp from "./pages/singUp/singUp";
+import SingIn from "./pages/singIn";
+import StartPage from "./pages/startPage";
 
 function App() {
   return (
-    <div className="app">
-      <div className="register-page">
-        <div className="logo-side">
-          <img src={Logo} alt="Logo" />
-        </div>
-        <div className="buttons-side">
-          <div className="btn-style signUp">Sign Up</div>
-          <div className="btn-style signIn">Sign In</div>
-          <div className="btn-style skipPassword">Skip Password</div>
-        </div>
-        <div className="version">v0.1.1</div>
-      </div>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<StartPage />} />
+        <Route path="/signUp" element={<SignUp />} />
+        <Route path="/signIn" element={<SingIn />} />
+        <Route path="/skipPassword" element={<div>Skip Password Page</div>} />
+        <Route path="/user-form" element={<div>User Form Page</div>} />
+        <Route
+          path="/organizer-form"
+          element={<div>Organizer Form Page</div>}
+        />
+      </Routes>
+    </Router>
   );
 }
 
