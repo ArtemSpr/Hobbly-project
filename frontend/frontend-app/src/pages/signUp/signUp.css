@@ -1,0 +1,113 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@500&family=Montserrat&display=swap');
+
+:root {
+    --color-dark-teal: #073b3a;
+    --color-yellow: #f5ff65;
+    --color-green: #65ff81;
+    --color-deep-dark: #021919;
+    --color-gray: #8f8f8f;
+    --color-white: #ffffff;
+
+    --transition-fast: 0.25s ease;
+    --radius-large: 50px;
+}
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-deep-dark);
+    font-family: 'Montserrat', sans-serif;
+    color: var(--color-white);
+}
+
+/* ===== MOBILE FIRST ===== */
+.sign-up {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 100vh;
+    padding: 40px 20px;
+    background: linear-gradient(160deg, var(--color-dark-teal), var(--color-deep-dark));
+    text-align: center;
+}
+
+.role-title {
+    font-size: clamp(1.8rem, 4.5vw, 2.4rem);
+    font-weight: 600;
+    font-family: 'Kanit', sans-serif;
+    margin-top: 80px;
+    margin-bottom: 60px;
+    color: var(--color-white);
+    line-height: 1.3;
+    letter-spacing: 0.5px;
+}
+
+.user-role-selector {
+    width: 100%;
+    max-width: 350px;
+    margin-bottom: 80px;
+}
+
+.role-buttons-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.role-button {
+    display: block;
+    text-align: center;
+    width: 100%;
+    padding: 18px;
+    border: 2px solid var(--color-gray);
+    border-radius: var(--radius-large);
+    font-size: 1.2rem;
+    font-weight: 500;
+    text-decoration: none;
+    background-color: transparent;
+    color: var(--color-white);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.role-button:hover,
+.role-button:focus {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+.role-button:active {
+    transform: translateY(-1px);
+}
+
+.user-button {
+    color: var(--color-green);
+    border-color: var(--color-green);
+}
+
+.user-button:hover,
+.user-button:focus {
+    background-color: var(--color-green);
+    color: var(--color-deep-dark);
+}
+
+.organizer-button {
+    color: var(--color-yellow);
+    border-color: var(--color-yellow);
+}
+
+.organizer-button:hover,
+.organizer-button:focus {
+    background-color: var(--color-yellow);
+    color: var(--color-deep-dark);
+}
+
+footer {
+    font-size: 0.85rem;
+    color: var(--color-gray);
+    margin-top: auto;
+    padding-bottom: 20px;
+}

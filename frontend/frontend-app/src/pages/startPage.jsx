@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Logo from "../assets/icons/bigGreenLogo.png";
+import "../app.css";
 
 const StartPage = () => {
   return (
@@ -10,7 +11,6 @@ const StartPage = () => {
           <img src={Logo} alt="Logo" />
         </div>
         <div className="buttons-side">
-          {/* Виправлення тут: додано атрибут `to` */}
           <Link to="/signUp" className="btn-style signUp">
             Sign Up
           </Link>
