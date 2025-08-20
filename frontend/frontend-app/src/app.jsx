@@ -3,7 +3,7 @@
 import "./app.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import SignUp from "./pages/singUp/singUp";
-import SingIn from "./pages/singIn";
+import SignIn from "./pages/signIn/SignIn";
 import StartPage from "./pages/startPage";
 
 function App() {
@@ -12,7 +12,7 @@ function App() {
       <Routes>
         <Route path="/" element={<StartPage />} />
         <Route path="/signUp" element={<SignUp />} />
-        <Route path="/signIn" element={<SingIn />} />
+        <Route path="/signIn" element={<SignIn />} />
         <Route path="/skipPassword" element={<div>Skip Password Page</div>} />
         <Route path="/user-form" element={<div>User Form Page</div>} />
         <Route
