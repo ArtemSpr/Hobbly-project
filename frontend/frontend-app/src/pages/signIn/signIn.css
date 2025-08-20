@@ -36,7 +36,7 @@
     width: 100%;
     max-width: 300px;
     display: flex;
-    flex-direction: column; /* corrected from columns */
+    flex-direction: column;
     gap: 15px;
 }
 
@@ -62,7 +62,7 @@
     border: none;
     border-radius: 50px;
     background-color: var(--color-green);
-    color: var(--color-deep-green); /* fixed variable name */
+    color: var(--color-deep-green);
     font-size: 1.1rem;
     cursor: pointer;
     transition: background-color 0.2s ease;
