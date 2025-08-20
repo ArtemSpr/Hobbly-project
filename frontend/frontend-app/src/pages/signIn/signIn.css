@@ -1,0 +1,91 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@500&family=Montserrat&display=swap');
+
+:root {
+    --color-dark-teal: #073b3a;
+    --color-yellow: #f5ff65;
+    --color-green: #65ff81;
+    --color-deep-green: #021919;
+    --color-gray: #8f8f8f;
+    --color-white: #ffffff;
+}
+.sign-in-container {
+    background-color: var(--color-deep-green);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    color: var(--color-white);
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
+}
+
+.sign-in-container h2{
+    font-size: clamp(1.8rem, 5vw, 2.4rem);
+    font-family: 'Kanit', sans-serif;
+    margin: 80px 0 40px 0;
+    color: var(--color-white);
+}
+
+.sign-in-form {
+    width: 100%;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.sign-in-form input {
+    width: 100%;
+    padding: 14px;
+    font-size: 1rem;
+    border: 2px solid var(--color-gray);
+    border-radius: 50px;
+    background-color: transparent;
+    color: var(--color-white);
+    outline: none;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.sign-in-form input::placeholder {
+    color: var(--color-gray);
+}
+
+.sign-in-form button {
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 50px;
+    background-color: var(--color-green);
+    color: var(--color-deep-green);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.sign-in-form button:hover {
+    background-color: #4de46b;
+}
+
+.sign-in-links {
+    margin-top: 25px;
+    font-size: 0.9rem;
+    color: var(--color-gray);
+}
+
+.sign-in-links a {
+  color: var(--color-yellow);
+  text-decoration: none;
+  display: block;
+  margin-top: 8px;
+}
+
+.sign-in-links a:hover {
+  text-decoration: underline;
+}
