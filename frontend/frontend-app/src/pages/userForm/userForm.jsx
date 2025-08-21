@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import axios from "axios";
 
 import "./userForm.css";
 
@@ -11,6 +12,14 @@ const UserForm = () => {
   const [isNameInvalid, setIsNameInvalid] = useState(false);
   const [isEmailInvalid, setIsEmailInvalid] = useState(false);
   const [isPasswordInvalid, setIsPasswordInvalid] = useState(false);
+
+  //! TO DO: Submit func. work even if input are empty
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
 
   const handleNameChanges = (e) => {
     const value = e.target.value;
@@ -30,11 +39,31 @@ const UserForm = () => {
     setIsPasswordInvalid(!value || value.length < 8 || !/\d/.test(value));
   };
 
-  const getStarted = (e) => {
+  const getStarted = async (e) => {
     e.preventDefault();
 
     if (isNameInvalid || isEmailInvalid || isPasswordInvalid) {
-      return; // блокуємо відправку, якщо є помилки
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/auth/register`,
+        {
+          name: NameValue,
+          email: EmailValue,
+          password: PasswordValue,
+        }
+      );
+      console.log("User created:", response.data);
+
+      if (response.status === 200) {
+        console.log("✅ WellDone:", response.data);
+      } else {
+        console.error("❌ Error:", response.status);
+      }
+    } catch (error) {
+      console.error("Error creating user:", error);
     }
 
     console.log("Name:", NameValue);
