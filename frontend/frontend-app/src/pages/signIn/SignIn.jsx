@@ -1,6 +1,7 @@
 import "./signIn.css";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const SignIn = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -13,11 +14,19 @@ const SignIn = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/auth/login`,
+        formData
+      );
+      console.log("Sign In Response:", response.data);
+    } catch (error) {}
     console.log("Sign In Data:", formData);
-    
-    navigate("/home");
+
+    navigate("/");
   };
 
   return (

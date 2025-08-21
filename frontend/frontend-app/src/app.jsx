@@ -2,11 +2,13 @@
 
 import "./app.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import SignUp from "./pages/singUp/singUp";
+import SignUp from "./pages/signUp/signUp";
 import SignIn from "./pages/signIn/SignIn";
 import StartPage from "./pages/startPage";
 import UserForm from "./pages/userForm/userForm";
 import OrganaizerForm from "./pages/organaizerForm/organaizerForm";
+
+//! TO DO: Think where you should use token from login response
 
 function App() {
   return (
