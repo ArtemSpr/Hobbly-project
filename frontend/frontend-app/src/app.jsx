@@ -5,6 +5,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import SignUp from "./pages/signUp/signUp";
 import SignIn from "./pages/signIn/SignIn";
 import StartPage from "./pages/startPage";
+HEAD
+import ForgotPassword from './pages/forgotPassword/forgotPassword';
 import UserForm from "./pages/userForm/userForm";
 import OrganaizerForm from "./pages/organaizerForm/organaizerForm";
 
@@ -17,6 +19,7 @@ function App() {
         <Route path="/" element={<StartPage />} />
         <Route path="/signUp" element={<SignUp />} />
         <Route path="/signIn" element={<SignIn />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/skipPassword" element={<div>Skip Password Page</div>} />
         <Route path="/user-form" element={<UserForm />} />
         <Route
