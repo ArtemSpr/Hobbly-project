@@ -1,19 +1,21 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 
 import "./userForm.css";
 
 const UserForm = () => {
+  const navigate = useNavigate();
   const [NameValue, setNameValue] = useState("");
   const [EmailValue, setEmailValue] = useState("");
   const [PasswordValue, setPasswordValue] = useState("");
 
-  const [isNameInvalid, setIsNameInvalid] = useState(false);
-  const [isEmailInvalid, setIsEmailInvalid] = useState(false);
-  const [isPasswordInvalid, setIsPasswordInvalid] = useState(false);
+  const [isNameTouched, setIsNameTouched] = useState(false);
+  const [isEmailTouched, setIsEmailTouched] = useState(false);
+  const [isPasswordTouched, setIsPasswordTouched] = useState(false);
 
   //! TO DO: Submit func. work even if input are empty
+  //! TO DO: Submit func. work even if you entered only email
 
   const [formData, setFormData] = useState({
     name: "",
@@ -21,22 +23,27 @@ const UserForm = () => {
     password: "",
   });
 
+  const isNameInvalid = NameValue.length < 3;
+  const isEmailInvalid = !EmailValue || !/\S+@\S+\.\S+/.test(EmailValue);
+  const isPasswordInvalid =
+    !PasswordValue || PasswordValue.length < 8 || !/\d/.test(PasswordValue);
+
   const handleNameChanges = (e) => {
     const value = e.target.value;
     setNameValue(value);
-    setIsNameInvalid(!value || value.length < 3);
+    setIsNameTouched(true);
   };
 
   const handleEmailChange = (e) => {
     const value = e.target.value;
     setEmailValue(value);
-    setIsEmailInvalid(!value || !/\S+@\S+\.\S+/.test(value));
+    setIsEmailTouched(true);
   };
 
   const handlePasswordChange = (e) => {
     const value = e.target.value;
     setPasswordValue(value);
-    setIsPasswordInvalid(!value || value.length < 8 || !/\d/.test(value));
+    setIsPasswordTouched(true);
   };
 
   const getStarted = async (e) => {
@@ -59,11 +66,19 @@ const UserForm = () => {
 
       if (response.status === 200) {
         console.log("✅ WellDone:", response.data);
-      } else {
-        console.error("❌ Error:", response.status);
+        navigate("/navigation");
       }
     } catch (error) {
-      console.error("Error creating user:", error);
+      if (error.response) {
+        console.error("Server error:", error.response.data);
+        if (error.response.status === 400) {
+          console.log("❌ This email is already registered");
+        }
+      } else if (error.request) {
+        console.error("No response from server");
+      } else {
+        console.error("Axios error:", error.message);
+      }
     }
 
     console.log("Name:", NameValue);
@@ -78,6 +93,13 @@ const UserForm = () => {
   return (
     <div className="card">
       <div className="card-image">
+        <button
+          type="button"
+          onClick={() => navigate(-1)}
+          className="back-button"
+        >
+          ←
+        </button>
         <h2 className="card-heading">
           Get started
           <small>Let us create your account</small>
@@ -95,7 +117,7 @@ const UserForm = () => {
             onChange={handleNameChanges}
           />
           <label className="input-label">Full name</label>
-          {isNameInvalid && (
+          {isNameInvalid && isNameTouched && (
             <p className="error-text">Name must be at least 3 characters</p>
           )}
         </div>
@@ -111,7 +133,7 @@ const UserForm = () => {
             onChange={handleEmailChange}
           />
           <label className="input-label">Email</label>
-          {isEmailInvalid && (
+          {isEmailInvalid && isEmailTouched && (
             <p className="error-text">Please enter a valid email</p>
           )}
         </div>
@@ -129,7 +151,7 @@ const UserForm = () => {
             onChange={handlePasswordChange}
           />
           <label className="input-label">Password</label>
-          {isPasswordInvalid && (
+          {isPasswordInvalid && isPasswordTouched && (
             <p className="error-text">
               Password must be at least 8 characters and contain a number
             </p>
