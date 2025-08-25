@@ -1,0 +1,26 @@
+@api_HostAddress = http://localhost:5234
+
+GET {{api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+POST {{api_HostAddress}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "test@mail.com",
+  "password": "123456"
+}
+
+###
+POST {{api_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@mail.com",
+  "password": "123456"
+}
+
+###
+GET {{api_HostAddress}}/api/secure/profile
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdEBtYWlsLmNvbSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE3NTU2MzI5NzEsImlzcyI6Ik15QXBwIiwiYXVkIjoiTXlBcHAifQ.EOzrzTH1LhZG0CKK5vrE5BM5ZcI_6b3MhxyYjOePoDU
