@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import "./organaizerForm.css";
 
 const OrganaizerForm = () => {
@@ -105,7 +106,6 @@ const OrganaizerForm = () => {
   const getStarted = (e) => {
     e.preventDefault();
 
-    // перевірка всіх обов'язкових полів
     const isFormInvalid =
       !NameValue ||
       !EmailValue ||
@@ -127,7 +127,6 @@ const OrganaizerForm = () => {
       isOrganizationTypeInvalid;
 
     if (isFormInvalid) {
-      // можна показати alert або просто не відправляти форму
       return;
     }
 
@@ -142,7 +141,6 @@ const OrganaizerForm = () => {
     console.log("ID Number:", IdentificationNumberValue);
     console.log("Organization Type:", OrganizationTypeValue);
 
-    // скидання форми
     setNameValue("");
     setEmailValue("");
     setPasswordValue("");
@@ -159,6 +157,11 @@ const OrganaizerForm = () => {
   return (
     <div className="card-org">
       <div className="card-image">
+        <div className="back-button">
+          <Link to="/signUp" className="back-link">
+            ←
+          </Link>
+        </div>
         <h2 className="card-heading">
           Get started
           <small>Let us create your Organaizer account</small>
