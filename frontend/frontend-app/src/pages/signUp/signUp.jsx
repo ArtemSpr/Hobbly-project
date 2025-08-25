@@ -14,6 +14,11 @@ const SignUp = () => {
             Organizer
           </Link>
         </div>
+        <div className="back-button">
+          <Link to="/" className="back-link">
+            ←
+          </Link>
+        </div>
       </div>
       <footer>© 2025 YourApp. All rights reserved.</footer>
     </div>
