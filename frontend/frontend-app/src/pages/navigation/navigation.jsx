@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
 import "./navigation.css";
 
 import Logo from "../../assets/icons/yellow-big-logo.png";
@@ -10,11 +11,34 @@ import SecEventImage from "../../assets/image/event-2.webp";
 import ThirdEventImage from "../../assets/image/event-3.webp";
 
 //! TO DO: header must hide on scroll
+//! TO DO: footer icon and text must be in the same line
+//! TO DO: active page should be yellow in footer
+//! TO DO: create all other page
 
 const Navigation = () => {
+  useEffect(() => {
+    let lastScroll = 0;
+    const header = document.getElementById("main-header");
+
+    if (!header) return;
+
+    const handleScroll = () => {
+      const currentScroll = window.scrollY;
+      if (currentScroll > lastScroll) {
+        header.classList.add("hidden");
+      } else {
+        header.classList.remove("hidden");
+      }
+      lastScroll = currentScroll;
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
   return (
     <div className="navigation">
-      <header>
+      <header id="main-header" className="navi-header">
         <div className="navi-logo">
           <img src={Logo} alt="Logo" />
         </div>
@@ -62,7 +86,7 @@ const Navigation = () => {
           </div>
         </div>
       </main>
-      <footer>
+      <footer className="navigation-footer">
         <div className="footer-el">
           <Link to="/navigation" className="active">
             <img src={HomeIcon} alt="Home" />

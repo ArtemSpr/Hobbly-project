@@ -19,13 +19,23 @@
 
 /* Decorate header elements */
 
-header {
+.navi-header {
+    width: 100%;
+    height: 80px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 80px;
+    position: fixed;
+    top: 0;
+    left: 0;
     padding: 10px;
     background-color: var(--color-dark-teal);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+}
+
+.navi-header.hidden {
+    transform: translateY(-100%);
 }
 
 .navi-logo img {
@@ -40,6 +50,7 @@ header {
 
 .main-content {
     flex: 1;
+    padding: 80px 0 100px 0;
 }
 
 .event-cards-container {
@@ -104,7 +115,15 @@ header {
 
 
 /* Decorate footer elements */
-footer {
+
+.footer-el a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.navigation-footer {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -125,26 +144,3 @@ footer {
     font-family: Montserrat;
     font-size: 16px;
 }
-
-/*
-Фон усього застосунку → --color-deep-green: #021919
-
-Хедер (де LOGO і пошук) → --color-dark-teal: #073b3a
-
-Текст LOGO → --color-yellow: #f5ff65
-
-Іконка пошуку → --color-white: #ffffff 
-на фоні --color-green: #65ff81
-
-Картки (фон картки) → --color-white: #ffffff
-Рамка картки → --color-gray: #8f8f8f (тонка тінь/бордер).
-Назва організації (Organization name) → --color-gray: #8f8f8f (менш контрастний вторинний текст).
-Основний заголовок (Lorem Ipsum) → --color-dark-teal: #073b3a (головний колір для тексту).
-Опис → --color-gray: #8f8f8f.
-Нижня навігація (фон) → --color-dark-teal: #073b3a.
-
-Текст кнопок меню →
-Активна сторінка → --color-yellow: #f5ff65
-Неактивні сторінки → --color-white: #ffffff
-Іконки → аналогічно тексту: активна жовта, неактивні білі.
-*/
