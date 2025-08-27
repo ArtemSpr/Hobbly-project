@@ -20,7 +20,6 @@ function App() {
         <Route path="/signUp" element={<SignUp />} />
         <Route path="/signIn" element={<SignIn />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/skipPassword" element={<div>Skip Password Page</div>} />
         <Route path="/user-form" element={<UserForm />} />
         <Route path="/organizer-form" element={<OrganaizerForm />} />
         <Route path="/navigation" element={<Navigation />} />
