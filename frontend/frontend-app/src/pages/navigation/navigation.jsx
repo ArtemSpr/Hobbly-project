@@ -16,27 +16,83 @@ import ThirdEventImage from "../../assets/image/event-3.webp";
 
 const Navigation = () => {
   const [events, setEvents] = useState([]);
-
-  useEffect(() => {
-    async function fetchEvents() {
-      try {
-        const response = await axios.get(
-          "https://api.hel.fi/linkedevents/v1/event/"
-        );
-        if (response.status === 200) {
-          const uniqueEvents = response.data.data.filter(
-            (event, index, self) =>
-              index === self.findIndex((e) => e.id === event.id)
-          );
-          setEvents(uniqueEvents);
+  const [apiPage, setApiPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [seenIds, setSeenIds] = useState(new Set());
+  const [apisLength, setApisLength] = useState(0);
+  const handleScroll = () => {
+    if (
+      window.scrollY + window.innerHeight >=
+        document.documentElement.scrollHeight - 10 &&
+      !loading
+    ) {
+      fetchEvents(apiPage).then((addedNew) => {
+        if (!addedNew) {
+          setApiPage((prev) => prev + 1);
+        } else {
+          setApiPage((prev) => prev + 1);
         }
-      } catch (error) {
-        console.error("Error fetching events:", error);
+      });
+    }
+  };
+
+  const fetchEvents = async (page) => {
+    setLoading(true);
+    let addedNew = false;
+
+    try {
+      const response = await axios.get(
+        `https://api.hel.fi/linkedevents/v1/event/?page=${page}`
+      );
+      console.log("Response URL: " + response.config.url);
+      if (response.status === 200) {
+        const newEvents = response.data.data.filter(
+          (event) => event.super_event === null
+        );
+
+        setEvents((prev) => {
+          const combined = [...prev, ...newEvents];
+          const unique = combined.filter(
+            (e, index, self) => index === self.findIndex((ev) => ev.id === e.id)
+          );
+
+          if (unique.length > prev.length) addedNew = true;
+
+          return unique;
+        });
       }
+    } catch (error) {
+      console.error("Error fetching events:", error);
+    } finally {
+      setLoading(false);
     }
 
-    fetchEvents();
-  }, []);
+    return addedNew;
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [loading, apiPage]);
+
+  useEffect(() => {
+    fetchEvents(apiPage);
+  }, [apiPage]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.scrollY + window.innerHeight >=
+          document.documentElement.scrollHeight - 10 &&
+        !loading
+      ) {
+        setApiPage((prev) => prev + 1);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [loading]);
 
   useEffect(() => {
     let lastScroll = 0;
@@ -58,6 +114,10 @@ const Navigation = () => {
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // ---------- URL CHECKING ----------
+  // console.log("Response URL: " + response.config.url);
+  // ---------- URL CHECKING ----------
   return (
     <div className="navigation">
       {/* ============ HEADER START ============ */}
