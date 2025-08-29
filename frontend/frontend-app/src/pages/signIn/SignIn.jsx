@@ -3,8 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import eyeIcon from "../../assets/icons/icons8-eye-48.png";
 import eyeSlashIcon from "../../assets/icons/icons8-closed-eye-24.png";
-
-
+import axios from "axios";
 
 const SignIn = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -44,10 +43,36 @@ const SignIn = () => {
     setPasswordValidations(validations);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/auth/login`,
+        formData
+      );
+
+      if (response.status === 200) {
+        console.log("✅ Login Successful:", response.data);
+        navigate("/navigation");
+      }
+    } catch (error) {
+      if (error.response) {
+        console.error("Server Error:", error.response.data);
+        alert(
+          error.response.data.error ||
+            "Login failed. Please check your credentials."
+        );
+      } else if (error.request) {
+        console.error("No response from server:", error.request);
+        alert("Server is not responding. Please try again later.");
+      } else {
+        console.error("Error:", error.message);
+        alert("An unexpected error occurred.");
+      }
+    }
     console.log("Sign In Data:", formData);
-    navigate("/home");
+    navigate("/");
   };
 
   return (

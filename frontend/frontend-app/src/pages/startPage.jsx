@@ -17,7 +17,7 @@ const StartPage = () => {
           <Link to="/signIn" className="btn-style signIn">
             Sign In
           </Link>
-          <Link to="/skipPassword" className="btn-style skipPassword">
+          <Link to="/navigation" className="btn-style skipPassword">
             Skip Password
           </Link>
         </div>

@@ -45,6 +45,18 @@ input {
     position: relative;
 }
 
+.back-button {
+    color: var(--color-white);
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+
 .card-heading {
     position: absolute;
     left: 10%;
