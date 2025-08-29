@@ -89,3 +89,86 @@
 .sign-in-links a:hover {
   text-decoration: underline;
 }
+
+
+.password-checklist {
+  list-style: none;
+  margin-top: 5px;
+  padding: 10px 20px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  font-size: 0.85rem;
+  text-align: left;
+  color: var(--color-gray);
+}
+
+.password-checklist li {
+  margin-bottom: 6px;
+  padding-left: 22px;
+  position: relative;
+  line-height: 1.4;
+}
+
+.password-checklist li::before {
+  content: "✖";
+  position: absolute;
+  left: 0;
+  color: red;
+  font-weight: bold;
+}
+
+.password-checklist li.valid {
+  color: var(--color-green);
+}
+
+.password-checklist li.valid::before {
+  content: "✔";
+  color: var(--color-green);
+}
+
+
+
+.password-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.password-input-wrapper input {
+  padding-right: 50px; 
+  width: 100%;
+  border-radius: 50px;
+  padding: 14px;
+  font-size: 1rem;
+  border: 2px solid var(--color-gray);
+  background-color: transparent;
+  color: var(--color-white);
+  outline: none;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.password-toggle-icon {
+  position: absolute;
+  top: 50%;
+  right: 18px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.7;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.password-toggle-icon img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: brightness(0) invert(1); 
+}
+
+.password-toggle-icon:hover {
+  opacity: 1;
+  transform: translateY(-50%) scale(1.05);
+}
