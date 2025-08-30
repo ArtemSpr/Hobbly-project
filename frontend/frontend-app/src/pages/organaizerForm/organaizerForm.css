@@ -9,6 +9,12 @@
     --color-white: #ffffff;
 }
 
+*,
+*:after,
+*:before {
+    box-sizing: border-box;
+}
+
 html,
 body {
     margin: 0;
@@ -20,22 +26,10 @@ body {
     color: var(--color-white);
 }
 
-*,
-*:after,
-*:before {
-    box-sizing: border-box;
-}
-
 img {
     max-width: 100%;
     height: auto;
     display: block;
-}
-
-input {
-    appearance: none;
-    border-radius: 0;
-    font-family: inherit;
 }
 
 .card-org {
@@ -44,20 +38,29 @@ input {
     width: 100%;
     max-width: 425px;
     min-height: 100vh;
-    padding: 0.75rem;
     margin: 0 auto;
+    padding: 0.75rem;
+    background-color: var(--color-dark-teal);
+    font-family: Montserrat, sans-serif;
+    color: var(--color-white);
 }
 
 .card-image {
     border-radius: 8px;
     overflow: hidden;
     padding-bottom: 45%;
-    background-repeat: no-repeat;
-    background-size: 150%;
-    background-position: 0 5%;
     position: relative;
-    flex-shrink: 0;
-    /* Prevents the image from shrinking */
+}
+
+.back-button {
+    color: var(--color-white);
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    left: 10px;
 }
 
 .card-heading {
@@ -68,8 +71,6 @@ input {
     font-size: 1.75rem;
     font-weight: 700;
     font-family: Kanit, sans-serif;
-    color: var(--color-white);
-    line-height: 1.222;
 }
 
 .card-heading small {
@@ -79,60 +80,78 @@ input {
     margin-top: 0.25em;
 }
 
-.card-form-org {
-    padding: 0 1rem;
-    padding-top: 5rem;
-    flex-grow: 1;
-    /* Allows the form to take up available space */
+.card-form {
+    padding: 5rem 1rem 0;
 }
 
-.input {
-    display: flex;
-    flex-direction: column-reverse;
+/* Inputs */
+.userForm-input,
+.password-input-wrapper {
+    width: 100%;
+    margin-bottom: 1.5rem;
     position: relative;
-    padding-top: 1.5rem;
 }
 
-.input+.input {
-    margin-top: 1.5rem;
-}
-
-.input-label {
-    color: var(--color-gray);
-    position: absolute;
-    top: 1.5rem;
-    transition: 0.25s ease;
-}
-
-.input-field {
-    border: 0;
-    z-index: 1;
+.userForm-input input,
+.password-input-wrapper input {
+    width: 100%;
+    padding: 14px;
+    padding-right: 50px;
+    font-size: 1rem;
+    border: 2px solid var(--color-gray);
+    border-radius: 50px;
     background-color: transparent;
-    border-bottom: 2px solid var(--color-gray);
-    font: inherit;
-    font-size: 1.125rem;
-    padding: 0.25rem 0;
     color: var(--color-white);
-}
-
-.input-field:focus,
-.input-field:valid {
-    outline: 0;
-    border-bottom-color: var(--color-green);
-}
-
-.input-field:focus+.input-label,
-.input-field:valid+.input-label {
-    color: var(--color-green);
-    transform: translateY(-1.5rem);
+    outline: none;
 }
 
 .input-field-red {
-    border-bottom-color: red;
+    border-color: red;
 }
 
-.input-field-red+.input-label {
+/* Password toggle */
+.password-toggle-icon {
+    position: absolute;
+    top: 50%;
+    right: 18px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    width: 22px;
+    height: 22px;
+}
+
+/* Checklist */
+.password-checklist {
+    list-style: none;
+    margin-top: 5px;
+    padding: 10px 20px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    font-size: 0.85rem;
+    color: var(--color-gray);
+}
+
+.password-checklist li {
+    margin-bottom: 6px;
+    padding-left: 22px;
+    position: relative;
+}
+
+.password-checklist li::before {
+    content: "✖";
+    position: absolute;
+    left: 0;
     color: red;
+    font-weight: bold;
+}
+
+.password-checklist li.valid::before {
+    content: "✔";
+    color: var(--color-green);
+}
+
+.password-checklist li.valid {
+    color: var(--color-green);
 }
 
 .action {
@@ -140,28 +159,17 @@ input {
 }
 
 .action-button {
-    font: inherit;
-    font-size: 1.25rem;
-    padding: 1em;
     width: 100%;
+    padding: 1em;
+    font-size: 1.25rem;
     font-weight: 500;
     font-family: Montserrat, sans-serif;
     background-color: var(--color-green);
     border-radius: 6px;
     color: var(--color-deep-dark);
     border: 0;
+    cursor: pointer;
 }
-
-.action-button:focus {
-    outline: 0;
-}
-
-.error-text {
-    color: red;
-    font-size: 0.85rem;
-    margin-top: 4px;
-}
-
 
 input:-webkit-autofill {
     -webkit-box-shadow: 0 0 0px 1000px var(--color-dark-teal) inset !important;

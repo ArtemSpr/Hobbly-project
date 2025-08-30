@@ -9,20 +9,13 @@
     --color-white: #ffffff;
 }
 
-*,
-*::after,
-*::before {
+* {
     box-sizing: border-box;
 }
 
 img {
     max-width: 100%;
     display: block;
-}
-
-input {
-    appearance: none;
-    border-radius: 0;
 }
 
 .card {
@@ -39,9 +32,6 @@ input {
     border-radius: 8px;
     overflow: hidden;
     padding-bottom: 45%;
-    background-repeat: no-repeat;
-    background-size: 150%;
-    background-position: 0 5%;
     position: relative;
 }
 
@@ -56,7 +46,6 @@ input {
     left: 10px;
 }
 
-
 .card-heading {
     position: absolute;
     left: 10%;
@@ -66,7 +55,6 @@ input {
     font-weight: 700;
     font-family: Kanit, sans-serif;
     color: var(--color-white);
-    line-height: 1.222;
 }
 
 .card-heading small {
@@ -80,69 +68,74 @@ input {
     padding: 10rem 1rem 0;
 }
 
-.input {
-    display: flex;
-    flex-direction: column-reverse;
+.userForm-input,
+.password-input-wrapper {
+    width: 100%;
+    margin-bottom: 1.5rem;
     position: relative;
-    padding-top: 1.5rem;
-    font-family: Montserrat, sans-serif;
 }
 
-.input+.input {
-    margin-top: 1.5rem;
+.userForm-input input,
+.password-input-wrapper input {
+    width: 100%;
+    padding: 14px;
+    padding-right: 50px;
+    font-size: 1rem;
+    border: 2px solid var(--color-gray);
+    border-radius: 50px;
+    background-color: transparent;
+    color: var(--color-white);
+    outline: none;
+    font-family: 'Montserrat', sans-serif;
 }
 
-.input-label {
-    color: var(--color-gray);
+.password-toggle-icon {
     position: absolute;
-    top: 1.5rem;
-    transition: 0.25s ease;
+    top: 50%;
+    right: 18px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    width: 22px;
+    height: 22px;
 }
 
-.input-field {
-    border: 0;
-    z-index: 1;
-    background-color: transparent;
-    border-bottom: 2px solid var(--color-gray);
-    font: inherit;
-    font-size: 1.125rem;
-    padding: 0.25rem 0;
-    color: var(--color-white);
-}
-
-.input-field:focus,
-.input-field:valid {
-    outline: 0;
-    border-bottom-color: var(--color-green);
-}
-
-.input-field:focus+.input-label,
-.input-field:valid+.input-label {
-    color: var(--color-green);
-    transform: translateY(-1.5rem);
-}
-
-.input-field-red {
-    border: 0;
-    z-index: 1;
-    background-color: transparent;
-    border-bottom: 2px solid var(--color-gray);
-    font: inherit;
-    font-size: 1.125rem;
-    padding: 0.25rem 0;
-    color: var(--color-white);
-}
-
-.input-field-red:focus,
-.input-field-red:valid {
-    outline: 0;
-    border-bottom-color: red;
-}
-
-.input-field-red:focus+.input-label,
-.input-field-red:valid+.input-label {
+.error-text {
     color: red;
-    transform: translateY(-1.5rem);
+    font-size: 0.85rem;
+    margin-top: 6px;
+}
+
+.password-checklist {
+    list-style: none;
+    margin-top: 5px;
+    padding: 10px 20px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    font-size: 0.85rem;
+    color: var(--color-gray);
+}
+
+.password-checklist li {
+    margin-bottom: 6px;
+    padding-left: 22px;
+    position: relative;
+}
+
+.password-checklist li::before {
+    content: "✖";
+    position: absolute;
+    left: 0;
+    color: red;
+    font-weight: bold;
+}
+
+.password-checklist li.valid::before {
+    content: "✔";
+    color: var(--color-green);
+}
+
+.password-checklist li.valid {
+    color: var(--color-green);
 }
 
 .action {
@@ -150,36 +143,19 @@ input {
 }
 
 .action-button {
-    font: inherit;
-    font-size: 1.25rem;
-    padding: 1em;
     width: 100%;
+    padding: 1em;
+    font-size: 1.25rem;
     font-weight: 500;
     font-family: Montserrat, sans-serif;
     background-color: var(--color-green);
     border-radius: 6px;
     color: var(--color-deep-dark);
     border: 0;
+    cursor: pointer;
 }
-
-.action-button:focus {
-    outline: 0;
-}
-
-.error-text {
-    color: red;
-    font-size: 0.85rem;
-    margin-top: 4px;
-}
-
 
 input:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0px 1000px var(--color-dark-teal) inset !important;
-    -webkit-text-fill-color: #ffffff !important;
-    transition: background-color 5000s ease-in-out 0s;
-}
-
-input:-webkit-autofill:focus {
     -webkit-box-shadow: 0 0 0px 1000px var(--color-dark-teal) inset !important;
     -webkit-text-fill-color: #ffffff !important;
 }

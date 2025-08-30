@@ -12,10 +12,10 @@ const StartPage = () => {
         </div>
         <div className="buttons-side">
           <Link to="/signUp" className="btn-style signUp">
-            Sign Up
+            <span>Sign Up</span>
           </Link>
           <Link to="/signIn" className="btn-style signIn">
-            Sign In
+            <span>Sign In</span>
           </Link>
           <Link to="/navigation" className="btn-style skipPassword">
             Skip Password

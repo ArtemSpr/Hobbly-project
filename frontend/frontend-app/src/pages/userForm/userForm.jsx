@@ -1,93 +1,80 @@
-import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import eyeIcon from "../../assets/icons/icons8-eye-48.png";
+import eyeSlashIcon from "../../assets/icons/icons8-closed-eye-24.png";
 
 import "./userForm.css";
 
 const UserForm = () => {
   const navigate = useNavigate();
-  const [NameValue, setNameValue] = useState("");
-  const [EmailValue, setEmailValue] = useState("");
-  const [PasswordValue, setPasswordValue] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const [isNameTouched, setIsNameTouched] = useState(false);
   const [isEmailTouched, setIsEmailTouched] = useState(false);
   const [isPasswordTouched, setIsPasswordTouched] = useState(false);
 
-  //! TO DO: Submit func. work even if input are empty
-  //! TO DO: Submit func. work even if you entered only email
-
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
+  const [showPassword, setShowPassword] = useState(false);
+  const [passwordValidations, setPasswordValidations] = useState({
+    length: false,
+    upper: false,
+    lower: false,
+    number: false,
+    special: false,
   });
 
-  const isNameInvalid = NameValue.length < 3;
-  const isEmailInvalid = !EmailValue || !/\S+@\S+\.\S+/.test(EmailValue);
+  const isNameInvalid = name.length < 3;
+  const isEmailInvalid = !email || !/\S+@\S+\.\S+/.test(email);
   const isPasswordInvalid =
-    !PasswordValue || PasswordValue.length < 8 || !/\d/.test(PasswordValue);
+    !passwordValidations.length ||
+    !passwordValidations.upper ||
+    !passwordValidations.lower ||
+    !passwordValidations.number ||
+    !passwordValidations.special;
 
-  const handleNameChanges = (e) => {
-    const value = e.target.value;
-    setNameValue(value);
-    setIsNameTouched(true);
-  };
-
-  const handleEmailChange = (e) => {
-    const value = e.target.value;
-    setEmailValue(value);
-    setIsEmailTouched(true);
+  const validatePassword = (pass) => {
+    setPasswordValidations({
+      length: pass.length >= 8 && pass.length <= 20,
+      upper: /[A-Z]/.test(pass),
+      lower: /[a-z]/.test(pass),
+      number: /[0-9]/.test(pass),
+      special: /[!@#$%^&*(),.?":{}|<>]/.test(pass),
+    });
   };
 
   const handlePasswordChange = (e) => {
-    const value = e.target.value;
-    setPasswordValue(value);
+    const val = e.target.value;
+    setPassword(val);
     setIsPasswordTouched(true);
+    validatePassword(val);
   };
 
-  const getStarted = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsNameTouched(true);
+    setIsEmailTouched(true);
+    setIsPasswordTouched(true);
 
-    if (isNameInvalid || isEmailInvalid || isPasswordInvalid) {
-      return;
-    }
+    if (isNameInvalid || isEmailInvalid || isPasswordInvalid) return;
 
     try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/auth/register`,
-        {
-          name: NameValue,
-          email: EmailValue,
-          password: PasswordValue,
-        }
-      );
-      console.log("User created:", response.data);
+      const response = await axios.post(`/api/auth/register`, {
+        name,
+        email,
+        password,
+      });
 
       if (response.status === 200) {
-        console.log("✅ WellDone:", response.data);
         navigate("/navigation");
       }
     } catch (error) {
-      if (error.response) {
-        console.error("Server error:", error.response.data);
-        if (error.response.status === 400) {
-          console.log("❌ This email is already registered");
-        }
-      } else if (error.request) {
-        console.error("No response from server");
-      } else {
-        console.error("Axios error:", error.message);
-      }
+      console.error(
+        "Registration error:",
+        error.response?.data || error.message
+      );
     }
-
-    console.log("Name:", NameValue);
-    console.log("Email:", EmailValue);
-    console.log("Password:", PasswordValue);
-
-    setNameValue("");
-    setEmailValue("");
-    setPasswordValue("");
   };
 
   return (
@@ -105,58 +92,90 @@ const UserForm = () => {
           <small>Let us create your account</small>
         </h2>
       </div>
-      <form className="card-form" onSubmit={getStarted}>
+
+      <form className="card-form" onSubmit={handleSubmit}>
         {/* Full name */}
-        <div className="input">
+        <div className="userForm-input">
           <input
             type="text"
-            name="fullName"
-            className={`input-field ${isNameInvalid ? "input-field-red" : ""}`}
-            id="fullName"
-            value={NameValue}
-            onChange={handleNameChanges}
+            name="name"
+            placeholder="Full name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            onBlur={() => setIsNameTouched(true)}
+            className={`input-field ${
+              isNameInvalid && isNameTouched ? "input-field-red" : ""
+            }`}
           />
-          <label className="input-label">Full name</label>
-          {isNameInvalid && isNameTouched && (
-            <p className="error-text">Name must be at least 3 characters</p>
-          )}
         </div>
+        {isNameInvalid && isNameTouched && (
+          <ul className="password-checklist">
+            <li>Name must be at least 3 characters</li>
+          </ul>
+        )}
 
         {/* Email */}
-        <div className="input">
+        <div className="userForm-input">
           <input
             type="email"
             name="email"
-            className={`input-field ${isEmailInvalid ? "input-field-red" : ""}`}
-            id="email"
-            value={EmailValue}
-            onChange={handleEmailChange}
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            onBlur={() => setIsEmailTouched(true)}
+            className={`input-field ${
+              isEmailInvalid && isEmailTouched ? "input-field-red" : ""
+            }`}
           />
-          <label className="input-label">Email</label>
-          {isEmailInvalid && isEmailTouched && (
-            <p className="error-text">Please enter a valid email</p>
-          )}
         </div>
+        {isEmailInvalid && isEmailTouched && (
+          <ul className="password-checklist">
+            <li>Please enter a valid email</li>
+          </ul>
+        )}
 
         {/* Password */}
-        <div className="input">
+        <div className="password-input-wrapper">
           <input
-            type="password"
+            type={showPassword ? "text" : "password"}
             name="password"
-            className={`input-field ${
-              isPasswordInvalid ? "input-field-red" : ""
-            }`}
-            id="password"
-            value={PasswordValue}
+            placeholder="Password"
+            value={password}
             onChange={handlePasswordChange}
+            onBlur={() => setIsPasswordTouched(true)}
+            className={`input-field ${
+              isPasswordInvalid && isPasswordTouched ? "input-field-red" : ""
+            }`}
           />
-          <label className="input-label">Password</label>
-          {isPasswordInvalid && isPasswordTouched && (
-            <p className="error-text">
-              Password must be at least 8 characters and contain a number
-            </p>
-          )}
+          <span
+            className="password-toggle-icon"
+            onClick={() => setShowPassword((p) => !p)}
+          >
+            <img
+              src={showPassword ? eyeSlashIcon : eyeIcon}
+              alt="Toggle password visibility"
+            />
+          </span>
         </div>
+        {password && (
+          <ul className="password-checklist">
+            <li className={passwordValidations.length ? "valid" : "invalid"}>
+              8–20 characters
+            </li>
+            <li className={passwordValidations.upper ? "valid" : "invalid"}>
+              At least one uppercase
+            </li>
+            <li className={passwordValidations.lower ? "valid" : "invalid"}>
+              At least one lowercase
+            </li>
+            <li className={passwordValidations.number ? "valid" : "invalid"}>
+              At least one number
+            </li>
+            <li className={passwordValidations.special ? "valid" : "invalid"}>
+              At least one special (!@#$)
+            </li>
+          </ul>
+        )}
 
         <div className="action">
           <button type="submit" className="action-button">

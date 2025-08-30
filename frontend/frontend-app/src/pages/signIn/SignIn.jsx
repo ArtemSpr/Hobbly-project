@@ -15,7 +15,7 @@ const SignIn = () => {
     special: false,
   });
 
-  const [showPassword, setShowPassword] = useState(false); 
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
 
@@ -47,10 +47,7 @@ const SignIn = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/auth/login`,
-        formData
-      );
+      const response = await axios.post(`api/auth/login`, formData);
 
       if (response.status === 200) {
         console.log("✅ Login Successful:", response.data);
@@ -72,7 +69,6 @@ const SignIn = () => {
       }
     }
     console.log("Sign In Data:", formData);
-    navigate("/");
   };
 
   return (
@@ -89,29 +85,27 @@ const SignIn = () => {
         />
 
         <div className="password-input-wrapper">
-  <input
-    type={showPassword ? "text" : "password"}
-    name="password"
-    placeholder="Password"
-    value={formData.password}
-    onChange={handleChange}
-    required
-  />
+          <input
+            type={showPassword ? "text" : "password"}
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
 
-  <span
-    className="password-toggle-icon"
-    onClick={() => setShowPassword((prev) => !prev)}
-  >
-    <img
-      src={showPassword ? eyeSlashIcon : eyeIcon}
-      alt="Toggle password visibility"
-      width="20"
-      height="20"
-    />
-  </span>
-</div>
-
-
+          <span
+            className="password-toggle-icon"
+            onClick={() => setShowPassword((prev) => !prev)}
+          >
+            <img
+              src={showPassword ? eyeSlashIcon : eyeIcon}
+              alt="Toggle password visibility"
+              width="20"
+              height="20"
+            />
+          </span>
+        </div>
 
         {formData.password && (
           <ul className="password-checklist">

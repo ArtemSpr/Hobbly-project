@@ -2,6 +2,11 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import "./organaizerForm.css";
 
+import eyeIcon from "../../assets/icons/icons8-eye-48.png";
+import eyeSlashIcon from "../../assets/icons/icons8-closed-eye-24.png";
+
+// ! TO DO : add space checker for description
+
 const OrganaizerForm = () => {
   const [NameValue, setNameValue] = useState("");
   const [EmailValue, setEmailValue] = useState("");
@@ -26,6 +31,19 @@ const OrganaizerForm = () => {
   const [isPostalCodeInvalid, setIsPostalCodeInvalid] = useState(false);
   const [isOrganizationTypeInvalid, setIsOrganizationTypeInvalid] =
     useState(false);
+
+  // Додаткові стани для touched і password toggle
+  const [isNameTouched, setIsNameTouched] = useState(false);
+  const [isEmailTouched, setIsEmailTouched] = useState(false);
+  const [isPasswordTouched, setIsPasswordTouched] = useState(false);
+  const [isDescriptionTouched, setIsDescriptionTouched] = useState(false);
+  const [isAddressTouched, setIsAddressTouched] = useState(false);
+  const [isCityTouched, setIsCityTouched] = useState(false);
+  const [isPostalCodeTouched, setIsPostalCodeTouched] = useState(false);
+  const [isOrganizationTypeTouched, setIsOrganizationTypeTouched] =
+    useState(false);
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleNameChanges = (e) => {
     const value = e.target.value;
@@ -164,159 +182,198 @@ const OrganaizerForm = () => {
         </div>
         <h2 className="card-heading">
           Get started
-          <small>Let us create your Organaizer account</small>
+          <small>Let us create your Organizer account</small>
         </h2>
       </div>
+
       <form className="card-form" onSubmit={getStarted}>
         {/* Name */}
-        <div className="input">
+        <div className="userForm-input">
           <input
             type="text"
-            className={`input-field ${isNameInvalid ? "input-field-red" : ""}`}
+            placeholder="Full Organization Name"
             value={NameValue}
             onChange={handleNameChanges}
+            onBlur={() => setIsNameTouched(true)}
+            className={`input-field ${
+              isNameInvalid && isNameTouched ? "input-field-red" : ""
+            }`}
           />
-          <label className="input-label">Full Organization Name</label>
-          {isNameInvalid && (
-            <p className="error-text">Name must be at least 3 characters</p>
-          )}
         </div>
+        {isNameInvalid && isNameTouched && (
+          <ul className="password-checklist">
+            <li>Name must be at least 3 characters</li>
+          </ul>
+        )}
 
         {/* Email */}
-        <div className="input">
+        <div className="userForm-input">
           <input
             type="email"
-            className={`input-field ${isEmailInvalid ? "input-field-red" : ""}`}
+            placeholder="Email"
             value={EmailValue}
             onChange={handleEmailChange}
+            onBlur={() => setIsEmailTouched(true)}
+            className={`input-field ${
+              isEmailInvalid && isEmailTouched ? "input-field-red" : ""
+            }`}
           />
-          <label className="input-label">Email</label>
-          {isEmailInvalid && (
-            <p className="error-text">Please enter a valid email</p>
-          )}
         </div>
+        {isEmailInvalid && isEmailTouched && (
+          <ul className="password-checklist">
+            <li>Please enter a valid email</li>
+          </ul>
+        )}
 
         {/* Password */}
-        <div className="input">
+        <div className="password-input-wrapper">
           <input
-            type="password"
-            className={`input-field ${
-              isPasswordInvalid ? "input-field-red" : ""
-            }`}
+            type={showPassword ? "text" : "password"}
+            placeholder="Password"
             value={PasswordValue}
             onChange={handlePasswordChange}
+            onBlur={() => setIsPasswordTouched(true)}
+            className={`input-field ${
+              isPasswordInvalid && isPasswordTouched ? "input-field-red" : ""
+            }`}
           />
-          <label className="input-label">Password</label>
-          {isPasswordInvalid && (
-            <p className="error-text">
-              Password must be at least 8 characters and contain a number
-            </p>
-          )}
+          <span
+            className="password-toggle-icon"
+            onClick={() => setShowPassword((p) => !p)}
+          >
+            <img
+              src={showPassword ? eyeSlashIcon : eyeIcon}
+              alt="Toggle password"
+            />
+          </span>
         </div>
-
-        {/* Logo */}
-        <div className="input">
-          <input
-            type="file"
-            accept="image/png, image/jpeg"
-            className="input-field"
-            onChange={logoChecker}
-          />
-          <label className="input-label">Logo</label>
-        </div>
+        {PasswordValue && (
+          <ul className="password-checklist">
+            <li className={PasswordValue.length >= 8 ? "valid" : ""}>
+              8+ characters
+            </li>
+            <li className={/\d/.test(PasswordValue) ? "valid" : ""}>
+              At least one number
+            </li>
+          </ul>
+        )}
 
         {/* Description */}
-        <div className="input">
+        <div className="userForm-input">
           <input
             type="text"
-            className={`input-field ${
-              isDescriptionInvalid ? "input-field-red" : ""
-            }`}
+            placeholder="Description"
             value={DescriptionValue}
             onChange={descriptionChecker}
+            onBlur={() => setIsDescriptionTouched(true)}
+            className={`input-field ${
+              isDescriptionInvalid && isDescriptionTouched
+                ? "input-field-red"
+                : ""
+            }`}
           />
-          <label className="input-label">Description</label>
-          {isDescriptionInvalid && (
-            <p className="error-text">Description must be 25–300 characters</p>
-          )}
         </div>
+        {isDescriptionInvalid && isDescriptionTouched && (
+          <ul className="password-checklist">
+            <li>Description must be 25–300 characters</li>
+          </ul>
+        )}
 
         {/* Address */}
-        <div className="input">
+        <div className="userForm-input">
           <input
             type="text"
-            className={`input-field ${
-              isAddressInvalid ? "input-field-red" : ""
-            }`}
+            placeholder="Address"
             value={AddressValue}
             onChange={handleAddressChange}
+            onBlur={() => setIsAddressTouched(true)}
+            className={`input-field ${
+              isAddressInvalid && isAddressTouched ? "input-field-red" : ""
+            }`}
           />
-          <label className="input-label">Address</label>
-          {isAddressInvalid && (
-            <p className="error-text">Address must be at least 5 characters</p>
-          )}
         </div>
+        {isAddressInvalid && isAddressTouched && (
+          <ul className="password-checklist">
+            <li>Address must be at least 5 characters</li>
+          </ul>
+        )}
 
         {/* City */}
-        <div className="input">
+        <div className="userForm-input">
           <input
             type="text"
-            className={`input-field ${isCityInvalid ? "input-field-red" : ""}`}
+            placeholder="City"
             value={CityValue}
             onChange={handleCityChange}
+            onBlur={() => setIsCityTouched(true)}
+            className={`input-field ${
+              isCityInvalid && isCityTouched ? "input-field-red" : ""
+            }`}
           />
-          <label className="input-label">City</label>
-          {isCityInvalid && <p className="error-text">City is required</p>}
         </div>
+        {isCityInvalid && isCityTouched && (
+          <ul className="password-checklist">
+            <li>City is required</li>
+          </ul>
+        )}
 
         {/* Postal Code */}
-        <div className="input">
+        <div className="userForm-input">
           <input
             type="text"
-            className={`input-field ${
-              isPostalCodeInvalid ? "input-field-red" : ""
-            }`}
+            placeholder="Postal Code"
             value={PostalCodeValue}
             onChange={handlePostalCodeChange}
+            onBlur={() => setIsPostalCodeTouched(true)}
+            className={`input-field ${
+              isPostalCodeInvalid && isPostalCodeTouched
+                ? "input-field-red"
+                : ""
+            }`}
           />
-          <label className="input-label">Postal Code</label>
-          {isPostalCodeInvalid && (
-            <p className="error-text">Postal code must be 5–10 digits</p>
-          )}
         </div>
+        {isPostalCodeInvalid && isPostalCodeTouched && (
+          <ul className="password-checklist">
+            <li>Postal code must be 5–10 digits</li>
+          </ul>
+        )}
 
         {/* Identification Number */}
-        <div className="input">
+        <div className="userForm-input">
           <input
             type="text"
-            className="input-field"
+            placeholder="Identification Number"
             value={IdentificationNumberValue}
             onChange={handleIdentificationNumberChange}
           />
-          <label className="input-label">Identification Number</label>
         </div>
 
         {/* Organization Type */}
-        <div className="input">
+        <div className="userForm-input">
           <input
             type="text"
             list="organization-types"
-            className={`input-field ${
-              isOrganizationTypeInvalid ? "input-field-red" : ""
-            }`}
+            placeholder="Organization Type"
             value={OrganizationTypeValue}
             onChange={handleOrganizationTypeChange}
+            onBlur={() => setIsOrganizationTypeTouched(true)}
+            className={`input-field ${
+              isOrganizationTypeInvalid && isOrganizationTypeTouched
+                ? "input-field-red"
+                : ""
+            }`}
           />
           <datalist id="organization-types">
             <option value="Association" />
             <option value="Private" />
             <option value="Limited company" />
           </datalist>
-          <label className="input-label">Organization Type</label>
-          {isOrganizationTypeInvalid && (
-            <p className="error-text">Please select organization type</p>
-          )}
         </div>
+        {isOrganizationTypeInvalid && isOrganizationTypeTouched && (
+          <ul className="password-checklist">
+            <li>Please select organization type</li>
+          </ul>
+        )}
 
         <div className="action">
           <button type="submit" className="action-button">
