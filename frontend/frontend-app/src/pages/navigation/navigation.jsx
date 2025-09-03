@@ -17,6 +17,8 @@ import EventLink from "../../assets/icons/link-icon.png";
 import EventPhone from "../../assets/icons/phone-icon.png";
 import EventLocation from "../../assets/icons/location-icon.png";
 import EventPrice from "../../assets/icons/price-icon.png";
+import FilterIcon from "../../assets/icons/filter-icon.png";
+import SearchGray from "../../assets/icons/search-grey.png";
 
 //! TO DO: active page should be yellow in footer
 //! TO DO: create all other page
@@ -177,6 +179,7 @@ const Navigation = () => {
     });
   };
 
+  // ===== DATE & TIME SPLITTER =====
   function getDay(dateString) {
     return new Date(dateString).toISOString().split("T")[0];
   }
@@ -184,6 +187,23 @@ const Navigation = () => {
   function getTime(dateString) {
     return new Date(dateString).toISOString().split("T")[1].slice(0, 5);
   }
+
+  // ===== SEARCH FUNCTIONALITY =====
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const filteredEvents = events.filter((event) => {
+    const name =
+      typeof event.name.fi === "string"
+        ? event.name.fi
+        : typeof event.name.sv === "string"
+        ? event.name.sv
+        : typeof event.name.en === "string"
+        ? event.name.en
+        : "";
+    return name.toLowerCase().includes(searchTerm.toLowerCase());
+  });
 
   return (
     <div className="navigation">
@@ -195,12 +215,26 @@ const Navigation = () => {
         {/* <div className="navi-header-search">
           <img src={SearchIcon} alt="Search" />
         </div> */}
+        <div className="search-container">
+          <div className="search-input-wrapper">
+            <input
+              type="text"
+              placeholder="Search events..."
+              value={searchTerm}
+              onChange={(e) => handleSearch(e)}
+            />
+            <img src={SearchGray} alt="Search" className="search-icon" />
+          </div>
+          <div className="filter-button">
+            <img src={FilterIcon} alt="Search" />
+          </div>
+        </div>
       </header>
 
       {/* ============ MAIN START ============ */}
       <main className="main-content">
         <div className="event-cards-container">
-          {events.map((event) => (
+          {filteredEvents.map((event) => (
             <div
               className={`event-card ${
                 activeEventId === event.id ? "active" : ""
