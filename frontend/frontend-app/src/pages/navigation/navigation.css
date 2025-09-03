@@ -9,6 +9,7 @@
     --color-white: #ffffff;
 }
 
+/* --- Navigation Wrapper --- */
 .navigation {
     display: flex;
     flex-direction: column;
@@ -17,8 +18,7 @@
     background-color: var(--color-deep-green);
 }
 
-/* Decorate header elements */
-
+/* --- Header --- */
 .navi-header {
     width: 100%;
     height: 80px;
@@ -46,8 +46,7 @@
     height: 40px;
 }
 
-/* Decorate main elements */
-
+/* --- Main content --- */
 .main-content {
     flex: 1;
     padding: 80px 0 100px 0;
@@ -61,36 +60,69 @@
     padding-top: 20px;
 }
 
+/* --- Event Card --- */
 .event-card {
     width: 400px;
+    height: auto;
+    max-height: none;
     overflow: hidden;
     background-color: var(--color-white);
     border: 2px solid var(--color-gray);
     border-radius: 12px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: all 0.3s ease;
     cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.event-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* Active card */
+.event-card.active {
+    height: auto;
+    max-height: none;
+    overflow: visible;
+    border-color: var(--color-dark-teal);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
 }
 
-.event-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+.event-card.active .shown {
+    display: block;
+}
+
+/* Event image */
+.event-card-image {
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+    border-bottom: 2px solid var(--color-gray);
 }
 
 .event-card-image img {
     width: 100%;
-    height: 200px;
+    height: 100%;
     object-fit: cover;
-    border-bottom: 2px solid var(--color-gray);
+    transition: transform 0.3s ease;
 }
 
+.event-card:hover .event-card-image img {
+    transform: scale(1.05);
+}
+
+/* Event content */
 .event-card-content {
-    padding: 16px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    padding: 16px;
+    gap: 12px;
+    overflow: visible;
 }
 
 .org-name {
@@ -107,22 +139,57 @@
     line-height: 1.4;
 }
 
+/* Description */
+.event-short-description,
 .event-description {
+    color: var(--color-dark-teal);
+    font-size: 16px;
+    line-height: 1.2;
+    max-height: none;
+    overflow: visible;
+    transition: max-height 0.3s ease;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.event-card.active .event-description {
+    max-height: 1000px;
+}
+
+/* Additional info sections */
+.event-time,
+.event-location,
+.event-capacity,
+.event-free {
+    display: none;
+    font-size: 0.9em;
     color: var(--color-gray);
-    font-size: 0.95em;
-    line-height: 1.5;
+    margin-top: 8px;
 }
 
-
-/* Decorate footer elements */
-
-.footer-el a {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+.event-card.active .event-time,
+.event-card.active .event-location,
+.event-card.active .event-capacity,
+.event-card.active .event-free {
+    display: block;
 }
 
+.event-location br {
+    display: block;
+    margin-bottom: 2px;
+}
+
+.event-location.shown a {
+    text-decoration: underline;
+    color: #1E90FF;
+}
+
+.event-free {
+    font-weight: bold;
+    color: var(--color-green);
+}
+
+/* --- Footer --- */
 .navigation-footer {
     display: flex;
     align-items: center;
@@ -135,12 +202,30 @@
     bottom: 0;
 }
 
-.active img {
+.footer-el a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+a.active img {
     height: 40px;
 }
 
 .active span {
-    color: var(--color-grey);
+    color: var(--color-white);
     font-family: Montserrat;
     font-size: 16px;
+}
+
+/* --- Responsive --- */
+@media (max-width: 450px) {
+    .event-card {
+        width: 90%;
+    }
+
+    .event-card-image {
+        height: 180px;
+    }
 }
