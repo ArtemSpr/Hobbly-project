@@ -1,15 +1,28 @@
+/*==============================*/
+/*====== IMPORT FONTS ======*/
 @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@500&family=Montserrat&display=swap');
 
+/*==============================*/
+/*====== ROOT COLORS ======*/
 :root {
     --color-dark-teal: #073b3a;
     --color-yellow: #f5ff65;
     --color-green: #65ff81;
     --color-deep-green: #021919;
-    --color-gray: #8f8f8f;
     --color-white: #ffffff;
+    --color-gray: #8f8f8f;
+    --color-event-start: #4CAF50;
+    --color-event-end: #F44336;
+    --color-address: #1976D2;
+    --color-email: #E64A19;
+    --color-phone: #009688;
+    --color-link: #1565C0;
+    --color-capacity: #616161;
+    --color-price: #2E7D32;
 }
 
-/* --- Navigation Wrapper --- */
+/*==============================*/
+/*====== NAVIGATION / HEADER ======*/
 .navigation {
     display: flex;
     flex-direction: column;
@@ -18,13 +31,12 @@
     background-color: var(--color-deep-green);
 }
 
-/* --- Header --- */
 .navi-header {
     width: 100%;
     height: 80px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     position: fixed;
     top: 0;
     left: 0;
@@ -38,6 +50,8 @@
     transform: translateY(-100%);
 }
 
+
+
 .navi-logo img {
     height: 50px;
 }
@@ -46,7 +60,8 @@
     height: 40px;
 }
 
-/* --- Main content --- */
+/*==============================*/
+/*====== MAIN CONTENT ======*/
 .main-content {
     flex: 1;
     padding: 80px 0 100px 0;
@@ -60,7 +75,8 @@
     padding-top: 20px;
 }
 
-/* --- Event Card --- */
+/*==============================*/
+/*====== EVENT CARD ======*/
 .event-card {
     width: 400px;
     height: auto;
@@ -82,19 +98,12 @@
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
 }
 
-/* Active card */
 .event-card.active {
     height: auto;
     max-height: none;
     overflow: visible;
     border-color: var(--color-dark-teal);
     box-shadow: 0 16px 32px rgba(0, 0, 0, 0.2);
-    display: flex;
-    flex-direction: column;
-}
-
-.event-card.active .shown {
-    display: block;
 }
 
 /* Event image */
@@ -122,7 +131,6 @@
     flex-direction: column;
     padding: 16px;
     gap: 12px;
-    overflow: visible;
 }
 
 .org-name {
@@ -156,7 +164,8 @@
     max-height: 1000px;
 }
 
-/* Additional info sections */
+/*==============================*/
+/*====== EVENT TIME & INFO ======*/
 .event-time,
 .event-location,
 .event-capacity,
@@ -167,11 +176,139 @@
     margin-top: 8px;
 }
 
-.event-card.active .event-time,
-.event-card.active .event-location,
-.event-card.active .event-capacity,
-.event-card.active .event-free {
-    display: block;
+.event-time.shown {
+    display: flex !important;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+
+.card-detail-info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.event-location.shown {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/*==============================*/
+/*====== CONTACT & BONUS INFO ======*/
+.event-contact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+.event-bonus-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* Common style for all small blocks */
+.event-date,
+.event-start-time,
+.event-end-time,
+.event-address,
+.event-email,
+.event-phone,
+.event-info-url,
+.event-capacity,
+.event-free {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.9em;
+    font-weight: 500;
+    min-width: 60px;
+}
+
+.event-date img,
+.event-start-time img,
+.event-end-time img,
+.event-address img,
+.event-email img,
+.event-phone img,
+.event-info-url img,
+.event-capacity img,
+.event-free img {
+    width: 16px;
+    height: 16px;
+}
+
+.event-date span,
+.event-start-time span,
+.event-end-time span,
+.event-address span,
+.event-email span,
+.event-phone span,
+.event-info-url span,
+.event-capacity span,
+.event-free span {
+    white-space: nowrap;
+}
+
+/* TIME BLOCK COLORS */
+.event-date {
+    background-color: rgba(143, 143, 143, 0.3);
+    color: #333333;
+}
+
+.event-start-time {
+    background-color: rgba(76, 175, 80, 0.35);
+    color: #1B5E20;
+}
+
+.event-end-time {
+    background-color: rgba(244, 67, 54, 0.35);
+    color: #B71C1C;
+}
+
+/* CONTACT BLOCK COLORS */
+.event-address {
+    background-color: rgba(25, 118, 210, 0.35);
+    color: #0D47A1;
+    font-size: 12px;
+}
+
+.event-email {
+    background-color: rgba(230, 74, 25, 0.35);
+    color: #BF360C;
+}
+
+.event-phone {
+    background-color: rgba(0, 150, 136, 0.35);
+    color: #004D40;
+}
+
+.event-info-url {
+    background-color: rgba(21, 101, 192, 0.35);
+    color: #0D47A1;
+}
+
+/* BONUS INFO COLORS */
+.event-capacity {
+    background-color: rgba(97, 97, 97, 0.35);
+    color: #212121;
+}
+
+.event-free {
+    background-color: rgba(46, 125, 50, 0.35);
+    color: #1B5E20;
+}
+
+/*==============================*/
+/*====== LINKS & SPECIAL ======*/
+.event-location.shown a {
+    text-decoration: underline;
+    color: #1E90FF;
 }
 
 .event-location br {
@@ -179,17 +316,8 @@
     margin-bottom: 2px;
 }
 
-.event-location.shown a {
-    text-decoration: underline;
-    color: #1E90FF;
-}
-
-.event-free {
-    font-weight: bold;
-    color: var(--color-green);
-}
-
-/* --- Footer --- */
+/*==============================*/
+/*====== FOOTER ======*/
 .navigation-footer {
     display: flex;
     align-items: center;
@@ -209,17 +337,21 @@
     justify-content: center;
 }
 
+.footer-el span {
+    color: var(--color-white);
+}
+
 a.active img {
     height: 40px;
 }
 
 .active span {
-    color: var(--color-white);
     font-family: Montserrat;
     font-size: 16px;
 }
 
-/* --- Responsive --- */
+/*==============================*/
+/*====== RESPONSIVE ======*/
 @media (max-width: 450px) {
     .event-card {
         width: 90%;

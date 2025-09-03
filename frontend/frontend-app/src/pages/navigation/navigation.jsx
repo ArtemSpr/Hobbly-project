@@ -8,6 +8,16 @@ import HomeIcon from "../../assets/icons/home-white.svg";
 import MapIcon from "../../assets/icons/map-white.svg";
 import ThirdEventImage from "../../assets/image/event-3.webp";
 
+import EventDate from "../../assets/icons/date-icon.png";
+import EventCapa from "../../assets/icons/capacity-icon.png";
+import EventStart from "../../assets/icons/clock-icon.png";
+import EventEnd from "../../assets/icons/clock-icon-close.png";
+import EventEmail from "../../assets/icons/email-icon.png";
+import EventLink from "../../assets/icons/link-icon.png";
+import EventPhone from "../../assets/icons/phone-icon.png";
+import EventLocation from "../../assets/icons/location-icon.png";
+import EventPrice from "../../assets/icons/price-icon.png";
+
 //! TO DO: active page should be yellow in footer
 //! TO DO: create all other page
 //! TO DO: when user click on event block event description broke a block
@@ -29,6 +39,8 @@ const Navigation = () => {
     info_url: "",
     address: "",
   });
+
+  const [searchTerm, setSearchTerm] = useState("");
 
   // ====== FUNCTION THAT SWITCH PAGE WHEN USER SCROLLS TO BOTTOM ======
   const handleScroll = () => {
@@ -145,8 +157,6 @@ const Navigation = () => {
         info_url: response.data.info_url?.fi || "",
         address: response.data.street_address.fi || "",
       };
-
-      console.log("Location Data:", locationData);
       setEventLocation(locationData);
     } catch (error) {
       console.error("Failed to fetch location:", error);
@@ -167,6 +177,14 @@ const Navigation = () => {
     });
   };
 
+  function getDay(dateString) {
+    return new Date(dateString).toISOString().split("T")[0];
+  }
+
+  function getTime(dateString) {
+    return new Date(dateString).toISOString().split("T")[1].slice(0, 5);
+  }
+
   return (
     <div className="navigation">
       {/* ============ HEADER START ============ */}
@@ -174,10 +192,11 @@ const Navigation = () => {
         <div className="navi-logo">
           <img src={Logo} alt="Logo" />
         </div>
-        <div className="navi-header-search">
+        {/* <div className="navi-header-search">
           <img src={SearchIcon} alt="Search" />
-        </div>
+        </div> */}
       </header>
+
       {/* ============ MAIN START ============ */}
       <main className="main-content">
         <div className="event-cards-container">
@@ -217,6 +236,81 @@ const Navigation = () => {
                     event.name?.en ||
                     "Event title"}
                 </div>
+
+                <div className="card-detail-info">
+                  <div
+                    className={`event-time ${
+                      activeEventId === event.id ? "shown" : ""
+                    }`}
+                  >
+                    <div className="event-date">
+                      <img src={EventDate} alt="Event Date" />
+                      <span>{getDay(event.start_time)}</span>{" "}
+                    </div>
+                    <div className="event-start-time">
+                      <img src={EventStart} alt="Start Time" />
+                      <span>{getTime(event.start_time)}</span>
+                    </div>
+                    <div className="event-end-time">
+                      <img src={EventEnd} alt="End Time" />
+                      <span>{getTime(event.end_time)}</span>
+                    </div>
+                  </div>
+
+                  <div
+                    className={`event-location ${
+                      activeEventId === event.id ? "shown" : ""
+                    }`}
+                  >
+                    <div className="event-contact">
+                      <div className="event-email">
+                        <img src={EventEmail} alt="Event Email" />
+                        {eventLocation.email || "Unknown"}
+                      </div>
+                      <div className="event-phone">
+                        <img src={EventPhone} alt="Event Phone" />
+                        {eventLocation.phone || "Unknown"}
+                      </div>
+                      <div className="event-info-url">
+                        <img src={EventLink} alt="Event Info" />
+                        {eventLocation.info_url ? (
+                          <a
+                            href={eventLocation.info_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            Link
+                          </a>
+                        ) : (
+                          "Unknown"
+                        )}
+                      </div>
+                    </div>
+                    <div className="event-bonus-info">
+                      <div className="event-address">
+                        <img src={EventLocation} alt="Event Address" />
+                        {eventLocation.address || "Address is unknown"}
+                      </div>
+
+                      <div
+                        className={`event-capacity ${
+                          activeEventId === event.id ? "shown" : ""
+                        }`}
+                      >
+                        <img src={EventCapa} alt="Event Capacity" />
+                        {event.maximum_capacity || "Unknown"}
+                      </div>
+                      <div
+                        className={`event-free ${
+                          activeEventId === event.id ? "shown" : ""
+                        }`}
+                      >
+                        <img src={EventPrice} alt="Event Free" />
+                        {event.is_free ? "Free" : "Paid"}{" "}
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <div
                   className={
                     activeEventId === event.id
@@ -234,56 +328,6 @@ const Navigation = () => {
                             "This is a description of the event.",
                     }}
                   />
-                </div>
-                <div
-                  className={`event-time ${
-                    activeEventId === event.id ? "shown" : ""
-                  }`}
-                >
-                  {formatDateTime(event.start_time)}
-                  <br />
-                  {formatDateTime(event.end_time)}
-                </div>
-
-                <div
-                  className={`event-location ${
-                    activeEventId === event.id ? "shown" : ""
-                  }`}
-                >
-                  {eventLocation.address || "Event address is unknown"}
-                  <br />
-                  {eventLocation.email || "Event email is unknown"}
-                  <br />
-                  {eventLocation.phone || "Event phone is unknown"}
-                  <br />
-                  {eventLocation.info_url ? (
-                    <a
-                      href={eventLocation.info_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {eventLocation.info_url}
-                    </a>
-                  ) : (
-                    "Event info URL is unknown"
-                  )}
-                </div>
-
-                <div
-                  className={`event-capacity ${
-                    activeEventId === event.id ? "shown" : ""
-                  }`}
-                >
-                  {" "}
-                  {event.maximum_capacity || "Event capacity is unknown"}{" "}
-                </div>
-                <div
-                  className={`event-free ${
-                    activeEventId === event.id ? "shown" : ""
-                  }`}
-                >
-                  {" "}
-                  {event.is_free ? "Free" : "Paid"}{" "}
                 </div>
               </div>
             </div>
