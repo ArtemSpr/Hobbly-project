@@ -22,7 +22,6 @@ import SearchGray from "../../assets/icons/search-grey.png";
 
 //! TO DO: active page should be yellow in footer
 //! TO DO: create all other page
-//! TO DO: when user click on event block event description broke a block
 
 const Navigation = () => {
   const [events, setEvents] = useState([]);
@@ -205,6 +204,40 @@ const Navigation = () => {
     return name.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
+  //====== TRUNCATED TEXT ======
+
+  function getTruncatedText(text, limit, link) {
+    if (!text) return "No description available.";
+
+    if (text.length > limit) {
+      const words = text.split(" ");
+      let truncated = "";
+      for (let word of words) {
+        if ((truncated + word).length > limit) break;
+        truncated += (truncated ? " " : "") + word;
+      }
+
+      if (!link) {
+        return (
+          truncated +
+          `... <a href="${link}" target="_blank" class="read-more-link nolink">
+        <img src="${EventLink}" alt="icon" class="read-more-icon" />
+        Linkki lisätään myöhemmin
+      </a>`
+        );
+      } else {
+        return (
+          truncated +
+          `... <a href="${link}" target="_blank" class="read-more-link">
+        <img src="${EventLink}" alt="icon" class="read-more-icon" />
+        lue lisää linkistä
+      </a>`
+        );
+      }
+    }
+
+    return text;
+  }
   return (
     <div className="navigation">
       {/* ============ HEADER START ============ */}
@@ -352,14 +385,18 @@ const Navigation = () => {
                       : " event-short-description"
                   }
                 >
-                  {" "}
+                  <br />
                   <div
                     dangerouslySetInnerHTML={{
-                      __html:
+                      __html: getTruncatedText(
                         activeEventId === event.id
-                          ? event.description?.fi || "No description available."
-                          : event.short_description?.fi ||
-                            "This is a description of the event.",
+                          ? event.description?.fi
+                          : event.short_description?.fi,
+                        1200,
+                        eventLocation.info_url.fi ||
+                          eventLocation.info_url.sv ||
+                          eventLocation.info_url.en
+                      ),
                     }}
                   />
                 </div>
