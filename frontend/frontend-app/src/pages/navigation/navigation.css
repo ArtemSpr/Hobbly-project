@@ -21,6 +21,10 @@
     --color-price: #2E7D32;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 /*==============================*/
 /*====== NAVIGATION / HEADER ======*/
 .navigation {
@@ -161,7 +165,6 @@
     border: 2px solid var(--color-gray);
     border-radius: 12px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
     cursor: pointer;
     display: flex;
     flex-direction: column;
@@ -206,6 +209,7 @@
     flex-direction: column;
     padding: 16px;
     gap: 12px;
+
 }
 
 .org-name {
@@ -229,13 +233,13 @@
     font-size: 16px;
     line-height: 1.2;
     max-height: none;
-    overflow: visible;
-    transition: max-height 0.3s ease;
+    overflow: hidden;
     white-space: pre-wrap;
     word-break: break-word;
 }
 
-.event-card.active .event-description {
+.event-card.active .event-description,
+.event-card.active .event-short-description {
     max-height: 1000px;
 }
 
@@ -391,10 +395,17 @@
     margin-bottom: 2px;
 }
 
-.read-more-link {
+.read-more-link,
+.read-more-nolink,
+.read-more-icon {
+    display: none;
+}
+
+.read-more-link.shown {
     display: flex;
     flex-direction: row;
     align-items: center;
+    gap: 20px;
     width: 70vw;
     color: var(--color-link);
     background-color: rgba(21, 101, 192, 0.35);
@@ -402,20 +413,36 @@
     transition: color 0.2s ease;
     border-radius: 10px;
     margin: 5vw 0 0 5vw;
+    padding: 5px 10px;
     word-break: break-word;
 }
 
-.read-more-link.nolink {
+.read-more-nolink.shown {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    width: 70vw;
+    color: var(--color-link);
+    background-color: rgba(21, 101, 192, 0.35);
+    font-weight: bold;
+    transition: color 0.2s ease;
+    border-radius: 10px;
+    margin: 5vw 0 0 5vw;
+    padding: 5px 10px;
+    word-break: break-word;
     pointer-events: none;
     cursor: default;
     opacity: 0.6;
-    font-size: 15px;
+    font-size: 14px;
 }
 
-.read-more-icon {
+
+.read-more-icon.shown {
+    display: block;
     width: 38px;
     height: 38px;
-    margin: 0 -25px 0 5px;
+    margin-left: 20px;
 }
 
 .read-more-link:hover {

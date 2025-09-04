@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import "./navigation.css";
 import Logo from "../../assets/icons/yellow-big-logo.png";
@@ -42,6 +42,7 @@ const Navigation = () => {
   });
 
   const [searchTerm, setSearchTerm] = useState("");
+  const eventRefs = useRef({});
 
   // ====== FUNCTION THAT SWITCH PAGE WHEN USER SCROLLS TO BOTTOM ======
   const handleScroll = () => {
@@ -91,6 +92,13 @@ const Navigation = () => {
     return addedNew;
   };
 
+  useEffect(() => {
+    if (events.length < 5) {
+      setApiPage((prev) => prev + 1);
+      fetchEvents(apiPage);
+    }
+  }, [events]);
+
   // ====== SCROLL EVENTS HANDLER======
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -136,6 +144,13 @@ const Navigation = () => {
   // ---------- URL CHECKING ----------
   // console.log("Response URL: " + response.config.url);
   // ---------- URL CHECKING ----------
+  useEffect(() => {
+    if (activeEventId && eventRefs.current[activeEventId]) {
+      eventRefs.current[activeEventId].scrollIntoView({
+        block: "start",
+      });
+    }
+  }, [activeEventId]);
 
   const handleEventClick = async (event) => {
     console.log("Event clicked:", event);
@@ -217,27 +232,12 @@ const Navigation = () => {
         truncated += (truncated ? " " : "") + word;
       }
 
-      if (!link) {
-        return (
-          truncated +
-          `... <a href="${link}" target="_blank" class="read-more-link nolink">
-        <img src="${EventLink}" alt="icon" class="read-more-icon" />
-        Linkki lisätään myöhemmin
-      </a>`
-        );
-      } else {
-        return (
-          truncated +
-          `... <a href="${link}" target="_blank" class="read-more-link">
-        <img src="${EventLink}" alt="icon" class="read-more-icon" />
-        lue lisää linkistä
-      </a>`
-        );
-      }
+      return truncated;
     }
 
     return text;
   }
+
   return (
     <div className="navigation">
       {/* ============ HEADER START ============ */}
@@ -269,11 +269,14 @@ const Navigation = () => {
         <div className="event-cards-container">
           {filteredEvents.map((event) => (
             <div
+              ref={(el) => (eventRefs.current[event.id] = el)}
               className={`event-card ${
                 activeEventId === event.id ? "active" : ""
               }`}
               key={event.id}
-              onClick={() => handleEventClick(event)}
+              onClick={() =>
+                handleEventClick(event, eventRefs.current[event.id])
+              }
             >
               <div className="event-card-image">
                 <img
@@ -399,6 +402,42 @@ const Navigation = () => {
                       ),
                     }}
                   />
+
+                  {eventLocation.info_url ? (
+                    <a
+                      href={eventLocation.info_url}
+                      target="_blank"
+                      className={`read-more-link ${
+                        activeEventId === event.id ? "shown" : ""
+                      }`}
+                    >
+                      <img
+                        src={EventLink}
+                        alt="icon"
+                        className={`read-more-icon ${
+                          activeEventId === event.id ? "shown" : ""
+                        }`}
+                      />
+                      Lue lisää linkistä
+                    </a>
+                  ) : (
+                    <a
+                      href="#"
+                      target="_blank"
+                      className={`read-more-nolink ${
+                        activeEventId === event.id ? "shown" : ""
+                      }`}
+                    >
+                      <img
+                        src={EventLink}
+                        alt="icon"
+                        className={`read-more-icon ${
+                          activeEventId === event.id ? "shown" : ""
+                        }`}
+                      />
+                      Linkki lisätään myöhemmin
+                    </a>
+                  )}
                 </div>
               </div>
             </div>
