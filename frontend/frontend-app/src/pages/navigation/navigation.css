@@ -450,6 +450,53 @@ html {
     text-decoration: underline;
 }
 
+.pagination-arrows {
+    display: flex;
+    justify-content: center;
+    gap: 220px;
+    margin-top: 20px;
+}
+
+.pagination-arrows.hidden {
+    display: none;
+}
+
+.pagination-arrows button {
+    background-color: var(--color-dark-teal);
+    color: var(--color-yellow);
+    border: none;
+    border-radius: 6px;
+    padding: 10px 16px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.pagination-arrows button:hover {
+    background-color: var(--color-green);
+    color: var(--color-deep-green);
+    transform: scale(1.05);
+}
+
+.pagination-arrows button:active {
+    background-color: var(--color-deep-green);
+    color: var(--color-yellow);
+}
+
+
+
+.pagination-arrows .next::before {
+    transform: rotate(-45deg);
+    margin-left: 6px;
+    margin-right: 0;
+}
+
+.pagination-arrows .prev::before {
+    transform: rotate(135deg);
+    margin-right: 6px;
+}
+
 
 /*==============================*/
 /*====== FOOTER ======*/
