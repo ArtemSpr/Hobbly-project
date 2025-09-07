@@ -19,6 +19,7 @@
     --color-link: #1565C0;
     --color-capacity: #616161;
     --color-price: #2E7D32;
+    --color-or: #20707F;
 }
 
 html {
@@ -449,6 +450,60 @@ html {
     color: var(--color-dark-teal);
     text-decoration: underline;
 }
+
+/*==============================*/
+/*====== BUY TICKETS ======*/
+
+.or-text {
+    display: none;
+}
+
+.or-text.shown {
+    display: block;
+    background-color: rgba(32, 112, 127, 0.35);
+    color: var(--color-or);
+    font-weight: bold;
+    padding: 5px 10px;
+    margin: 10px 0 10px 30vw;
+    border-radius: 10px;
+    text-align: center;
+    width: 20vw;
+}
+
+.offer-link {
+    display: none;
+}
+
+.offer-link.shown {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    width: 70vw;
+    color: var(--color-price);
+    background-color: rgba(46, 125, 50, 0.35);
+    font-weight: bold;
+    transition: color 0.2s ease;
+    border-radius: 10px;
+    margin: 0 0 0 5vw;
+    padding: 5px 10px;
+    word-break: break-word;
+}
+
+.event-price-icon {
+    display: none;
+}
+
+.event-price-icon.shown {
+    display: block;
+    width: 38px;
+    height: 38px;
+    margin-left: 20px;
+
+}
+
+/*==============================*/
+/*====== PAGINATION ======*/
 
 .pagination-arrows {
     display: flex;

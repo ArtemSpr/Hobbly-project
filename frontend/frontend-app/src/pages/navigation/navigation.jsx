@@ -22,14 +22,12 @@ import SearchGray from "../../assets/icons/search-grey.png";
 
 //! TO DO: active page should be yellow in footer
 //! TO DO: create all other page
-//! TO DO: events should fetched only if their end_time is in the future
+//! TO DO: user can filter events by time, location, keywords, text, language, age
 
-const Navigation = () => {
+function Navigation() {
   const [events, setEvents] = useState([]);
   const [apiPage, setApiPage] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [seenIds, setSeenIds] = useState(new Set());
-  const [apisLength, setApisLength] = useState(0);
   const [activeEventId, setActiveEventId] = useState(null);
   const [eventLocation, setEventLocation] = useState({
     contactEmail: "",
@@ -45,6 +43,8 @@ const Navigation = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const eventRefs = useRef({});
   const [currentPage, setCurrentPage] = useState(1);
+
+  const [keyWords, setKeyWords] = useState([]);
 
   // ====== FUNCTION THAT SWITCH PAGE WHEN USER SCROLLS TO BOTTOM ======
   const handleScroll = () => {
@@ -72,7 +72,6 @@ const Navigation = () => {
         `https://api.hel.fi/linkedevents/v1/event/?page=${page}`
       );
       // console.log("Response URL: " + response.config.url);
-
       const now = new Date();
       if (response.status === 200) {
         const newEvents = response.data.data.filter((event) => {
@@ -98,18 +97,18 @@ const Navigation = () => {
     return addedNew;
   };
 
+  // ====== FETCH EVENTS ON PAGE LOAD ======
   useEffect(() => {
     setApiPage((prev) => prev + 1);
     fetchEvents(apiPage);
   }, [events]);
 
+  // ====== PAGINATION ARROWS SHOW/HIDE ======
   useEffect(() => {
     const pagArrows = document.getElementById("pagination-arrows");
     if (filteredEvents.slice(0, 20).length >= 20) {
-      console.log("Pagination arrows shown");
       pagArrows.classList.remove("hidden");
     } else {
-      console.log("Pagination arrows hidden");
       pagArrows.classList.add("hidden");
     }
   }, [events]);
@@ -120,10 +119,7 @@ const Navigation = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [loading, apiPage]);
 
-  // useEffect(() => {
-  //   fetchEvents(apiPage);
-  // }, [apiPage]);
-
+  // ====== INFINITE SCROLL ======
   useEffect(() => {
     const handleScroll = () => {
       if (
@@ -156,9 +152,7 @@ const Navigation = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // ---------- URL CHECKING ----------
-  // console.log("Response URL: " + response.config.url);
-  // ---------- URL CHECKING ----------
+  // ===== SCROLL TO ACTIVE EVENT =====
   useEffect(() => {
     if (activeEventId && eventRefs.current[activeEventId]) {
       eventRefs.current[activeEventId].scrollIntoView({
@@ -167,6 +161,29 @@ const Navigation = () => {
     }
   }, [activeEventId]);
 
+  // useEffect(() => {
+  //   const fetchKeywords = async () => {
+  //     try {
+  //       // отримуємо всі @id з усіх івентів
+  //       const allKeywordIds = events.flatMap(
+  //         (event) => event.keywords?.map((k) => k["@id"]) || []
+  //       );
+  //       // робимо запити до кожного @id
+  //       const keywordNames = await Promise.all(
+  //         allKeywordIds.map(async (url) => {
+  //           const response = await axios.get(url);
+  //           return response.data.name; // або response.data.name.fi, якщо потрібна фінська версія
+  //         })
+  //       );
+  //       setKeyWords(keywordNames); // зберігаємо масив назв
+  //       console.log("Keyword Names:", keywordNames);
+  //     } catch (error) {
+  //       console.error("Error fetching keywords:", error);
+  //     }
+  //   };
+  //   fetchKeywords();
+  // }, [events]);
+  // ===== FETCH EVENT LOCATION DETAILS =====
   const handleEventClick = async (event) => {
     console.log("Event clicked:", event);
 
@@ -180,7 +197,7 @@ const Navigation = () => {
 
       const locationData = {
         contactEmail: response.data.email || "",
-        contactPhone: response.data.telephone || "",
+        contactPhone: response.data.telephone?.fi || "",
         coordinates: {
           latitude: response.data.position.coordinates[0],
           longitude: response.data.position.coordinates[1],
@@ -192,20 +209,6 @@ const Navigation = () => {
     } catch (error) {
       console.error("Failed to fetch location:", error);
     }
-  };
-
-  // ===== TIME FORMATER =====
-  const formatDateTime = (isoString) => {
-    if (!isoString) return "Unknown";
-    const date = new Date(isoString);
-    return date.toLocaleString("fi-FI", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    });
   };
 
   // ===== DATE & TIME SPLITTER =====
@@ -235,7 +238,6 @@ const Navigation = () => {
   });
 
   //====== TRUNCATED TEXT ======
-
   function getTruncatedText(text, limit, link) {
     if (!text) return "No description available.";
 
@@ -259,7 +261,6 @@ const Navigation = () => {
   const endIndex = startIndex + eventsPerPage;
 
   // ===== NEW PAGE SCROLL =====
-
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -268,6 +269,8 @@ const Navigation = () => {
     }
   }, [currentPage]);
 
+  //
+
   return (
     <div className="navigation">
       {/* ============ HEADER START ============ */}
@@ -275,14 +278,11 @@ const Navigation = () => {
         <div className="navi-logo">
           <img src={Logo} alt="Logo" />
         </div>
-        {/* <div className="navi-header-search">
-          <img src={SearchIcon} alt="Search" />
-        </div> */}
         <div className="search-container">
           <div className="search-input-wrapper">
             <input
               type="text"
-              placeholder="Search events..."
+              placeholder="Hae tapahtumia..."
               value={searchTerm}
               onChange={(e) => handleSearch(e)}
             />
@@ -365,31 +365,17 @@ const Navigation = () => {
                     <div className="event-contact">
                       <div className="event-email">
                         <img src={EventEmail} alt="Event Email" />
-                        {eventLocation.email || "Unknown"}
+                        {eventLocation.contactEmail || "Tuntematon"}
                       </div>
                       <div className="event-phone">
                         <img src={EventPhone} alt="Event Phone" />
-                        {eventLocation.phone || "Unknown"}
-                      </div>
-                      <div className="event-info-url">
-                        <img src={EventLink} alt="Event Info" />
-                        {eventLocation.info_url ? (
-                          <a
-                            href={eventLocation.info_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            Link
-                          </a>
-                        ) : (
-                          "Unknown"
-                        )}
+                        {eventLocation.contactPhone || "Tuntematon"}
                       </div>
                     </div>
                     <div className="event-bonus-info">
                       <div className="event-address">
                         <img src={EventLocation} alt="Event Address" />
-                        {eventLocation.address || "Address is unknown"}
+                        {eventLocation.address || "Tuntematon"}
                       </div>
 
                       <div
@@ -398,7 +384,7 @@ const Navigation = () => {
                         }`}
                       >
                         <img src={EventCapa} alt="Event Capacity" />
-                        {event.maximum_capacity || "Unknown"}
+                        {event.maximum_capacity || "Tuntematon"}
                       </div>
                       <div
                         className={`event-free ${
@@ -406,7 +392,7 @@ const Navigation = () => {
                         }`}
                       >
                         <img src={EventPrice} alt="Event Free" />
-                        {event.is_free ? "Free" : "Paid"}{" "}
+                        {event.is_free ? "Ilmainen" : "Maksullinen"}{" "}
                       </div>
                     </div>
                   </div>
@@ -468,6 +454,36 @@ const Navigation = () => {
                       Linkki lisätään myöhemmin
                     </a>
                   )}
+
+                  {event.offers?.[0]?.info_url?.fi ||
+                  event.offers?.[0]?.info_url?.sv ||
+                  event.offers?.[0]?.info_url?.en ? (
+                    <div className="event-offer">
+                      <span
+                        className={`or-text ${
+                          activeEventId === event.id ? "shown" : ""
+                        }`}
+                      >
+                        Tai
+                      </span>
+                      <a
+                        href={event.offers?.[0]?.info_url.fi}
+                        target="_blank"
+                        className={`offer-link ${
+                          activeEventId === event.id ? "shown" : ""
+                        }`}
+                      >
+                        <img
+                          src={EventPrice}
+                          alt="Event Price"
+                          className={`event-price-icon ${
+                            activeEventId === event.id ? "shown" : ""
+                          }`}
+                        />
+                        Ostaa liput tästä
+                      </a>
+                    </div>
+                  ) : null}
                 </div>
               </div>
             </div>
@@ -494,24 +510,24 @@ const Navigation = () => {
         <div className="footer-el">
           <Link to="/navigation" className="active">
             <img src={HomeIcon} alt="Home" />
-            <span>Home</span>
+            <span>Kotisivu</span>
           </Link>
         </div>
         <div className="footer-el">
           <Link to="/navigation" className="active">
             <img src={SearchIcon} alt="Search" />
-            <span>Search</span>
+            <span>Haku</span>
           </Link>
         </div>
         <div className="footer-el">
           <Link to="/navigation" className="active">
             <img src={MapIcon} alt="Map" />
-            <span>Map</span>
+            <span>Kartta</span>
           </Link>
         </div>
       </footer>
     </div>
   );
-};
+}
 
 export default Navigation;
