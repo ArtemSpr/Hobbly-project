@@ -22,6 +22,7 @@ import SearchGray from "../../assets/icons/search-grey.png";
 
 //! TO DO: active page should be yellow in footer
 //! TO DO: create all other page
+//! TO DO: events should fetched only if their end_time is in the future
 
 const Navigation = () => {
   const [events, setEvents] = useState([]);
@@ -43,6 +44,7 @@ const Navigation = () => {
 
   const [searchTerm, setSearchTerm] = useState("");
   const eventRefs = useRef({});
+  const [currentPage, setCurrentPage] = useState(1);
 
   // ====== FUNCTION THAT SWITCH PAGE WHEN USER SCROLLS TO BOTTOM ======
   const handleScroll = () => {
@@ -69,12 +71,16 @@ const Navigation = () => {
       const response = await axios.get(
         `https://api.hel.fi/linkedevents/v1/event/?page=${page}`
       );
-      console.log("Response URL: " + response.config.url);
+      // console.log("Response URL: " + response.config.url);
 
+      const now = new Date();
       if (response.status === 200) {
-        const newEvents = response.data.data.filter(
-          (event) => event.super_event === null
-        );
+        const newEvents = response.data.data.filter((event) => {
+          const endTime = event.end_time ? new Date(event.end_time) : null;
+          return (
+            event.super_event === null && (endTime === null || endTime > now)
+          );
+        });
         setEvents((prev) => {
           const combined = [...prev, ...newEvents];
           const unique = combined.filter(
@@ -93,9 +99,18 @@ const Navigation = () => {
   };
 
   useEffect(() => {
-    if (events.length < 5) {
-      setApiPage((prev) => prev + 1);
-      fetchEvents(apiPage);
+    setApiPage((prev) => prev + 1);
+    fetchEvents(apiPage);
+  }, [events]);
+
+  useEffect(() => {
+    const pagArrows = document.getElementById("pagination-arrows");
+    if (filteredEvents.slice(0, 20).length >= 20) {
+      console.log("Pagination arrows shown");
+      pagArrows.classList.remove("hidden");
+    } else {
+      console.log("Pagination arrows hidden");
+      pagArrows.classList.add("hidden");
     }
   }, [events]);
 
@@ -105,9 +120,9 @@ const Navigation = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [loading, apiPage]);
 
-  useEffect(() => {
-    fetchEvents(apiPage);
-  }, [apiPage]);
+  // useEffect(() => {
+  //   fetchEvents(apiPage);
+  // }, [apiPage]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -238,6 +253,21 @@ const Navigation = () => {
     return text;
   }
 
+  // ===== PAGINATION =====
+  const eventsPerPage = 20;
+  const startIndex = (currentPage - 1) * eventsPerPage;
+  const endIndex = startIndex + eventsPerPage;
+
+  // ===== NEW PAGE SCROLL =====
+
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [currentPage]);
+
   return (
     <div className="navigation">
       {/* ============ HEADER START ============ */}
@@ -265,9 +295,9 @@ const Navigation = () => {
       </header>
 
       {/* ============ MAIN START ============ */}
-      <main className="main-content">
+      <main className="main-content" ref={containerRef}>
         <div className="event-cards-container">
-          {filteredEvents.map((event) => (
+          {filteredEvents.slice(startIndex, endIndex).map((event) => (
             <div
               ref={(el) => (eventRefs.current[event.id] = el)}
               className={`event-card ${
@@ -442,6 +472,21 @@ const Navigation = () => {
               </div>
             </div>
           ))}
+        </div>
+
+        <div className="pagination-arrows" id="pagination-arrows">
+          <button
+            className="prev"
+            onClick={() => setCurrentPage((prev) => prev - 1)}
+          >
+            &lt; Prev
+          </button>
+          <button
+            className="next"
+            onClick={() => setCurrentPage((prev) => prev + 1)}
+          >
+            Next &gt;
+          </button>
         </div>
       </main>
       {/* ============ FOOTER START ============ */}
