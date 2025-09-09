@@ -71,7 +71,7 @@ function Navigation() {
       const response = await axios.get(
         `https://api.hel.fi/linkedevents/v1/event/?page=${page}`
       );
-      // console.log("Response URL: " + response.config.url);
+      console.log("Response URL: " + response.config.url);
       const now = new Date();
       if (response.status === 200) {
         const newEvents = response.data.data.filter((event) => {
