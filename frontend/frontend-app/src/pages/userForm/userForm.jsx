@@ -67,6 +67,7 @@ const UserForm = () => {
       });
 
       if (response.status === 200) {
+        console.log("Registration successful:", response.data);
         navigate("/navigation");
       }
     } catch (error) {
@@ -88,8 +89,8 @@ const UserForm = () => {
           ←
         </button>
         <h2 className="card-heading">
-          Get started
-          <small>Let us create your account</small>
+          Aloita
+          <small>Luo käyttäjätilisi</small>
         </h2>
       </div>
 
@@ -99,7 +100,7 @@ const UserForm = () => {
           <input
             type="text"
             name="name"
-            placeholder="Full name"
+            placeholder="Koko nimi"
             value={name}
             onChange={(e) => setName(e.target.value)}
             onBlur={() => setIsNameTouched(true)}
@@ -110,7 +111,7 @@ const UserForm = () => {
         </div>
         {isNameInvalid && isNameTouched && (
           <ul className="password-checklist">
-            <li>Name must be at least 3 characters</li>
+            <li>Nimen on oltava vähintään 3 merkkiä pitkä</li>
           </ul>
         )}
 
@@ -119,7 +120,7 @@ const UserForm = () => {
           <input
             type="email"
             name="email"
-            placeholder="Email"
+            placeholder="Sähköposti"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             onBlur={() => setIsEmailTouched(true)}
@@ -130,7 +131,7 @@ const UserForm = () => {
         </div>
         {isEmailInvalid && isEmailTouched && (
           <ul className="password-checklist">
-            <li>Please enter a valid email</li>
+            <li>Anna voimassa oleva sähköpostiosoite</li>
           </ul>
         )}
 
@@ -139,7 +140,7 @@ const UserForm = () => {
           <input
             type={showPassword ? "text" : "password"}
             name="password"
-            placeholder="Password"
+            placeholder="Salasana"
             value={password}
             onChange={handlePasswordChange}
             onBlur={() => setIsPasswordTouched(true)}
@@ -153,33 +154,33 @@ const UserForm = () => {
           >
             <img
               src={showPassword ? eyeSlashIcon : eyeIcon}
-              alt="Toggle password visibility"
+              alt="Näytä tai piilota salasana"
             />
           </span>
         </div>
         {password && (
           <ul className="password-checklist">
             <li className={passwordValidations.length ? "valid" : "invalid"}>
-              8–20 characters
+              8–20 merkkiä
             </li>
             <li className={passwordValidations.upper ? "valid" : "invalid"}>
-              At least one uppercase
+              Vähintään yksi iso kirjain
             </li>
             <li className={passwordValidations.lower ? "valid" : "invalid"}>
-              At least one lowercase
+              Vähintään yksi pieni kirjain
             </li>
             <li className={passwordValidations.number ? "valid" : "invalid"}>
-              At least one number
+              Vähintään yksi numero
             </li>
             <li className={passwordValidations.special ? "valid" : "invalid"}>
-              At least one special (!@#$)
+              Vähintään yksi erikoismerkki (!@#$)
             </li>
           </ul>
         )}
 
         <div className="action">
           <button type="submit" className="action-button">
-            Get started
+            Rekisteröidy
           </button>
         </div>
       </form>
