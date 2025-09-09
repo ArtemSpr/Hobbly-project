@@ -43,7 +43,6 @@ function Navigation() {
   const [searchTerm, setSearchTerm] = useState("");
   const eventRefs = useRef({});
   const [currentPage, setCurrentPage] = useState(1);
-
   const [keyWords, setKeyWords] = useState([]);
 
   // ====== FUNCTION THAT SWITCH PAGE WHEN USER SCROLLS TO BOTTOM ======
@@ -64,6 +63,7 @@ function Navigation() {
   };
 
   // ====== FUNCTION THAT FETCHES EVENTS FROM API ======
+
   const fetchEvents = async (page) => {
     setLoading(true);
     let addedNew = false;
@@ -268,8 +268,6 @@ function Navigation() {
       containerRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [currentPage]);
-
-  //
 
   return (
     <div className="navigation">
