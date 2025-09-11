@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
+import { Splide, SplideSlide } from "@splidejs/react-splide";
 import axios from "axios";
 import "./navigation.css";
 
@@ -21,8 +22,6 @@ import EventPrice from "../../assets/icons/price-icon.png";
 import FilterIcon from "../../assets/icons/filter-icon.png";
 import SearchGray from "../../assets/icons/search-grey.png";
 
-
-
 //! TO DO: active page should be yellow in footer
 //! TO DO: create all other page
 //! TO DO: user can filter events by time, location, keywords, text, language, age
@@ -43,21 +42,39 @@ function Navigation() {
     address: "",
   });
 
-  // souman filter
-
-const [showFilterPanel, setShowFilterPanel] = useState(false);
-
-const toggleFilterPanel = () => {
-  setShowFilterPanel((prev) => !prev);
-};
-
-
-  
   const [searchTerm, setSearchTerm] = useState("");
   const eventRefs = useRef({});
   const [currentPage, setCurrentPage] = useState(1);
   const [keyWords, setKeyWords] = useState([]);
+  // ------- FILTER PANEL STATES -------
+  const [showFilterPanel, setShowFilterPanel] = useState(false);
+  const [isCentered, setIsCentered] = useState(false);
+  const [buttonVisible, setButtonVisible] = useState(true);
+  const [isClosing, setIsClosing] = useState(false);
 
+  // ======= FILTER PANEL =======
+  const toggleFilterPanel = () => {
+    if (!showFilterPanel) {
+      setIsCentered(true);
+      setTimeout(() => {
+        setButtonVisible(false);
+        setShowFilterPanel(true);
+        setIsClosing(false);
+      }, 400);
+    } else {
+      setIsClosing(true);
+
+      setTimeout(() => {
+        setShowFilterPanel(false);
+        setIsClosing(false);
+      }, 400);
+
+      setButtonVisible(true);
+      setTimeout(() => {
+        setIsCentered(false);
+      }, 300);
+    }
+  };
   // ====== FUNCTION THAT SWITCH PAGE WHEN USER SCROLLS TO BOTTOM ======
   const handleScroll = () => {
     if (
@@ -177,11 +194,9 @@ const toggleFilterPanel = () => {
   // useEffect(() => {
   //   const fetchKeywords = async () => {
   //     try {
-  //       // отримуємо всі @id з усіх івентів
   //       const allKeywordIds = events.flatMap(
   //         (event) => event.keywords?.map((k) => k["@id"]) || []
   //       );
-  //       // робимо запити до кожного @id
   //       const keywordNames = await Promise.all(
   //         allKeywordIds.map(async (url) => {
   //           const response = await axios.get(url);
@@ -196,6 +211,7 @@ const toggleFilterPanel = () => {
   //   };
   //   fetchKeywords();
   // }, [events]);
+
   // ===== FETCH EVENT LOCATION DETAILS =====
   const handleEventClick = async (event) => {
     console.log("Event clicked:", event);
@@ -299,74 +315,8 @@ const toggleFilterPanel = () => {
             />
             <img src={SearchGray} alt="Search" className="search-icon" />
           </div>
-
-          {/* SOUMAN AHMED FILTERATION */}
-          <header id="main-header" className="navi-header">
-  <div className="navi-logo">
-    <img src={Logo} alt="Logo" />
-  </div>
-
-  <div className="search-container">
-    <div className="search-input-wrapper">
-      <input
-        type="text"
-        placeholder="Hae tapahtumia..."
-        value={searchTerm}
-        onChange={(e) => handleSearch(e)}
-      />
-      <img src={SearchGray} alt="Search" className="search-icon" />
-    </div>
-
-    {/* Filter button beside search input */}
-    <div className="filter-wrapper" style={{ position: "relative" }}>
-      <div className="filter-button" onClick={toggleFilterPanel}>
-        <img src={FilterIcon} alt="Filter" />
-      </div>
-
-      {showFilterPanel && (
-        <div className="filter-panel">
-         <div className="filter-label">
-  Filtered by: <span>Filtered by</span>
-</div>
-          <div className="filter-row">
-            <label htmlFor="time">Time</label>
-            <select id="time" name="time">
-              <option value="">Select</option>
-              <option value="newest">Newest to Oldest</option>
-              <option value="oldest">Oldest to Newest</option>
-            </select>
-          </div>
-
-          <div className="filter-row">
-            <label htmlFor="place">Place</label>
-            <input
-              type="text"
-              id="place"
-              name="place"
-              placeholder="Enter a place"
-            />
-          </div>
-
-          <div className="filter-row">
-            <label htmlFor="keywords">Keywords</label>
-            <input
-              type="text"
-              id="keywords"
-              name="keywords"
-              placeholder="Enter keywords"
-            />
-          </div>
-        </div>
-      )}
-    </div>
-  </div>
-</header>
-
-           
-
         </div>
       </header>
-
 
       {/* ============ MAIN START ============ */}
       <main className="main-content" ref={containerRef}>
@@ -562,6 +512,105 @@ const toggleFilterPanel = () => {
               </div>
             </div>
           ))}
+        </div>
+
+        <div className="filter-wrapper">
+          {buttonVisible && (
+            <div
+              className={`filter-button ${isCentered ? "centered" : ""}`}
+              onClick={toggleFilterPanel}
+            >
+              <img src={FilterIcon} alt="Filter" />
+            </div>
+          )}
+
+          {showFilterPanel && (
+            <div
+              className={`filter-panel ${
+                showFilterPanel && !isClosing ? "open" : "closing"
+              }`}
+            >
+              <div className="filter-title">Filteröity</div>
+              <div className="filter-rows-container">
+                <Splide
+                  options={{
+                    type: "loop",
+                    perPage: 1,
+                    interval: 3000,
+                    arrows: true,
+                    pagination: true,
+                    speed: 500,
+                  }}
+                  aria-label="Filter Options"
+                >
+                  <SplideSlide>
+                    <div className="filter-row">
+                      <div className="filter-title">Aika</div>
+                      <div className="filter-version">
+                        <div className="filter-version-item">Uusin ensin</div>
+                        <div className="filter-version-item">Vanhin ensin</div>
+                        <div className="filter-version-item">Tännän</div>
+                        <div className="filter-version-item">Tämä viikko</div>
+                        <div className="filter-version-item">Tämä kuukausi</div>
+                      </div>
+                    </div>
+                  </SplideSlide>
+                  <SplideSlide>
+                    <div className="filter-row">
+                      <div className="filter-title">Paikkakunta</div>
+                      <div className="filter-places-container">
+                        <label>
+                          <input type="checkbox" />
+                          <span>Helsinki</span>
+                        </label>
+                        <label>
+                          <input type="checkbox" />
+                          <span>Espoo</span>
+                        </label>
+                        <label>
+                          <input type="checkbox" />
+                          <span>Vuosari</span>
+                        </label>
+                        <label>
+                          <input type="checkbox" />
+                          <span>Vantaa</span>
+                        </label>
+                        <label>
+                          <input type="checkbox" />
+                          <span>Melunmäki</span>
+                        </label>
+                      </div>
+                    </div>
+                  </SplideSlide>
+                  <SplideSlide>
+                    <div className="filter-row">
+                      <div className="filter-title">Avainsanat</div>
+                      <div className="filter-keywords-container">
+                        <span>Konsertti</span>
+                        <span>Näyttely</span>
+                        <span>Festivaali</span>
+                        <span>Seminaari</span>
+                        <span>Työpaja</span>
+                        <span>Näytelmä</span>
+                        <span>Markkinat</span>
+                        <span>Tapaaminen</span>
+                        <span>Esittely</span>
+                        <span>Juhla</span>
+                      </div>
+                    </div>
+                  </SplideSlide>
+                </Splide>
+              </div>
+              <div className="filter-button-container">
+                <div className="discard-button" onClick={toggleFilterPanel}>
+                  Hylkää suodattimet
+                </div>
+                <div className="apply-button" onClick={toggleFilterPanel}>
+                  Hyväksy suodattimet
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="pagination-arrows" id="pagination-arrows">
