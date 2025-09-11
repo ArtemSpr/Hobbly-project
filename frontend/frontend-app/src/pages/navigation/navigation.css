@@ -583,6 +583,16 @@ a.active img {
 /*==============================*/
 /*====== RESPONSIVE ======*/
 @media (max-width: 450px) {
+
+    .event-card {
+        width: 90%;
+    }
+
+    .event-card-image {
+        height: 180px;
+    }
+}
+
   .event-card {
     width: 90%;
   }
@@ -590,4 +600,61 @@ a.active img {
   .event-card-image {
     height: 180px;
   }
+
+
+/* souman filteration */
+
+
+
+.filter-panel {
+  position: absolute;
+  top: 100%; /* right below filter button */
+  right: 0;
+  margin-top: 8px;
+  width: 280px;
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  padding: 12px;
+  z-index: 20;
+}
+
+.filter-row {
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-row label {
+  margin-bottom: 6px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.filter-row input,
+.filter-row select {
+  padding: 8px 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+@media screen and (min-width: 768px) {
+  .filter-panel {
+    width: 320px;
+  }
+}
+
+.filter-panel .filter-label {
+  font-weight: bold;
+  margin-bottom: 10px;
+  font-size: 20px;
+  display: flex;
+  text-align: left;
+}
+
+
+.filter-panel .filter-label span {
+  font-weight: normal;
+  color: #555;
 }
