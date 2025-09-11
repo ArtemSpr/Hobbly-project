@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import "./navigation.css";
+
 import Logo from "../../assets/icons/yellow-big-logo.png";
 import SearchIcon from "../../assets/icons/search-white.svg";
 import HomeIcon from "../../assets/icons/home-white.svg";
@@ -19,6 +20,8 @@ import EventLocation from "../../assets/icons/location-icon.png";
 import EventPrice from "../../assets/icons/price-icon.png";
 import FilterIcon from "../../assets/icons/filter-icon.png";
 import SearchGray from "../../assets/icons/search-grey.png";
+
+
 
 //! TO DO: active page should be yellow in footer
 //! TO DO: create all other page
@@ -40,6 +43,16 @@ function Navigation() {
     address: "",
   });
 
+  // souman filter
+
+const [showFilterPanel, setShowFilterPanel] = useState(false);
+
+const toggleFilterPanel = () => {
+  setShowFilterPanel((prev) => !prev);
+};
+
+
+  
   const [searchTerm, setSearchTerm] = useState("");
   const eventRefs = useRef({});
   const [currentPage, setCurrentPage] = useState(1);
@@ -288,11 +301,74 @@ function Navigation() {
             />
             <img src={SearchGray} alt="Search" className="search-icon" />
           </div>
-          <div className="filter-button">
-            <img src={FilterIcon} alt="Search" />
+
+          {/* SOUMAN AHMED FILTERATION */}
+          <header id="main-header" className="navi-header">
+  <div className="navi-logo">
+    <img src={Logo} alt="Logo" />
+  </div>
+
+  <div className="search-container">
+    <div className="search-input-wrapper">
+      <input
+        type="text"
+        placeholder="Hae tapahtumia..."
+        value={searchTerm}
+        onChange={(e) => handleSearch(e)}
+      />
+      <img src={SearchGray} alt="Search" className="search-icon" />
+    </div>
+
+    {/* Filter button beside search input */}
+    <div className="filter-wrapper" style={{ position: "relative" }}>
+      <div className="filter-button" onClick={toggleFilterPanel}>
+        <img src={FilterIcon} alt="Filter" />
+      </div>
+
+      {showFilterPanel && (
+        <div className="filter-panel">
+         <div className="filter-label">
+  Filtered by: <span>Filtered by</span>
+</div>
+          <div className="filter-row">
+            <label htmlFor="time">Time</label>
+            <select id="time" name="time">
+              <option value="">Select</option>
+              <option value="newest">Newest to Oldest</option>
+              <option value="oldest">Oldest to Newest</option>
+            </select>
+          </div>
+
+          <div className="filter-row">
+            <label htmlFor="place">Place</label>
+            <input
+              type="text"
+              id="place"
+              name="place"
+              placeholder="Enter a place"
+            />
+          </div>
+
+          <div className="filter-row">
+            <label htmlFor="keywords">Keywords</label>
+            <input
+              type="text"
+              id="keywords"
+              name="keywords"
+              placeholder="Enter keywords"
+            />
           </div>
         </div>
+      )}
+    </div>
+  </div>
+</header>
+
+           
+
+        </div>
       </header>
+
 
       {/* ============ MAIN START ============ */}
       <main className="main-content" ref={containerRef}>
