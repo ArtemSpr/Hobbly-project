@@ -181,8 +181,8 @@ const OrganaizerForm = () => {
           </Link>
         </div>
         <h2 className="card-heading">
-          Get started
-          <small>Let us create your Organizer account</small>
+          Aloita
+          <small>Luo järjestäjätilisi</small>
         </h2>
       </div>
 
@@ -191,7 +191,7 @@ const OrganaizerForm = () => {
         <div className="userForm-input">
           <input
             type="text"
-            placeholder="Full Organization Name"
+            placeholder="Organisaation koko nimi"
             value={NameValue}
             onChange={handleNameChanges}
             onBlur={() => setIsNameTouched(true)}
@@ -202,7 +202,7 @@ const OrganaizerForm = () => {
         </div>
         {isNameInvalid && isNameTouched && (
           <ul className="password-checklist">
-            <li>Name must be at least 3 characters</li>
+            <li>Nimen on oltava vähintään 3 merkkiä pitkä</li>
           </ul>
         )}
 
@@ -210,7 +210,7 @@ const OrganaizerForm = () => {
         <div className="userForm-input">
           <input
             type="email"
-            placeholder="Email"
+            placeholder="Sähköposti"
             value={EmailValue}
             onChange={handleEmailChange}
             onBlur={() => setIsEmailTouched(true)}
@@ -221,7 +221,7 @@ const OrganaizerForm = () => {
         </div>
         {isEmailInvalid && isEmailTouched && (
           <ul className="password-checklist">
-            <li>Please enter a valid email</li>
+            <li>Anna voimassa oleva sähköpostiosoite</li>
           </ul>
         )}
 
@@ -229,7 +229,7 @@ const OrganaizerForm = () => {
         <div className="password-input-wrapper">
           <input
             type={showPassword ? "text" : "password"}
-            placeholder="Password"
+            placeholder="Salasana"
             value={PasswordValue}
             onChange={handlePasswordChange}
             onBlur={() => setIsPasswordTouched(true)}
@@ -243,17 +243,17 @@ const OrganaizerForm = () => {
           >
             <img
               src={showPassword ? eyeSlashIcon : eyeIcon}
-              alt="Toggle password"
+              alt="Näytä tai piilota salasana"
             />
           </span>
         </div>
         {PasswordValue && (
           <ul className="password-checklist">
             <li className={PasswordValue.length >= 8 ? "valid" : ""}>
-              8+ characters
+              Vähintään 8 merkkiä
             </li>
             <li className={/\d/.test(PasswordValue) ? "valid" : ""}>
-              At least one number
+              Vähintään yksi numero
             </li>
           </ul>
         )}
@@ -262,7 +262,7 @@ const OrganaizerForm = () => {
         <div className="userForm-input">
           <input
             type="text"
-            placeholder="Description"
+            placeholder="Kuvaus"
             value={DescriptionValue}
             onChange={descriptionChecker}
             onBlur={() => setIsDescriptionTouched(true)}
@@ -275,7 +275,7 @@ const OrganaizerForm = () => {
         </div>
         {isDescriptionInvalid && isDescriptionTouched && (
           <ul className="password-checklist">
-            <li>Description must be 25–300 characters</li>
+            <li>Kuvauksen on oltava 25–300 merkkiä pitkä</li>
           </ul>
         )}
 
@@ -283,7 +283,7 @@ const OrganaizerForm = () => {
         <div className="userForm-input">
           <input
             type="text"
-            placeholder="Address"
+            placeholder="Osoite"
             value={AddressValue}
             onChange={handleAddressChange}
             onBlur={() => setIsAddressTouched(true)}
@@ -294,7 +294,7 @@ const OrganaizerForm = () => {
         </div>
         {isAddressInvalid && isAddressTouched && (
           <ul className="password-checklist">
-            <li>Address must be at least 5 characters</li>
+            <li>Osoitteen on oltava vähintään 5 merkkiä pitkä</li>
           </ul>
         )}
 
@@ -302,7 +302,7 @@ const OrganaizerForm = () => {
         <div className="userForm-input">
           <input
             type="text"
-            placeholder="City"
+            placeholder="Kaupunki"
             value={CityValue}
             onChange={handleCityChange}
             onBlur={() => setIsCityTouched(true)}
@@ -313,7 +313,7 @@ const OrganaizerForm = () => {
         </div>
         {isCityInvalid && isCityTouched && (
           <ul className="password-checklist">
-            <li>City is required</li>
+            <li>Kaupunki on pakollinen tieto</li>
           </ul>
         )}
 
@@ -321,7 +321,7 @@ const OrganaizerForm = () => {
         <div className="userForm-input">
           <input
             type="text"
-            placeholder="Postal Code"
+            placeholder="Postinumero"
             value={PostalCodeValue}
             onChange={handlePostalCodeChange}
             onBlur={() => setIsPostalCodeTouched(true)}
@@ -334,7 +334,7 @@ const OrganaizerForm = () => {
         </div>
         {isPostalCodeInvalid && isPostalCodeTouched && (
           <ul className="password-checklist">
-            <li>Postal code must be 5–10 digits</li>
+            <li>Postinumeron on oltava 5–10 numeroa</li>
           </ul>
         )}
 
@@ -342,7 +342,7 @@ const OrganaizerForm = () => {
         <div className="userForm-input">
           <input
             type="text"
-            placeholder="Identification Number"
+            placeholder="Tunnistenumero"
             value={IdentificationNumberValue}
             onChange={handleIdentificationNumberChange}
           />
@@ -353,7 +353,7 @@ const OrganaizerForm = () => {
           <input
             type="text"
             list="organization-types"
-            placeholder="Organization Type"
+            placeholder="Organisaation tyyppi"
             value={OrganizationTypeValue}
             onChange={handleOrganizationTypeChange}
             onBlur={() => setIsOrganizationTypeTouched(true)}
@@ -364,20 +364,20 @@ const OrganaizerForm = () => {
             }`}
           />
           <datalist id="organization-types">
-            <option value="Association" />
-            <option value="Private" />
-            <option value="Limited company" />
+            <option value="Yhdistys" />
+            <option value="Yksityinen" />
+            <option value="Osakeyhtiö" />
           </datalist>
         </div>
         {isOrganizationTypeInvalid && isOrganizationTypeTouched && (
           <ul className="password-checklist">
-            <li>Please select organization type</li>
+            <li>Valitse organisaation tyyppi</li>
           </ul>
         )}
 
         <div className="action">
           <button type="submit" className="action-button">
-            Get started
+            Rekisteröidy
           </button>
         </div>
       </form>
