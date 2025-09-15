@@ -53,8 +53,24 @@ function Navigation() {
   const [isCentered, setIsCentered] = useState(false);
   const [buttonVisible, setButtonVisible] = useState(true);
   const [isClosing, setIsClosing] = useState(false);
+  const [filterParams, setFilterParams] = useState([[], [], []]);
+  const [apiLink, setApiLink] = useState(
+    "https://api.hel.fi/linkedevents/v1/event/"
+  );
 
   // ======= FILTER PANEL =======
+
+  const applyFilterButton = () => {
+    setCurrentPage(1);
+    toggleFilterPanel();
+  };
+
+  const declineFilterButton = () => {
+    setCurrentPage(1);
+    clearFilters();
+    toggleFilterPanel();
+  };
+
   const toggleFilterPanel = () => {
     if (!showFilterPanel) {
       setIsCentered(true);
@@ -79,10 +95,15 @@ function Navigation() {
   };
   // ====== FUNCTION THAT SWITCH PAGE WHEN USER SCROLLS TO BOTTOM ======
   const handleScroll = () => {
+    const hasActiveFilters = filterParams.some(
+      (paramArray) => paramArray.length > 0
+    );
+
     if (
       window.scrollY + window.innerHeight >=
         document.documentElement.scrollHeight - 10 &&
-      !loading
+      !loading &&
+      !hasActiveFilters
     ) {
       fetchEvents(apiPage).then((addedNew) => {
         if (!addedNew) {
@@ -95,16 +116,23 @@ function Navigation() {
   };
 
   // ====== FUNCTION THAT FETCHES EVENTS FROM API ======
-
   const fetchEvents = async (page) => {
     setLoading(true);
     let addedNew = false;
+
     try {
-      const response = await axios.get(
-        `https://api.hel.fi/linkedevents/v1/event/?page=${page}`
-      );
-      // console.log("Response URL: " + response.config.url);
+      let requestUrl;
+      if (apiLink.includes("?")) {
+        requestUrl = `${apiLink}/&page=${page}`;
+      } else {
+        requestUrl = `${apiLink}/?page=${page}`;
+      }
+
+      console.log("Request URL: " + requestUrl);
+
+      const response = await axios.get(requestUrl);
       const now = new Date();
+
       if (response.status === 200) {
         const newEvents = response.data.data.filter((event) => {
           const endTime = event.end_time ? new Date(event.end_time) : null;
@@ -112,6 +140,7 @@ function Navigation() {
             event.super_event === null && (endTime === null || endTime > now)
           );
         });
+
         setEvents((prev) => {
           const combined = [...prev, ...newEvents];
           const unique = combined.filter(
@@ -126,6 +155,7 @@ function Navigation() {
     } finally {
       setLoading(false);
     }
+
     return addedNew;
   };
 
@@ -192,68 +222,6 @@ function Navigation() {
       });
     }
   }, [activeEventId]);
-
-  // useEffect(() => {
-  //   const fetchKeywords = async () => {
-  //     try {
-  //       const allKeywordIds = events.flatMap(
-  //         (event) => event.keywords?.map((k) => k["@id"]) || []
-  //       );
-  //       const keywordNames = await Promise.all(
-  //         allKeywordIds.map(async (url) => {
-  //           const response = await axios.get(url);
-  //           return response.data.name; // або response.data.name.fi, якщо потрібна фінська версія
-  //         })
-  //       );
-  //       setKeyWords(keywordNames); // зберігаємо масив назв
-  //       console.log("Keyword Names:", keywordNames);
-  //     } catch (error) {
-  //       console.error("Error fetching keywords:", error);
-  //     }
-  //   };
-  //   fetchKeywords();
-  // }, [events]);
-
-  // useEffect(() => {
-  //   const fetchInBatches = async (urls, batchSize = 5) => {
-  //     const results = [];
-  //     for (let i = 0; i < urls.length; i += batchSize) {
-  //       const batch = urls.slice(i, i + batchSize).map(async (url) => {
-  //         try {
-  //           const res = await fetch(url);
-  //           const data = await res.json();
-  //           return data?.divisions?.[1]?.name.fi || null;
-  //         } catch {
-  //           return null;
-  //         }
-  //       });
-
-  //       const batchResults = await Promise.all(batch);
-  //       results.push(...batchResults);
-  //     }
-  //     return results.filter(Boolean);
-  //   };
-
-  //   const fetchMunicipalities = async () => {
-  //     try {
-  //       const urls = events
-  //         .map((event) => event?.location?.["@id"])
-  //         .filter(Boolean);
-
-  //       const allMuni = await fetchInBatches(urls, 5); // по 5 одночасно
-  //       const uniqueMuni = [...new Set(allMuni)];
-
-  //       console.log("Унікальні муніципалітети:", uniqueMuni);
-  //       // setMunicipalities(uniqueMuni);
-  //     } catch (error) {
-  //       console.error("Помилка при отриманні муніципалітетів:", error);
-  //     }
-  //   };
-
-  //   if (events?.length) {
-  //     fetchMunicipalities();
-  //   }
-  // }, [events]);
 
   // ===== FETCH EVENT LOCATION DETAILS =====
   const handleEventClick = async (event) => {
@@ -353,18 +321,30 @@ function Navigation() {
       titleRef.current.sync(optionsRef.current.splide);
     }
   }, []);
+  // ====================================
+  // ========= BIG FILTER LOGIC =========
+  // ====================================
+
+  const filterTime = [
+    "Uusin ensin",
+    "Vanhin ensin",
+    "Tännän",
+    "Tämä viikko",
+    "Tämä kuukausi",
+    "Tämä vuonna",
+  ];
 
   const districts = [
-    "Pasila",
-    "Kallio",
-    "Pitäjänmäki",
-    "Taka-Töölö",
-    "Vartiokylä",
-    "Vallila",
-    "Malmi",
-    "Mellunkylä",
-    "Pukinmäki",
-    "Vuosaari",
+    { name: "Helsinki", value: "helsinki" },
+    { name: "Espoo", value: "espoo" },
+    { name: "Vantaa", value: "vantaa" },
+    { name: "Kauniainen", value: "kauniainen" },
+    { name: "Pasila", value: "pasila" },
+    { name: "Kallio", value: "kallio" },
+    { name: "Pitäjänmäki", value: "pitajanmaki" },
+    { name: "Taka-Töölö", value: "taka-toolo" },
+    { name: "Vartiokylä", value: "vartiokyla" },
+    { name: "Vallila", value: "vallila" },
   ];
 
   const keywords = [
@@ -385,8 +365,168 @@ function Navigation() {
     "Kokous",
     "Urheilutapahtuma",
     "Lastentapahtuma",
-    "Kirjamessut",
   ];
+
+  const filterTimeHandler = (value) => {
+    try {
+      setFilterParams((prev) => {
+        const newParams = [...prev];
+        newParams[0] = [];
+
+        switch (value) {
+          case "Uusin ensin":
+            newParams[0] = ["sort=-start_time"];
+            break;
+
+          case "Vanhin ensin":
+            newParams[0] = ["sort=start_time"];
+            break;
+
+          case "Tännän":
+            const today = new Date().toISOString().split("T")[0];
+            newParams[0] = [`start=${today}`, `end=${today}`];
+            break;
+
+          case "Tämä viikko":
+            const startOfWeek = new Date();
+            const endOfWeek = new Date();
+            endOfWeek.setDate(startOfWeek.getDate() + 7);
+            newParams[0] = [
+              `start=${startOfWeek.toISOString().split("T")[0]}`,
+              `end=${endOfWeek.toISOString().split("T")[0]}`,
+            ];
+            break;
+
+          case "Tämä kuukausi":
+            const startOfMonth = new Date();
+            const endOfMonth = new Date();
+            endOfMonth.setDate(startOfMonth.getDate() + 30);
+            newParams[0] = [
+              `start=${startOfMonth.toISOString().split("T")[0]}`,
+              `end=${endOfMonth.toISOString().split("T")[0]}`,
+            ];
+            break;
+
+          case "Tämä vuonna":
+            newParams[0] = ["start=2025-01-01", "end=2025-12-31"];
+            break;
+
+          default:
+            break;
+        }
+
+        return newParams;
+      });
+      console.log("Time filter was successfully added");
+    } catch (error) {
+      console.log("Something went wrong while time filter adding: " + error);
+    }
+  };
+
+  const filterPlaceHandler = (districtObj) => {
+    try {
+      setFilterParams((prev) => {
+        const newParams = [...prev];
+        const districtValue = districtObj.value || districtObj; // підтримка і старого і нового формату
+
+        if (newParams[1].includes(districtValue)) {
+          newParams[1] = newParams[1].filter((item) => item !== districtValue);
+        } else {
+          newParams[1] = [...newParams[1], districtValue];
+        }
+
+        console.log("Updated filterParams:", newParams);
+        return newParams;
+      });
+      console.log("Place filter was successfully updated");
+    } catch (error) {
+      console.log("Something went wrong while place filter updating: " + error);
+    }
+  };
+
+  const filterKeywordHandler = (value) => {
+    try {
+      setFilterParams((prev) => {
+        const newParams = [...prev];
+        const lowerCaseValue = value.toLowerCase();
+
+        if (newParams[2].includes(lowerCaseValue)) {
+          newParams[2] = newParams[2].filter((item) => item !== lowerCaseValue);
+        } else {
+          newParams[2] = [...newParams[2], lowerCaseValue];
+        }
+
+        return newParams;
+      });
+      console.log("Keyword filter was successfully updated");
+    } catch (error) {
+      console.log(
+        "Something went wrong while keyword filter updating: " + error
+      );
+    }
+  };
+
+  useEffect(() => {
+    const hasAnyFilters = filterParams.some(
+      (paramArray) => paramArray && paramArray.length > 0
+    );
+    console.log("filterParams changed:", filterParams);
+
+    if (hasAnyFilters) {
+      filterLinkSwitching();
+    } else {
+      const baseUrl = "https://api.hel.fi/linkedevents/v1/event/";
+      setApiLink(baseUrl);
+      console.log("All filters cleared, reset to base URL");
+    }
+  }, [filterParams]);
+
+  const filterLinkSwitching = () => {
+    try {
+      console.log("Current filterParams in filterLinkSwitching:", filterParams);
+
+      const timeFilterArray = filterParams[0] || [];
+      const placeFilterArray = (filterParams[1] || []).map(
+        (p) => `location=${p}`
+      );
+      const keywordFilterArray = (filterParams[2] || []).map(
+        (k) => `keyword=${k}`
+      );
+
+      const allParams = [
+        ...timeFilterArray,
+        ...placeFilterArray,
+        ...keywordFilterArray,
+      ].filter((param) => param && param.trim() !== "");
+
+      console.log("All params for URL:", allParams);
+
+      const baseUrl = "https://api.hel.fi/linkedevents/v1/event/";
+
+      if (allParams.length > 0) {
+        const queryString = allParams.join("&");
+        setApiLink(`${baseUrl}?${queryString}`);
+        console.log("New API URL:", `${baseUrl}?${queryString}`);
+      } else {
+        setApiLink(baseUrl);
+        console.log("Reset to base URL:", baseUrl);
+      }
+
+      setEvents([]);
+      setApiPage(1);
+    } catch (error) {
+      console.log("Error in filterLinkSwitching: " + error);
+    }
+  };
+
+  const clearFilters = () => {
+    setFilterParams([[], [], []]);
+    setApiLink("https://api.hel.fi/linkedevents/v1/event/");
+    setEvents([]);
+    setApiPage(1);
+    setCurrentPage(1);
+  };
+
   return (
     <div className="navigation">
       {/* ============ HEADER START ============ */}
@@ -655,11 +795,15 @@ function Navigation() {
                   <SplideSlide>
                     <div className="filter-row">
                       <div className="filter-version">
-                        <div className="filter-version-item">Uusin ensin</div>
-                        <div className="filter-version-item">Vanhin ensin</div>
-                        <div className="filter-version-item">Tännän</div>
-                        <div className="filter-version-item">Tämä viikko</div>
-                        <div className="filter-version-item">Tämä kuukausi</div>
+                        {filterTime.map((time) => (
+                          <div
+                            key={time}
+                            className="filter-version-item"
+                            onClick={() => filterTimeHandler(time)}
+                          >
+                            {time}
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </SplideSlide>
@@ -667,9 +811,16 @@ function Navigation() {
                     <div className="filter-row">
                       <div className="filter-places-container">
                         {districts.map((district) => (
-                          <label>
-                            <input type="checkbox" />
-                            <span>{district}</span>
+                          <label
+                            key={district.value}
+                            onClick={() => filterPlaceHandler(district)}
+                          >
+                            <input
+                              type="checkbox"
+                              checked={filterParams[1].includes(district.value)}
+                              readOnly
+                            />
+                            <span>{district.name}</span>
                           </label>
                         ))}
                       </div>
@@ -679,7 +830,12 @@ function Navigation() {
                     <div className="filter-row">
                       <div className="filter-keywords-container">
                         {keywords.map((keyword) => (
-                          <span>{keyword}</span>
+                          <span
+                            key={keyword}
+                            onClick={() => filterKeywordHandler(keyword)}
+                          >
+                            {keyword}
+                          </span>
                         ))}
                       </div>
                     </div>
@@ -687,10 +843,10 @@ function Navigation() {
                 </Splide>
               </div>
               <div id="filter-buttons" className="filter-button-container">
-                <div className="discard-button" onClick={toggleFilterPanel}>
+                <div className="discard-button" onClick={declineFilterButton}>
                   Hylkää
                 </div>
-                <div className="apply-button" onClick={toggleFilterPanel}>
+                <div className="apply-button" onClick={applyFilterButton}>
                   Hyväksy
                 </div>
               </div>
