@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, use } from "react";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import axios from "axios";
 import "./navigation.css";
@@ -40,6 +40,8 @@ function Navigation() {
     },
     info_url: "",
     address: "",
+    muni: "",
+    district: "",
   });
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -51,8 +53,24 @@ function Navigation() {
   const [isCentered, setIsCentered] = useState(false);
   const [buttonVisible, setButtonVisible] = useState(true);
   const [isClosing, setIsClosing] = useState(false);
+  const [filterParams, setFilterParams] = useState([[], [], []]);
+  const [apiLink, setApiLink] = useState(
+    "https://api.hel.fi/linkedevents/v1/event/"
+  );
 
   // ======= FILTER PANEL =======
+
+  const applyFilterButton = () => {
+    setCurrentPage(1);
+    toggleFilterPanel();
+  };
+
+  const declineFilterButton = () => {
+    setCurrentPage(1);
+    clearFilters();
+    toggleFilterPanel();
+  };
+
   const toggleFilterPanel = () => {
     if (!showFilterPanel) {
       setIsCentered(true);
@@ -77,10 +95,15 @@ function Navigation() {
   };
   // ====== FUNCTION THAT SWITCH PAGE WHEN USER SCROLLS TO BOTTOM ======
   const handleScroll = () => {
+    const hasActiveFilters = filterParams.some(
+      (paramArray) => paramArray.length > 0
+    );
+
     if (
       window.scrollY + window.innerHeight >=
         document.documentElement.scrollHeight - 10 &&
-      !loading
+      !loading &&
+      !hasActiveFilters
     ) {
       fetchEvents(apiPage).then((addedNew) => {
         if (!addedNew) {
@@ -93,16 +116,23 @@ function Navigation() {
   };
 
   // ====== FUNCTION THAT FETCHES EVENTS FROM API ======
-
   const fetchEvents = async (page) => {
     setLoading(true);
     let addedNew = false;
+
     try {
-      const response = await axios.get(
-        `https://api.hel.fi/linkedevents/v1/event/?page=${page}`
-      );
-      // console.log("Response URL: " + response.config.url);
+      let requestUrl;
+      if (apiLink.includes("?")) {
+        requestUrl = `${apiLink}/&page=${page}`;
+      } else {
+        requestUrl = `${apiLink}/?page=${page}`;
+      }
+
+      console.log("Request URL: " + requestUrl);
+
+      const response = await axios.get(requestUrl);
       const now = new Date();
+
       if (response.status === 200) {
         const newEvents = response.data.data.filter((event) => {
           const endTime = event.end_time ? new Date(event.end_time) : null;
@@ -110,6 +140,7 @@ function Navigation() {
             event.super_event === null && (endTime === null || endTime > now)
           );
         });
+
         setEvents((prev) => {
           const combined = [...prev, ...newEvents];
           const unique = combined.filter(
@@ -124,6 +155,7 @@ function Navigation() {
     } finally {
       setLoading(false);
     }
+
     return addedNew;
   };
 
@@ -191,27 +223,6 @@ function Navigation() {
     }
   }, [activeEventId]);
 
-  // useEffect(() => {
-  //   const fetchKeywords = async () => {
-  //     try {
-  //       const allKeywordIds = events.flatMap(
-  //         (event) => event.keywords?.map((k) => k["@id"]) || []
-  //       );
-  //       const keywordNames = await Promise.all(
-  //         allKeywordIds.map(async (url) => {
-  //           const response = await axios.get(url);
-  //           return response.data.name; // або response.data.name.fi, якщо потрібна фінська версія
-  //         })
-  //       );
-  //       setKeyWords(keywordNames); // зберігаємо масив назв
-  //       console.log("Keyword Names:", keywordNames);
-  //     } catch (error) {
-  //       console.error("Error fetching keywords:", error);
-  //     }
-  //   };
-  //   fetchKeywords();
-  // }, [events]);
-
   // ===== FETCH EVENT LOCATION DETAILS =====
   const handleEventClick = async (event) => {
     console.log("Event clicked:", event);
@@ -233,6 +244,8 @@ function Navigation() {
         },
         info_url: response.data.info_url?.fi || "",
         address: response.data.street_address.fi || "",
+        muni: response.data.divisions[1].municipality || "",
+        district: response.data.divisions[1].name.fi || "",
       };
       setEventLocation(locationData);
     } catch (error) {
@@ -297,6 +310,222 @@ function Navigation() {
       containerRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [currentPage]);
+
+  // ====== SLIDER SYNCRONIZATION ======
+
+  const titleRef = useRef(null);
+  const optionsRef = useRef(null);
+
+  useEffect(() => {
+    if (titleRef.current && optionsRef.current) {
+      titleRef.current.sync(optionsRef.current.splide);
+    }
+  }, []);
+  // ====================================
+  // ========= BIG FILTER LOGIC =========
+  // ====================================
+
+  const filterTime = [
+    "Uusin ensin",
+    "Vanhin ensin",
+    "Tännän",
+    "Tämä viikko",
+    "Tämä kuukausi",
+    "Tämä vuonna",
+  ];
+
+  const districts = [
+    { name: "Helsinki", value: "helsinki" },
+    { name: "Espoo", value: "espoo" },
+    { name: "Vantaa", value: "vantaa" },
+    { name: "Kauniainen", value: "kauniainen" },
+    { name: "Pasila", value: "pasila" },
+    { name: "Kallio", value: "kallio" },
+    { name: "Pitäjänmäki", value: "pitajanmaki" },
+    { name: "Taka-Töölö", value: "taka-toolo" },
+    { name: "Vartiokylä", value: "vartiokyla" },
+    { name: "Vallila", value: "vallila" },
+  ];
+
+  const keywords = [
+    "Konsertti",
+    "Näyttely",
+    "Festivaali",
+    "Seminaari",
+    "Työpaja",
+    "Näytelmä",
+    "Markkinat",
+    "Tapaaminen",
+    "Esittely",
+    "Juhla",
+    "Luento",
+    "Workshop",
+    "Konferenssi",
+    "Elokuvanäytös",
+    "Kokous",
+    "Urheilutapahtuma",
+    "Lastentapahtuma",
+  ];
+
+  const filterTimeHandler = (value) => {
+    try {
+      setFilterParams((prev) => {
+        const newParams = [...prev];
+        newParams[0] = [];
+
+        switch (value) {
+          case "Uusin ensin":
+            newParams[0] = ["sort=-start_time"];
+            break;
+
+          case "Vanhin ensin":
+            newParams[0] = ["sort=start_time"];
+            break;
+
+          case "Tännän":
+            const today = new Date().toISOString().split("T")[0];
+            newParams[0] = [`start=${today}`, `end=${today}`];
+            break;
+
+          case "Tämä viikko":
+            const startOfWeek = new Date();
+            const endOfWeek = new Date();
+            endOfWeek.setDate(startOfWeek.getDate() + 7);
+            newParams[0] = [
+              `start=${startOfWeek.toISOString().split("T")[0]}`,
+              `end=${endOfWeek.toISOString().split("T")[0]}`,
+            ];
+            break;
+
+          case "Tämä kuukausi":
+            const startOfMonth = new Date();
+            const endOfMonth = new Date();
+            endOfMonth.setDate(startOfMonth.getDate() + 30);
+            newParams[0] = [
+              `start=${startOfMonth.toISOString().split("T")[0]}`,
+              `end=${endOfMonth.toISOString().split("T")[0]}`,
+            ];
+            break;
+
+          case "Tämä vuonna":
+            newParams[0] = ["start=2025-01-01", "end=2025-12-31"];
+            break;
+
+          default:
+            break;
+        }
+
+        return newParams;
+      });
+      console.log("Time filter was successfully added");
+    } catch (error) {
+      console.log("Something went wrong while time filter adding: " + error);
+    }
+  };
+
+  const filterPlaceHandler = (districtObj) => {
+    try {
+      setFilterParams((prev) => {
+        const newParams = [...prev];
+        const districtValue = districtObj.value || districtObj; // підтримка і старого і нового формату
+
+        if (newParams[1].includes(districtValue)) {
+          newParams[1] = newParams[1].filter((item) => item !== districtValue);
+        } else {
+          newParams[1] = [...newParams[1], districtValue];
+        }
+
+        console.log("Updated filterParams:", newParams);
+        return newParams;
+      });
+      console.log("Place filter was successfully updated");
+    } catch (error) {
+      console.log("Something went wrong while place filter updating: " + error);
+    }
+  };
+
+  const filterKeywordHandler = (value) => {
+    try {
+      setFilterParams((prev) => {
+        const newParams = [...prev];
+        const lowerCaseValue = value.toLowerCase();
+
+        if (newParams[2].includes(lowerCaseValue)) {
+          newParams[2] = newParams[2].filter((item) => item !== lowerCaseValue);
+        } else {
+          newParams[2] = [...newParams[2], lowerCaseValue];
+        }
+
+        return newParams;
+      });
+      console.log("Keyword filter was successfully updated");
+    } catch (error) {
+      console.log(
+        "Something went wrong while keyword filter updating: " + error
+      );
+    }
+  };
+
+  useEffect(() => {
+    const hasAnyFilters = filterParams.some(
+      (paramArray) => paramArray && paramArray.length > 0
+    );
+    console.log("filterParams changed:", filterParams);
+
+    if (hasAnyFilters) {
+      filterLinkSwitching();
+    } else {
+      const baseUrl = "https://api.hel.fi/linkedevents/v1/event/";
+      setApiLink(baseUrl);
+      console.log("All filters cleared, reset to base URL");
+    }
+  }, [filterParams]);
+
+  const filterLinkSwitching = () => {
+    try {
+      console.log("Current filterParams in filterLinkSwitching:", filterParams);
+
+      const timeFilterArray = filterParams[0] || [];
+      const placeFilterArray = (filterParams[1] || []).map(
+        (p) => `location=${p}`
+      );
+      const keywordFilterArray = (filterParams[2] || []).map(
+        (k) => `keyword=${k}`
+      );
+
+      const allParams = [
+        ...timeFilterArray,
+        ...placeFilterArray,
+        ...keywordFilterArray,
+      ].filter((param) => param && param.trim() !== "");
+
+      console.log("All params for URL:", allParams);
+
+      const baseUrl = "https://api.hel.fi/linkedevents/v1/event/";
+
+      if (allParams.length > 0) {
+        const queryString = allParams.join("&");
+        setApiLink(`${baseUrl}?${queryString}`);
+        console.log("New API URL:", `${baseUrl}?${queryString}`);
+      } else {
+        setApiLink(baseUrl);
+        console.log("Reset to base URL:", baseUrl);
+      }
+
+      setEvents([]);
+      setApiPage(1);
+    } catch (error) {
+      console.log("Error in filterLinkSwitching: " + error);
+    }
+  };
+
+  const clearFilters = () => {
+    setFilterParams([[], [], []]);
+    setApiLink("https://api.hel.fi/linkedevents/v1/event/");
+    setEvents([]);
+    setApiPage(1);
+    setCurrentPage(1);
+  };
 
   return (
     <div className="navigation">
@@ -530,83 +759,95 @@ function Navigation() {
                 showFilterPanel && !isClosing ? "open" : "closing"
               }`}
             >
-              <div className="filter-title">Filteröity</div>
+              <Splide
+                ref={titleRef}
+                className="slider"
+                aria-label="Filter Titles"
+                options={{
+                  type: "loop",
+                  arrows: false,
+                  pagination: false,
+                }}
+              >
+                <SplideSlide>
+                  <div className="filter-title">Aika</div>
+                </SplideSlide>
+                <SplideSlide>
+                  <div className="filter-title">Paikkakunta</div>
+                </SplideSlide>
+                <SplideSlide>
+                  <div className="filter-title">Avainsanat</div>
+                </SplideSlide>
+              </Splide>
               <div className="filter-rows-container">
                 <Splide
+                  ref={optionsRef}
+                  aria-label="Filter Options"
+                  className="slider"
                   options={{
-                    type: "loop",
                     perPage: 1,
                     interval: 3000,
-                    arrows: true,
+                    arrows: false,
                     pagination: true,
                     speed: 500,
                   }}
-                  aria-label="Filter Options"
                 >
                   <SplideSlide>
                     <div className="filter-row">
-                      <div className="filter-title">Aika</div>
                       <div className="filter-version">
-                        <div className="filter-version-item">Uusin ensin</div>
-                        <div className="filter-version-item">Vanhin ensin</div>
-                        <div className="filter-version-item">Tännän</div>
-                        <div className="filter-version-item">Tämä viikko</div>
-                        <div className="filter-version-item">Tämä kuukausi</div>
+                        {filterTime.map((time) => (
+                          <div
+                            key={time}
+                            className="filter-version-item"
+                            onClick={() => filterTimeHandler(time)}
+                          >
+                            {time}
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </SplideSlide>
                   <SplideSlide>
                     <div className="filter-row">
-                      <div className="filter-title">Paikkakunta</div>
                       <div className="filter-places-container">
-                        <label>
-                          <input type="checkbox" />
-                          <span>Helsinki</span>
-                        </label>
-                        <label>
-                          <input type="checkbox" />
-                          <span>Espoo</span>
-                        </label>
-                        <label>
-                          <input type="checkbox" />
-                          <span>Vuosari</span>
-                        </label>
-                        <label>
-                          <input type="checkbox" />
-                          <span>Vantaa</span>
-                        </label>
-                        <label>
-                          <input type="checkbox" />
-                          <span>Melunmäki</span>
-                        </label>
+                        {districts.map((district) => (
+                          <label
+                            key={district.value}
+                            onClick={() => filterPlaceHandler(district)}
+                          >
+                            <input
+                              type="checkbox"
+                              checked={filterParams[1].includes(district.value)}
+                              readOnly
+                            />
+                            <span>{district.name}</span>
+                          </label>
+                        ))}
                       </div>
                     </div>
                   </SplideSlide>
                   <SplideSlide>
                     <div className="filter-row">
-                      <div className="filter-title">Avainsanat</div>
                       <div className="filter-keywords-container">
-                        <span>Konsertti</span>
-                        <span>Näyttely</span>
-                        <span>Festivaali</span>
-                        <span>Seminaari</span>
-                        <span>Työpaja</span>
-                        <span>Näytelmä</span>
-                        <span>Markkinat</span>
-                        <span>Tapaaminen</span>
-                        <span>Esittely</span>
-                        <span>Juhla</span>
+                        {keywords.map((keyword) => (
+                          <span
+                            key={keyword}
+                            onClick={() => filterKeywordHandler(keyword)}
+                          >
+                            {keyword}
+                          </span>
+                        ))}
                       </div>
                     </div>
                   </SplideSlide>
                 </Splide>
               </div>
-              <div className="filter-button-container">
-                <div className="discard-button" onClick={toggleFilterPanel}>
-                  Hylkää suodattimet
+              <div id="filter-buttons" className="filter-button-container">
+                <div className="discard-button" onClick={declineFilterButton}>
+                  Hylkää
                 </div>
-                <div className="apply-button" onClick={toggleFilterPanel}>
-                  Hyväksy suodattimet
+                <div className="apply-button" onClick={applyFilterButton}>
+                  Hyväksy
                 </div>
               </div>
             </div>
