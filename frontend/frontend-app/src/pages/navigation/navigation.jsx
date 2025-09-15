@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, use } from "react";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import axios from "axios";
 import "./navigation.css";
@@ -40,6 +40,8 @@ function Navigation() {
     },
     info_url: "",
     address: "",
+    muni: "",
+    district: "",
   });
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -212,6 +214,47 @@ function Navigation() {
   //   fetchKeywords();
   // }, [events]);
 
+  // useEffect(() => {
+  //   const fetchInBatches = async (urls, batchSize = 5) => {
+  //     const results = [];
+  //     for (let i = 0; i < urls.length; i += batchSize) {
+  //       const batch = urls.slice(i, i + batchSize).map(async (url) => {
+  //         try {
+  //           const res = await fetch(url);
+  //           const data = await res.json();
+  //           return data?.divisions?.[1]?.name.fi || null;
+  //         } catch {
+  //           return null;
+  //         }
+  //       });
+
+  //       const batchResults = await Promise.all(batch);
+  //       results.push(...batchResults);
+  //     }
+  //     return results.filter(Boolean);
+  //   };
+
+  //   const fetchMunicipalities = async () => {
+  //     try {
+  //       const urls = events
+  //         .map((event) => event?.location?.["@id"])
+  //         .filter(Boolean);
+
+  //       const allMuni = await fetchInBatches(urls, 5); // по 5 одночасно
+  //       const uniqueMuni = [...new Set(allMuni)];
+
+  //       console.log("Унікальні муніципалітети:", uniqueMuni);
+  //       // setMunicipalities(uniqueMuni);
+  //     } catch (error) {
+  //       console.error("Помилка при отриманні муніципалітетів:", error);
+  //     }
+  //   };
+
+  //   if (events?.length) {
+  //     fetchMunicipalities();
+  //   }
+  // }, [events]);
+
   // ===== FETCH EVENT LOCATION DETAILS =====
   const handleEventClick = async (event) => {
     console.log("Event clicked:", event);
@@ -233,6 +276,8 @@ function Navigation() {
         },
         info_url: response.data.info_url?.fi || "",
         address: response.data.street_address.fi || "",
+        muni: response.data.divisions[1].municipality || "",
+        district: response.data.divisions[1].name.fi || "",
       };
       setEventLocation(locationData);
     } catch (error) {
@@ -298,6 +343,50 @@ function Navigation() {
     }
   }, [currentPage]);
 
+  // ====== SLIDER SYNCRONIZATION ======
+
+  const titleRef = useRef(null);
+  const optionsRef = useRef(null);
+
+  useEffect(() => {
+    if (titleRef.current && optionsRef.current) {
+      titleRef.current.sync(optionsRef.current.splide);
+    }
+  }, []);
+
+  const districts = [
+    "Pasila",
+    "Kallio",
+    "Pitäjänmäki",
+    "Taka-Töölö",
+    "Vartiokylä",
+    "Vallila",
+    "Malmi",
+    "Mellunkylä",
+    "Pukinmäki",
+    "Vuosaari",
+  ];
+
+  const keywords = [
+    "Konsertti",
+    "Näyttely",
+    "Festivaali",
+    "Seminaari",
+    "Työpaja",
+    "Näytelmä",
+    "Markkinat",
+    "Tapaaminen",
+    "Esittely",
+    "Juhla",
+    "Luento",
+    "Workshop",
+    "Konferenssi",
+    "Elokuvanäytös",
+    "Kokous",
+    "Urheilutapahtuma",
+    "Lastentapahtuma",
+    "Kirjamessut",
+  ];
   return (
     <div className="navigation">
       {/* ============ HEADER START ============ */}
@@ -530,22 +619,41 @@ function Navigation() {
                 showFilterPanel && !isClosing ? "open" : "closing"
               }`}
             >
-              <div className="filter-title">Filteröity</div>
+              <Splide
+                ref={titleRef}
+                className="slider"
+                aria-label="Filter Titles"
+                options={{
+                  type: "loop",
+                  arrows: false,
+                  pagination: false,
+                }}
+              >
+                <SplideSlide>
+                  <div className="filter-title">Aika</div>
+                </SplideSlide>
+                <SplideSlide>
+                  <div className="filter-title">Paikkakunta</div>
+                </SplideSlide>
+                <SplideSlide>
+                  <div className="filter-title">Avainsanat</div>
+                </SplideSlide>
+              </Splide>
               <div className="filter-rows-container">
                 <Splide
+                  ref={optionsRef}
+                  aria-label="Filter Options"
+                  className="slider"
                   options={{
-                    type: "loop",
                     perPage: 1,
                     interval: 3000,
-                    arrows: true,
+                    arrows: false,
                     pagination: true,
                     speed: 500,
                   }}
-                  aria-label="Filter Options"
                 >
                   <SplideSlide>
                     <div className="filter-row">
-                      <div className="filter-title">Aika</div>
                       <div className="filter-version">
                         <div className="filter-version-item">Uusin ensin</div>
                         <div className="filter-version-item">Vanhin ensin</div>
@@ -557,56 +665,33 @@ function Navigation() {
                   </SplideSlide>
                   <SplideSlide>
                     <div className="filter-row">
-                      <div className="filter-title">Paikkakunta</div>
                       <div className="filter-places-container">
-                        <label>
-                          <input type="checkbox" />
-                          <span>Helsinki</span>
-                        </label>
-                        <label>
-                          <input type="checkbox" />
-                          <span>Espoo</span>
-                        </label>
-                        <label>
-                          <input type="checkbox" />
-                          <span>Vuosari</span>
-                        </label>
-                        <label>
-                          <input type="checkbox" />
-                          <span>Vantaa</span>
-                        </label>
-                        <label>
-                          <input type="checkbox" />
-                          <span>Melunmäki</span>
-                        </label>
+                        {districts.map((district) => (
+                          <label>
+                            <input type="checkbox" />
+                            <span>{district}</span>
+                          </label>
+                        ))}
                       </div>
                     </div>
                   </SplideSlide>
                   <SplideSlide>
                     <div className="filter-row">
-                      <div className="filter-title">Avainsanat</div>
                       <div className="filter-keywords-container">
-                        <span>Konsertti</span>
-                        <span>Näyttely</span>
-                        <span>Festivaali</span>
-                        <span>Seminaari</span>
-                        <span>Työpaja</span>
-                        <span>Näytelmä</span>
-                        <span>Markkinat</span>
-                        <span>Tapaaminen</span>
-                        <span>Esittely</span>
-                        <span>Juhla</span>
+                        {keywords.map((keyword) => (
+                          <span>{keyword}</span>
+                        ))}
                       </div>
                     </div>
                   </SplideSlide>
                 </Splide>
               </div>
-              <div className="filter-button-container">
+              <div id="filter-buttons" className="filter-button-container">
                 <div className="discard-button" onClick={toggleFilterPanel}>
-                  Hylkää suodattimet
+                  Hylkää
                 </div>
                 <div className="apply-button" onClick={toggleFilterPanel}>
-                  Hyväksy suodattimet
+                  Hyväksy
                 </div>
               </div>
             </div>
