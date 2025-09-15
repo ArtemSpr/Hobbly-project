@@ -877,14 +877,9 @@ function Navigation() {
             <span>Kotisivu</span>
           </Link>
         </div>
+
         <div className="footer-el">
-          <Link to="/navigation" className="active">
-            <img src={SearchIcon} alt="Search" />
-            <span>Haku</span>
-          </Link>
-        </div>
-        <div className="footer-el">
-          <Link to="/navigation" className="active">
+          <Link to="/map" className="active">
             <img src={MapIcon} alt="Map" />
             <span>Kartta</span>
           </Link>

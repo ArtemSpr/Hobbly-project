@@ -11,6 +11,7 @@ import UserForm from "./pages/userForm/userForm";
 import OrganaizerForm from "./pages/organaizerForm/organaizerForm";
 import SkipPassword from "./pages/skipPassword/skipPassword";
 import Navigation from "./pages/navigation/navigation";
+import Map from "./pages/map/map";
 
 //! TO DO: Think where you should use token from login response
 
@@ -25,6 +26,7 @@ function App() {
         <Route path="/user-form" element={<UserForm />} />
         <Route path="/organizer-form" element={<OrganaizerForm />} />
         <Route path="/navigation" element={<Navigation />} />
+        <Route path="/map" element={<Map />} />
       </Routes>
     </Router>
   );
