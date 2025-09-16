@@ -159,3 +159,142 @@ input:-webkit-autofill {
     -webkit-box-shadow: 0 0 0px 1000px var(--color-dark-teal) inset !important;
     -webkit-text-fill-color: #ffffff !important;
 }
+
+
+/* ========= MOBILE ========= */
+@media (max-width: 480px) {
+    .card {
+        max-width: 100%;
+        height: auto;
+        padding: 1rem;
+    }
+
+    .card-heading {
+        font-size: 1.5rem;
+    }
+
+    .action-button {
+        font-size: 1rem;
+        padding: 0.75rem;
+    }
+}
+
+/* =========== TABLET =========== */
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    .card {
+        max-width: 600px;
+        margin: 2rem auto;
+        padding: clamp(1rem, 2vw, 2rem);
+        border-radius: 1rem;
+        height: auto;
+        background-color: var(--color-dark-teal);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-image {
+        padding-bottom: 35%;
+        border-radius: 1rem;
+    }
+
+    .back-button {
+        font-size: 2rem;
+        top: 1rem;
+        left: 1rem;
+    }
+
+    .card-heading {
+        font-size: clamp(2rem, 4vw, 2.5rem);
+        top: 20%;
+        left: 8%;
+        right: 8%;
+    }
+
+    .card-form {
+        padding: clamp(3rem, 6vh, 5rem) clamp(1rem, 2vw, 2rem) 0;
+    }
+
+    .userForm-input input,
+    .password-input-wrapper input {
+        font-size: clamp(1rem, 2vw, 1.1rem);
+        padding: clamp(0.9rem, 1.5vh, 1.1rem);
+        border-radius: 3rem;
+    }
+
+    .password-toggle-icon img {
+        width: clamp(24px, 3vw, 28px);
+        height: clamp(24px, 3vw, 28px);
+    }
+
+    .password-checklist {
+        font-size: clamp(0.85rem, 1.8vw, 1rem);
+        padding: 1rem 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .action-button {
+        font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+        padding: clamp(1rem, 2vh, 1.25rem);
+        border-radius: 0.75rem;
+    }
+}
+
+
+/* =========== DESKTOP =========== */
+@media (min-width: 1024px) {
+    .card {
+        max-width: 500px;
+        margin: 4rem auto;
+        padding: clamp(2rem, 3vw, 3rem);
+        border-radius: 1.25rem;
+        height: auto;
+        background-color: var(--color-dark-teal);
+        box-shadow: 0 6px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    .card-image {
+        padding-bottom: 30%;
+        border-radius: 1.25rem;
+    }
+
+    .back-button {
+        font-size: 2.25rem;
+        top: 1.5rem;
+        left: 1.5rem;
+    }
+
+    .card-heading {
+        font-size: clamp(2.2rem, 3vw, 3rem);
+        top: 22%;
+        left: 10%;
+        right: 10%;
+    }
+
+    .card-form {
+        padding: clamp(4rem, 7vh, 6rem) clamp(2rem, 3vw, 3rem) 0;
+    }
+
+    .userForm-input input,
+    .password-input-wrapper input {
+        font-size: clamp(1.1rem, 1.5vw, 1.25rem);
+        padding: clamp(1rem, 1.5vh, 1.25rem);
+        border-radius: 3rem;
+    }
+
+    .password-toggle-icon img {
+        width: 28px;
+        height: 28px;
+    }
+
+    .password-checklist {
+        font-size: clamp(0.9rem, 1vw, 1rem);
+        padding: 1rem 2rem;
+        margin-bottom: 1rem;
+    }
+
+    .action-button {
+        font-size: clamp(1.2rem, 1.5vw, 1.4rem);
+        padding: clamp(1.1rem, 2vh, 1.4rem);
+        border-radius: 1rem;
+    }
+}
