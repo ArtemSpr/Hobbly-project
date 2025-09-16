@@ -1,5 +1,14 @@
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import markIcon from "../../assets/icons/map-white.svg";
+
+const iconMark = L.icon({
+  iconUrl: markIcon,
+  iconSize: [32, 32],
+  iconAnchor: [16, 32],
+  popupAnchor: [0, -32],
+});
 
 const Map = () => {
   return (
@@ -22,16 +31,14 @@ const Map = () => {
         preferCanvas={true} // performance optimization for many markers
         style={{ height: "100%", width: "100%" }}
       >
-        // there is map style
-        ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
         <TileLayer
-          url="https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=YOUR_MAPBOX_ACCESS_TOKEN"
+          url="https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoid2VsbG5vdGUiLCJhIjoiY205ODZuODJqMGV4eDJsc2VwZ3hraHAzaSJ9.Ei8toDcIcpyPbVlu6BLkvw"
           attribution='&copy; <a href="https://www.mapbox.com/">Mapbox</a>'
           id="mapbox/streets-v11"
           tileSize={512}
           zoomOffset={-1}
         />
-        <Marker position={[51.505, -0.09]}>
+        <Marker position={[60.17, 24.93]} icon={iconMark}>
           <Popup>There will be an events card</Popup>
         </Marker>
       </MapContainer>
