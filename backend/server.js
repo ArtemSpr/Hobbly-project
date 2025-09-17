@@ -98,6 +98,38 @@ app.post("/api/auth/register/org", (req, res) => {
   }
 });
 
+app.post("/api/auth/login", (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    if (!email || !password) {
+      return res.status(400).json({ error: "Email and password required" });
+    }
+
+    const existingUser = users.find((user) => user.email === email);
+
+    if (!existingUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    if (existingUser.password !== password) {
+      return res.status(401).json({ error: "Invalid password" });
+    }
+
+    return res.status(200).json({
+      message: "Login successful",
+      user: {
+        name: existingUser.name,
+        email: existingUser.email,
+        role: existingUser.role,
+      },
+    });
+  } catch (error) {
+    console.error("Login error:", error);
+    return res.status(500).json({ error: "Server error during login" });
+  }
+});
+
 const PORT = 5234;
 app.listen(PORT, () => {
   console.log(`Server work in port http://localhost:${PORT}`);
