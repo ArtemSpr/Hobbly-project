@@ -1,13 +1,15 @@
-import { useState } from "react";
+import { useState, useNavigate } from "react";
 import { Link } from "react-router-dom";
 import "./organaizerForm.css";
 
 import eyeIcon from "../../assets/icons/icons8-eye-48.png";
 import eyeSlashIcon from "../../assets/icons/icons8-closed-eye-24.png";
+import axios from "axios";
 
 // ! TO DO : add space checker for description
 
 const OrganaizerForm = () => {
+  const navigate = useNavigate();
   const [NameValue, setNameValue] = useState("");
   const [EmailValue, setEmailValue] = useState("");
   const [PasswordValue, setPasswordValue] = useState("");
@@ -121,7 +123,7 @@ const OrganaizerForm = () => {
     }
   };
 
-  const getStarted = (e) => {
+  const getStarted = async (e) => {
     e.preventDefault();
 
     const isFormInvalid =
@@ -170,6 +172,31 @@ const OrganaizerForm = () => {
     setPostalCodeValue("");
     setIdentificationNumberValue("");
     setOrganizationTypeValue("");
+
+    try {
+      const response = await axios.post(`/api/auth/register/org`, {
+        NameValue,
+        EmailValue,
+        PasswordValue,
+        LogoValue,
+        DescriptionValue,
+        AddressValue,
+        CityValue,
+        PostalCodeValue,
+        IdentificationNumberValue,
+        OrganizationTypeValue,
+      });
+
+      if (response.status === 201) {
+        console.log("Registration successful:", response.data);
+        navigate("/navigation");
+      }
+    } catch (error) {
+      console.error(
+        "Registration error:",
+        error.response?.data || error.message
+      );
+    }
   };
 
   return (

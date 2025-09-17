@@ -60,13 +60,13 @@ const UserForm = () => {
     if (isNameInvalid || isEmailInvalid || isPasswordInvalid) return;
 
     try {
-      const response = await axios.post(`/api/auth/register`, {
+      const response = await axios.post(`/api/auth/register/user`, {
         name,
         email,
         password,
       });
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         console.log("Registration successful:", response.data);
         navigate("/navigation");
       }
