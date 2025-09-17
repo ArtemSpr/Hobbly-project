@@ -1,0 +1,16 @@
+======== THIS IS FILE WHERE YOU CAN PROPOSE NEW FEATURES ========
+
+- Features description
+-- Author (if we want to clarify what author mean)
+
+=================================================================
+=================================================================
+=================================================================
+- User can save event if he want to check it later
+-- Artem
+=================================================================
+- All events loaded at the same time, but if there is more
+- that 20 events program will add a pages
+-- Artem
+=================================================================
+
