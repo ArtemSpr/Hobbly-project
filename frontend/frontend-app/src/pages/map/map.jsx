@@ -1,3 +1,4 @@
+import { useLocation } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -11,6 +12,9 @@ const iconMark = L.icon({
 });
 
 const Map = () => {
+  const { state } = useLocation();
+  const locations = state?.locations || [];
+  console.log("Got locations:", locations);
   return (
     <div className="map" style={{ height: "100vh", width: "100%" }}>
       <MapContainer
@@ -38,9 +42,17 @@ const Map = () => {
           tileSize={512}
           zoomOffset={-1}
         />
-        <Marker position={[60.17, 24.93]} icon={iconMark}>
-          <Popup>There will be an events card</Popup>
-        </Marker>
+        {locations
+          .filter((loc) => loc.latitude && loc.longitude) // <-- отсекаем пустые
+          .map((loc) => (
+            <Marker
+              key={loc.id}
+              position={[loc.latitude, loc.longitude]}
+              icon={iconMark}
+            >
+              <Popup>{loc.name}</Popup>
+            </Marker>
+          ))}
       </MapContainer>
     </div>
   );
