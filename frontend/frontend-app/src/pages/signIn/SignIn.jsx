@@ -75,10 +75,10 @@ const SignIn = () => {
         setErrorMessage(error.response?.data?.error || "Server error");
       } else if (error.request) {
         console.error("No response from server:", error.request);
-        alert("Server is not responding. Please try again later.");
+        setErrorMessage("No response from server, please try again later");
       } else {
         console.error("Error:", error.message);
-        alert("An unexpected error occurred.");
+        setErrorMessage("An unexpected error occurred");
       }
     }
     console.log("Sign In Data:", formData);
