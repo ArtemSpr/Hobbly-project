@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef, use } from "react";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import axios from "axios";
@@ -47,6 +47,7 @@ function Navigation() {
   const eventRefs = useRef({});
   const [currentPage, setCurrentPage] = useState(1);
   const [keyWords, setKeyWords] = useState([]);
+  const [eventLocations, setEventLocations] = useState([]);
   // ------- FILTER PANEL STATES -------
   const [showFilterPanel, setShowFilterPanel] = useState(false);
   const [isCentered, setIsCentered] = useState(false);
@@ -92,6 +93,7 @@ function Navigation() {
       }, 300);
     }
   };
+
   // ====== FUNCTION THAT SWITCH PAGE WHEN USER SCROLLS TO BOTTOM ======
   const handleScroll = () => {
     const hasActiveFilters = filterParams.some(
@@ -145,7 +147,6 @@ function Navigation() {
           const unique = combined.filter(
             (e, index, self) => index === self.findIndex((ev) => ev.id === e.id)
           );
-          if (unique.length > prev.length) addedNew = true;
           return unique;
         });
       }
@@ -157,6 +158,44 @@ function Navigation() {
 
     return addedNew;
   };
+
+  useEffect(() => {
+    if (events.length === 0) return;
+
+    events.forEach(async (event) => {
+      if (!event.location) return;
+
+      const locationUrl = Array.isArray(event.location)
+        ? event.location[0]["@id"]
+        : event.location["@id"];
+
+      try {
+        const response = await axios.get(locationUrl);
+        const coords = response.data.position?.coordinates;
+
+        if (coords) {
+          const locationData = {
+            id: event.id,
+            name: event.name?.fi || event.name?.en || "No Name",
+            latitude: coords[1],
+            longitude: coords[0],
+          };
+
+          setEventLocations((prev) => {
+            if (prev.some((loc) => loc.id === event.id)) {
+              return prev;
+            }
+            return [...prev, locationData];
+          });
+
+          // for check
+          console.log("Saved location:", locationData);
+        }
+      } catch (error) {
+        console.error(`Failed to fetch location for event ${event.id}:`, error);
+      }
+    });
+  }, [events]);
 
   // ====== FETCH EVENTS ON PAGE LOAD ======
   useEffect(() => {
@@ -246,6 +285,7 @@ function Navigation() {
         muni: response.data.divisions[1].municipality || "",
         district: response.data.divisions[1].name.fi || "",
       };
+      console.log(locationData.coordinates);
       setEventLocation(locationData);
     } catch (error) {
       console.error("Failed to fetch location:", error);
@@ -464,6 +504,8 @@ function Navigation() {
       );
     }
   };
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const hasAnyFilters = filterParams.some(
@@ -878,7 +920,11 @@ function Navigation() {
         </div>
 
         <div className="footer-el">
-          <Link to="/map" className="active">
+          <Link
+            to="/map"
+            state={{ locations: eventLocations }}
+            className="active"
+          >
             <img src={MapIcon} alt="Map" />
             <span>Kartta</span>
           </Link>
