@@ -1,8 +1,13 @@
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import markIcon from "../../assets/icons/map-white.svg";
+import markIcon from "../../assets/icons/yellow-logo.png";
+import MarkerClusterGroup from "react-leaflet-markercluster";
+import "leaflet/dist/leaflet.css";
+import "leaflet.markercluster/dist/MarkerCluster.css";
+import "leaflet.markercluster/dist/MarkerCluster.Default.css";
+import "./map.css";
 
 const iconMark = L.icon({
   iconUrl: markIcon,
@@ -16,7 +21,7 @@ const Map = () => {
   const locations = state?.locations || [];
   console.log("Got locations:", locations);
   return (
-    <div className="map" style={{ height: "100vh", width: "100%" }}>
+    <div className="map">
       <MapContainer
         center={[60.17, 24.93]} // Helsinki
         zoom={12} // default zoom level
@@ -42,18 +47,23 @@ const Map = () => {
           tileSize={512}
           zoomOffset={-1}
         />
-        {locations
-          .filter((loc) => loc.latitude && loc.longitude) // <-- отсекаем пустые
-          .map((loc) => (
-            <Marker
-              key={loc.id}
-              position={[loc.latitude, loc.longitude]}
-              icon={iconMark}
-            >
-              <Popup>{loc.name}</Popup>
-            </Marker>
-          ))}
+        <MarkerClusterGroup spiderfyOnClick showCoverageOnHover>
+          {locations
+            .filter((loc) => loc.latitude && loc.longitude)
+            .map((loc) => (
+              <Marker
+                key={loc.id}
+                position={[loc.latitude, loc.longitude]}
+                icon={iconMark}
+              >
+                <Popup>{loc.name}</Popup>
+              </Marker>
+            ))}
+        </MarkerClusterGroup>
       </MapContainer>
+      <Link to="/navigation" className="back-button">
+        &lt;
+      </Link>
     </div>
   );
 };
