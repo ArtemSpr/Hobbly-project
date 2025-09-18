@@ -8,7 +8,7 @@ import axios from "axios";
 
 // ! TO DO : add space checker for description
 
-const OrganaizerForm = () => {
+const OrganaizerForm = ({ sendDataToParent }) => {
   const navigate = useNavigate();
   const [name, setNameValue] = useState("");
   const [email, setEmailValue] = useState("");
@@ -212,6 +212,7 @@ const OrganaizerForm = () => {
 
       if (response.status === 201) {
         console.log("Registration successful:", response.data);
+        sendDataToParent(response.data.user);
         navigate("/navigation");
       }
     } catch (error) {
@@ -291,10 +292,7 @@ const OrganaizerForm = () => {
             className="password-toggle-icon"
             onClick={() => setShowPassword((p) => !p)}
           >
-            <img
-              src={showPassword ? eyeSlashIcon : eyeIcon}
-              alt="Näytä tai piilota salasana"
-            />
+            {showPassword ? "🙈" : "👁️"}
           </span>
         </div>
         {password && (

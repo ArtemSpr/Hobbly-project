@@ -63,6 +63,8 @@ html {
   transform: translateY(-100%);
 }
 
+
+
 .navi-logo img {
   height: 50px;
   max-width: 200px;
@@ -589,9 +591,11 @@ html {
   align-items: center;
   justify-content: space-around;
   position: fixed;
-  width: 100%;
+  width: 90%;
   height: 80px;
   padding: 10px 20px;
+  margin: 0 5% 0 5%;
+  border-radius: 15px;
   background-color: var(--color-dark-teal);
   bottom: 0;
   z-index: 999;
@@ -615,6 +619,10 @@ html {
 
 .footer-el a:hover {
   transform: scale(1.1);
+  background-color: rgba(76, 175, 80, 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 10px;
 }
 
 .footer-el span {
@@ -1138,7 +1146,7 @@ a.active img {
 
   .search-container {
     max-width: 600px;
-    margin-top: 120px;
+    margin-top: 140px;
   }
 
   .filter-button {
@@ -1195,7 +1203,7 @@ a.active img {
   .search-container {
     width: 95vw;
     max-width: 500px;
-    margin-top: 100px;
+    margin-top: 145px;
     padding: 10px;
   }
 
@@ -1313,7 +1321,7 @@ a.active img {
   }
 
   .search-container {
-    margin-top: 90px;
+    margin-top: 130px;
     padding: 8px;
     width: 96vw;
   }
@@ -1344,7 +1352,7 @@ a.active img {
   }
 
   .navigation-footer {
-    height: 65px;
+    height: 80px;
     padding: 8px 15px;
   }
 

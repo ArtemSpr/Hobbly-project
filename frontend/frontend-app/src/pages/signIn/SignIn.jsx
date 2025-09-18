@@ -8,7 +8,7 @@ import eyeSlashIcon from "../../assets/icons/icons8-closed-eye-24.png";
 
 import ErrorIcon from "../../assets/icons/error.png";
 
-const SignIn = () => {
+const SignIn = ({ sendDataToParent }) => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [passwordValidations, setPasswordValidations] = useState({
     length: false,
@@ -63,6 +63,7 @@ const SignIn = () => {
 
     try {
       const response = await axios.post(`/api/auth/login`, formData);
+      sendDataToParent(response.data.user);
 
       if (response.status === 200) {
         console.log("✅ Login Successful:", response.data);
@@ -111,12 +112,7 @@ const SignIn = () => {
             className="password-toggle-icon"
             onClick={() => setShowPassword((prev) => !prev)}
           >
-            <img
-              src={showPassword ? eyeSlashIcon : eyeIcon}
-              alt="Toggle password visibility"
-              width="20"
-              height="20"
-            />
+            {showPassword ? "🙈" : "👁️"}
           </span>
         </div>
         <div className="errorBlock">
