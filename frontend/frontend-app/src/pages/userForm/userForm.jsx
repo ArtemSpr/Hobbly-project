@@ -1,12 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+
 import eyeIcon from "../../assets/icons/icons8-eye-48.png";
 import eyeSlashIcon from "../../assets/icons/icons8-closed-eye-24.png";
+import ErrorIcon from "../../assets/icons/error.png";
 
 import "./userForm.css";
 
-const UserForm = () => {
+const UserForm = ({ sendDataToParent }) => {
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -24,6 +26,9 @@ const UserForm = () => {
     number: false,
     special: false,
   });
+  const [errorMessage, setErrorMessage] = useState("");
+
+  // const [userData, setUserData] = useState("");
 
   const isNameInvalid = name.length < 3;
   const isEmailInvalid = !email || !/\S+@\S+\.\S+/.test(email);
@@ -51,6 +56,17 @@ const UserForm = () => {
     validatePassword(val);
   };
 
+  useEffect(() => {
+    const errorBlock = document.querySelector(".errorBlock");
+    if (errorBlock) {
+      if (errorMessage) {
+        errorBlock.classList.add("active");
+      } else {
+        errorBlock.classList.remove("active");
+      }
+    }
+  }, [errorMessage]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsNameTouched(true);
@@ -65,16 +81,24 @@ const UserForm = () => {
         email,
         password,
       });
+      sendDataToParent(response.data.user);
 
       if (response.status === 201) {
         console.log("Registration successful:", response.data);
+        setErrorMessage("");
         navigate("/navigation");
       }
     } catch (error) {
-      console.error(
-        "Registration error:",
-        error.response?.data || error.message
-      );
+      if (error.response) {
+        console.error("Server Error:", error.response.data);
+        setErrorMessage(error.response?.data?.error || "Server error");
+      } else if (error.request) {
+        console.error("No response from server:", error.request);
+        setErrorMessage("No response from server, please try again later");
+      } else {
+        console.error("Error:", error.message);
+        setErrorMessage("An unexpected error occurred");
+      }
     }
   };
 
@@ -152,10 +176,7 @@ const UserForm = () => {
             className="password-toggle-icon"
             onClick={() => setShowPassword((p) => !p)}
           >
-            <img
-              src={showPassword ? eyeSlashIcon : eyeIcon}
-              alt="Näytä tai piilota salasana"
-            />
+            {showPassword ? "🙈" : "👁️"}
           </span>
         </div>
         {password && (
@@ -177,6 +198,10 @@ const UserForm = () => {
             </li>
           </ul>
         )}
+        <div className="errorBlock">
+          <img src={ErrorIcon}></img>
+          <span>{errorMessage}</span>
+        </div>
 
         <div className="action">
           <button type="submit" className="action-button">

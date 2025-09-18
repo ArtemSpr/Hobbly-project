@@ -8,6 +8,7 @@ import Logo from "../../assets/icons/yellow-big-logo.png";
 import SearchIcon from "../../assets/icons/search-white.svg";
 import HomeIcon from "../../assets/icons/home-white.svg";
 import MapIcon from "../../assets/icons/map-white.svg";
+import AccountIcon from "../../assets/icons/account-icon.png";
 import ThirdEventImage from "../../assets/image/event-3.webp";
 
 import EventDate from "../../assets/icons/date-icon.png";
@@ -23,8 +24,6 @@ import FilterIcon from "../../assets/icons/filter-icon.png";
 import SearchGray from "../../assets/icons/search-grey.png";
 
 //! TO DO: active page should be yellow in footer
-//! TO DO: create all other page
-//! TO DO: user can filter events by time, location, keywords, text, language, age
 
 function Navigation() {
   const [events, setEvents] = useState([]);
@@ -882,6 +881,13 @@ function Navigation() {
           <Link to="/map" className="active">
             <img src={MapIcon} alt="Map" />
             <span>Kartta</span>
+          </Link>
+        </div>
+
+        <div className="footer-el">
+          <Link to="/account" className="active">
+            <img src={AccountIcon} alt="Map" />
+            <span>Account</span>
           </Link>
         </div>
       </footer>

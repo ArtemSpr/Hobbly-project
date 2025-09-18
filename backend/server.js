@@ -6,7 +6,7 @@ app.use(express.json());
 
 const users = [];
 
-app.post("/api/auth/register/user", (req, res) => {
+app.post("/api/auth/register/user", async (req, res) => {
   try {
     const { name, email, password } = req.body;
     const allowedNames = ["artem", "valentin", "leonardo", "souman"];
@@ -21,11 +21,12 @@ app.post("/api/auth/register/user", (req, res) => {
     if (exists) {
       return res.status(409).json({ error: "User already exists" });
     }
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = {
       name,
       email,
-      password,
+      password: hashedPassword,
       role: allowedNames.includes(name.toLowerCase()) ? "admin" : "user",
     };
 
@@ -146,6 +147,20 @@ app.post("/api/auth/login", async (req, res) => {
   } catch (error) {
     console.error("Login error:", error);
     return res.status(500).json({ error: "Server error during login" });
+  }
+});
+
+app.post("/api/auth/forgotPassword", async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ error: "Email and password required" });
+  }
+
+  const existingUser = users.find((user) => user.email === email);
+
+  if (!existingUser) {
+    return res.status(404).json({ error: "User not found" });
   }
 });
 
