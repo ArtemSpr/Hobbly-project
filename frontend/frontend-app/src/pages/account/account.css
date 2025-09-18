@@ -1,3 +1,171 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300; 400; 500; 600; 700& family=Poppins:wght@400; 500; 600; 700& family=JetBrains+Mono:ital, wght@1, 300& family=Quicksand:wght@300& family=Archivo+Black& display=swap');
+
+
+:root {
+    --color-dark-teal: #073b3a;
+    --color-yellow: #f5ff65;
+    --color-green: #65ff81;
+    --color-deep-green: #021919;
+    --color-white: #ffffff;
+    --color-gray: #8f8f8f;
+    --color-event-start: #4caf50;
+    --color-event-end: #f44336;
+    --color-address: #1976d2;
+    --color-email: #e64a19;
+    --color-phone: #009688;
+    --color-link: #1565c0;
+    --color-capacity: #616161;
+    --color-price: #2e7d32;
+    --color-or: #20707f;
+}
+
+html {
+    margin: 0px;
+    padding: 0px;
+}
+
 .account-container {
-    background-color: red;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.account-profile {
+    display: flex;
+    flex-direction: row;
+    background-color: rgba(32, 112, 127, 0.35);
+    backdrop-filter: blur(10px) saturate(120%);
+    -webkit-backdrop-filter: blur(10px) saturate(120%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 6px 18px rgba(16, 24, 32, 0.25);
+    border-radius: 8px;
+    width: 90%;
+    height: 120px;
+    margin: 20px 5% 0 5%;
+    padding: 10px;
+}
+
+.account-profile img {
+    height: 100px;
+    border-radius: 50px;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    font-size: 15px;
+    justify-content: center;
+    border-radius: 12px;
+
+}
+
+.profile-info span {
+    margin-left: 12px;
+    line-height: 1.6;
+    letter-spacing: 0.3px;
+    padding: 6px 10px;
+    transition: all 0.3s ease;
+}
+
+.profile-email:hover {
+    color: #ffffff;
+    transform: translateX(4px);
+    cursor: pointer;
+}
+
+.profile-name {
+    font-size: 20px;
+    font-family: "Popins", sans-serif;
+    font-weight: 700;
+}
+
+.profile-email {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: #8f8f8f;
+    font-family: "Inter", sans-serif;
+    font-weight: 400;
+
+}
+
+.profile-email img {
+    height: 15px;
+    border-radius: none;
+    margin-left: 5px;
+}
+
+.profile-role {
+    color: rgba(128, 128, 128, 0.462);
+    display: flex;
+    align-items: end;
+}
+
+.account-passwordChange {
+    display: flex;
+    flex-direction: row;
+    background-color: rgba(32, 112, 127, 0.35);
+    backdrop-filter: blur(10px) saturate(120%);
+    -webkit-backdrop-filter: blur(10px) saturate(120%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 6px 18px rgba(16, 24, 32, 0.25);
+    border-radius: 8px;
+    width: 90%;
+    margin: 20px 5% 0 5%;
+}
+
+.password-card-form {
+    padding: 20px;
+    width: 100%;
+}
+
+.passwordChange-title {
+    font-size: 20px;
+    font-family: "Popins", sans-serif;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.password-checklist.hidden {
+    display: none;
+}
+
+.passwordChange-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.passwordChange-cancel {
+    padding: 10px;
+    background: rgba(97, 97, 97, 0.25);
+    backdrop-filter: blur(12px) saturate(120%);
+    -webkit-backdrop-filter: blur(12px) saturate(120%);
+    border-radius: 16px;
+    border: 1px solid rgba(97, 97, 97, 0.4);
+    box-shadow: 0 4px 20px rgba(97, 97, 97, 0.2);
+    width: 150px;
+    text-align: center;
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+}
+
+.passwordChange-save {
+    padding: 10px;
+    background: rgba(76, 175, 80, 0.25);
+    backdrop-filter: blur(12px) saturate(120%);
+    -webkit-backdrop-filter: blur(12px) saturate(120%);
+    border-radius: 16px;
+    border: 1px solid rgba(76, 175, 80, 0.4);
+    box-shadow: 0 4px 20px rgba(76, 175, 80, 0.2);
+    width: 150px;
+    text-align: center;
+    font-family: "Poppins",
+        sans-serif;
+    font-weight: 500;
 }

@@ -16,10 +16,6 @@ import Account from "./pages/account/account";
 
 //! TO DO: Think where you should use token from login response
 
-//! ----------------------------------------------------------
-//? TO DO: show information about user in his account
-//! ----------------------------------------------------------
-
 function App() {
   const [userData, setUserData] = useState(null);
 
@@ -45,10 +41,13 @@ function App() {
           path="/organizer-form"
           element={<OrganaizerForm sendDataToParent={handleChildData} />}
         />
-        <Route path="/navigation" element={<Navigation />} />
-        <Route path="/map" element={<Map />} />
+        <Route
+          path="/navigation"
+          element={<Navigation userData={userData} />}
+        />
+        <Route path="/map" element={<Map userData={userData} />} />
         <Route path="/passwordVerif" element={<PasswordVerif />} />
-        <Route path="/account" element={<Account />} />
+        <Route path="/account" element={<Account userData={userData} />} />
       </Routes>
     </Router>
   );
