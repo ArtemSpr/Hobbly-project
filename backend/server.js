@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const bcrypt = require("bcrypt");
 
 app.use(express.json());
 
@@ -41,13 +42,14 @@ app.post("/api/auth/register/user", (req, res) => {
   }
 });
 
-app.post("/api/auth/register/org", (req, res) => {
+// Registration for organizer
+app.post("/api/auth/register/org", async (req, res) => {
   try {
     const {
       name,
       email,
       password,
-      logo,
+      // LogoValue,
       description,
       address,
       city,
@@ -60,7 +62,7 @@ app.post("/api/auth/register/org", (req, res) => {
       !name ||
       !email ||
       !password ||
-      !logo ||
+      // !LogoValue ||
       !description ||
       !address ||
       !city ||
@@ -68,33 +70,82 @@ app.post("/api/auth/register/org", (req, res) => {
       !idNumber ||
       !orgType
     ) {
-      return res.status(400).json({ error: "User infromation required " });
+      return res.status(400).json({ error: "Missing required fields" });
     }
+
+    const existingUser = users.find((user) => user.email === email);
+
+    if (existingUser) {
+      return res.status(409).json({ error: "User already exists" });
+    }
+
+    // Hash password before storing
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const newOrg = {
       name,
       email,
-      password,
-      logo,
+      password: hashedPassword,
+      // LogoValue,
       description,
       address,
       city,
       postalCode,
       idNumber,
       orgType,
-      role: "organizator",
+      role: "organizer",
     };
 
-    console.log("User was registered");
+    // Adding newOrg to users array
+    users.push(newOrg);
+    console.log("Organizer was registered");
 
-    res
-      .status(201)
-      .json({ message: "Organization registered successfully", user: newOrg });
+    res.status(201).json({
+      message: "Organizer registered successfully",
+      user: { ...newOrg, password: undefined },
+    });
   } catch (error) {
-    console.error("Error with user registering " + error);
+    console.error("Error with organizer registering " + error);
     res.status(500).json({
       error: "User not registered due to server error",
     });
+  }
+});
+
+app.post("/api/auth/login", async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    if (!email || !password) {
+      return res.status(400).json({ error: "Email and password required" });
+    }
+
+    const existingUser = users.find((user) => user.email === email);
+
+    if (!existingUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const isPasswordValid = await bcrypt.compare(
+      password,
+      existingUser.password
+    );
+
+    if (!isPasswordValid) {
+      return res.status(401).json({ error: "Invalid password" });
+    }
+
+    return res.status(200).json({
+      message: "Login successful",
+      user: {
+        name: existingUser.name,
+        email: existingUser.email,
+        role: existingUser.role,
+      },
+    });
+  } catch (error) {
+    console.error("Login error:", error);
+    return res.status(500).json({ error: "Server error during login" });
   }
 });
 

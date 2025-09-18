@@ -184,7 +184,7 @@ input:-webkit-autofill {
 @media (min-width: 768px) and (max-width: 1024px) {
     .card {
         max-width: 600px;
-        margin: 2rem auto;
+        margin: 2rem 6rem;
         padding: clamp(1rem, 2vw, 2rem);
         border-radius: 1rem;
         height: auto;

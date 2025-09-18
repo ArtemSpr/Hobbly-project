@@ -1,9 +1,12 @@
 import "./signIn.css";
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+
 import eyeIcon from "../../assets/icons/icons8-eye-48.png";
 import eyeSlashIcon from "../../assets/icons/icons8-closed-eye-24.png";
-import axios from "axios";
+
+import ErrorIcon from "../../assets/icons/error.png";
 
 const SignIn = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -16,6 +19,7 @@ const SignIn = () => {
   });
 
   const [showPassword, setShowPassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
 
@@ -43,29 +47,38 @@ const SignIn = () => {
     setPasswordValidations(validations);
   };
 
+  useEffect(() => {
+    const errorBlock = document.querySelector(".errorBlock");
+    if (errorBlock) {
+      if (errorMessage) {
+        errorBlock.classList.add("active");
+      } else {
+        errorBlock.classList.remove("active");
+      }
+    }
+  }, [errorMessage]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(`api/auth/login`, formData);
+      const response = await axios.post(`/api/auth/login`, formData);
 
       if (response.status === 200) {
         console.log("✅ Login Successful:", response.data);
+        setErrorMessage("");
         navigate("/navigation");
       }
     } catch (error) {
       if (error.response) {
         console.error("Server Error:", error.response.data);
-        alert(
-          error.response.data.error ||
-            "Login failed. Please check your credentials."
-        );
+        setErrorMessage(error.response?.data?.error || "Server error");
       } else if (error.request) {
         console.error("No response from server:", error.request);
-        alert("Server is not responding. Please try again later.");
+        setErrorMessage("No response from server, please try again later");
       } else {
         console.error("Error:", error.message);
-        alert("An unexpected error occurred.");
+        setErrorMessage("An unexpected error occurred");
       }
     }
     console.log("Sign In Data:", formData);
@@ -105,6 +118,10 @@ const SignIn = () => {
               height="20"
             />
           </span>
+        </div>
+        <div className="errorBlock">
+          <img src={ErrorIcon}></img>
+          <span>{errorMessage}</span>
         </div>
 
         {formData.password && (

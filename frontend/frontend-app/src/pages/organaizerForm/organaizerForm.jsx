@@ -1,5 +1,5 @@
-import { useState, useNavigate } from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "./organaizerForm.css";
 
 import eyeIcon from "../../assets/icons/icons8-eye-48.png";
@@ -10,22 +10,28 @@ import axios from "axios";
 
 const OrganaizerForm = () => {
   const navigate = useNavigate();
-  const [NameValue, setNameValue] = useState("");
-  const [EmailValue, setEmailValue] = useState("");
-  const [PasswordValue, setPasswordValue] = useState("");
+  const [name, setNameValue] = useState("");
+  const [email, setEmailValue] = useState("");
+  const [password, setPasswordValue] = useState("");
   const [LogoValue, setLogoValue] = useState(null);
   const [LogoName, setLogoName] = useState("");
-  const [DescriptionValue, setDescriptionValue] = useState("");
-  const [AddressValue, setAddressValue] = useState("");
-  const [CityValue, setCityValue] = useState("");
-  const [PostalCodeValue, setPostalCodeValue] = useState("");
-  const [IdentificationNumberValue, setIdentificationNumberValue] =
-    useState("");
-  const [OrganizationTypeValue, setOrganizationTypeValue] = useState("");
+  const [description, setDescriptionValue] = useState("");
+  const [address, setAddressValue] = useState("");
+  const [city, setCityValue] = useState("");
+  const [postalCode, setPostalCodeValue] = useState("");
+  const [idNumber, setIdentificationNumberValue] = useState("");
+  const [orgType, setOrganizationTypeValue] = useState("");
 
   const [isNameInvalid, setIsNameInvalid] = useState(false);
   const [isEmailInvalid, setIsEmailInvalid] = useState(false);
-  const [isPasswordInvalid, setIsPasswordInvalid] = useState(false);
+  const [passwordValidations, setPasswordValidations] = useState({
+    length: false,
+    upper: false,
+    lower: false,
+    number: false,
+    special: false,
+  });
+  const [isPasswordInvalid, setIsPasswordInvalid] = useState("");
   const [isLogoInvalid, setIsLogoInvalid] = useState(false);
   const [isDescriptionInvalid, setIsDescriptionInvalid] = useState(false);
   const [isAddressInvalid, setIsAddressInvalid] = useState(false);
@@ -34,7 +40,6 @@ const OrganaizerForm = () => {
   const [isOrganizationTypeInvalid, setIsOrganizationTypeInvalid] =
     useState(false);
 
-  // Додаткові стани для touched і password toggle
   const [isNameTouched, setIsNameTouched] = useState(false);
   const [isEmailTouched, setIsEmailTouched] = useState(false);
   const [isPasswordTouched, setIsPasswordTouched] = useState(false);
@@ -62,7 +67,18 @@ const OrganaizerForm = () => {
   const handlePasswordChange = (e) => {
     const value = e.target.value;
     setPasswordValue(value);
-    setIsPasswordInvalid(!value || value.length < 8 || !/\d/.test(value));
+    validatePassword(value);
+  };
+
+  const validatePassword = (password) => {
+    const validations = {
+      length: password.length >= 8 && password.length <= 20,
+      upper: /[A-Z]/.test(password),
+      lower: /[a-z]/.test(password),
+      number: /[0-9]/.test(password),
+      special: /[!@#$%^&*(),.?":{}|<>]/.test(password),
+    };
+    setPasswordValidations(validations);
   };
 
   const handleAddressChange = (e) => {
@@ -126,16 +142,23 @@ const OrganaizerForm = () => {
   const getStarted = async (e) => {
     e.preventDefault();
 
+    const setIsPasswordInvalid = !(
+      passwordValidations.length &&
+      passwordValidations.upper &&
+      passwordValidations.lower &&
+      passwordValidations.number &&
+      passwordValidations.special
+    );
+
     const isFormInvalid =
-      !NameValue ||
-      !EmailValue ||
-      !PasswordValue ||
-      !LogoValue ||
-      !DescriptionValue ||
-      !AddressValue ||
-      !CityValue ||
-      !PostalCodeValue ||
-      !OrganizationTypeValue ||
+      !name ||
+      !email ||
+      !password ||
+      !description ||
+      !address ||
+      !city ||
+      !postalCode ||
+      !orgType ||
       isNameInvalid ||
       isEmailInvalid ||
       isPasswordInvalid ||
@@ -150,16 +173,16 @@ const OrganaizerForm = () => {
       return;
     }
 
-    console.log("Name:", NameValue);
-    console.log("Email:", EmailValue);
-    console.log("Password:", PasswordValue);
+    console.log("Name:", name);
+    console.log("Email:", email);
+    console.log("Password:", password);
     console.log("Logo:", LogoValue);
-    console.log("Description:", DescriptionValue);
-    console.log("Address:", AddressValue);
-    console.log("City:", CityValue);
-    console.log("Postal Code:", PostalCodeValue);
-    console.log("ID Number:", IdentificationNumberValue);
-    console.log("Organization Type:", OrganizationTypeValue);
+    console.log("Description:", description);
+    console.log("Address:", address);
+    console.log("City:", city);
+    console.log("Postal Code:", postalCode);
+    console.log("ID Number:", idNumber);
+    console.log("Organization Type:", orgType);
 
     setNameValue("");
     setEmailValue("");
@@ -175,16 +198,16 @@ const OrganaizerForm = () => {
 
     try {
       const response = await axios.post(`/api/auth/register/org`, {
-        NameValue,
-        EmailValue,
-        PasswordValue,
-        LogoValue,
-        DescriptionValue,
-        AddressValue,
-        CityValue,
-        PostalCodeValue,
-        IdentificationNumberValue,
-        OrganizationTypeValue,
+        name,
+        email,
+        password,
+        // LogoValue,
+        description,
+        address,
+        city,
+        postalCode,
+        idNumber,
+        orgType,
       });
 
       if (response.status === 201) {
@@ -219,7 +242,7 @@ const OrganaizerForm = () => {
           <input
             type="text"
             placeholder="Organisaation koko nimi"
-            value={NameValue}
+            value={name}
             onChange={handleNameChanges}
             onBlur={() => setIsNameTouched(true)}
             className={`input-field ${
@@ -238,7 +261,7 @@ const OrganaizerForm = () => {
           <input
             type="email"
             placeholder="Sähköposti"
-            value={EmailValue}
+            value={email}
             onChange={handleEmailChange}
             onBlur={() => setIsEmailTouched(true)}
             className={`input-field ${
@@ -257,11 +280,11 @@ const OrganaizerForm = () => {
           <input
             type={showPassword ? "text" : "password"}
             placeholder="Salasana"
-            value={PasswordValue}
+            value={password}
             onChange={handlePasswordChange}
             onBlur={() => setIsPasswordTouched(true)}
             className={`input-field ${
-              isPasswordInvalid && isPasswordTouched ? "input-field-red" : ""
+              isPasswordTouched && isPasswordInvalid ? "input-field-red" : ""
             }`}
           />
           <span
@@ -274,13 +297,22 @@ const OrganaizerForm = () => {
             />
           </span>
         </div>
-        {PasswordValue && (
+        {password && (
           <ul className="password-checklist">
-            <li className={PasswordValue.length >= 8 ? "valid" : ""}>
-              Vähintään 8 merkkiä
+            <li className={passwordValidations.length ? "valid" : "invalid"}>
+              8–20 characters
             </li>
-            <li className={/\d/.test(PasswordValue) ? "valid" : ""}>
-              Vähintään yksi numero
+            <li className={passwordValidations.upper ? "valid" : "invalid"}>
+              At least one uppercase letter
+            </li>
+            <li className={passwordValidations.lower ? "valid" : "invalid"}>
+              At least one lowercase letter
+            </li>
+            <li className={passwordValidations.number ? "valid" : "invalid"}>
+              At least one number
+            </li>
+            <li className={passwordValidations.special ? "valid" : "invalid"}>
+              At least one special character (!@#$...)
             </li>
           </ul>
         )}
@@ -290,7 +322,7 @@ const OrganaizerForm = () => {
           <input
             type="text"
             placeholder="Kuvaus"
-            value={DescriptionValue}
+            value={description}
             onChange={descriptionChecker}
             onBlur={() => setIsDescriptionTouched(true)}
             className={`input-field ${
@@ -311,7 +343,7 @@ const OrganaizerForm = () => {
           <input
             type="text"
             placeholder="Osoite"
-            value={AddressValue}
+            value={address}
             onChange={handleAddressChange}
             onBlur={() => setIsAddressTouched(true)}
             className={`input-field ${
@@ -330,7 +362,7 @@ const OrganaizerForm = () => {
           <input
             type="text"
             placeholder="Kaupunki"
-            value={CityValue}
+            value={city}
             onChange={handleCityChange}
             onBlur={() => setIsCityTouched(true)}
             className={`input-field ${
@@ -349,7 +381,7 @@ const OrganaizerForm = () => {
           <input
             type="text"
             placeholder="Postinumero"
-            value={PostalCodeValue}
+            value={postalCode}
             onChange={handlePostalCodeChange}
             onBlur={() => setIsPostalCodeTouched(true)}
             className={`input-field ${
@@ -370,7 +402,7 @@ const OrganaizerForm = () => {
           <input
             type="text"
             placeholder="Tunnistenumero"
-            value={IdentificationNumberValue}
+            value={idNumber}
             onChange={handleIdentificationNumberChange}
           />
         </div>
@@ -381,7 +413,7 @@ const OrganaizerForm = () => {
             type="text"
             list="organization-types"
             placeholder="Organisaation tyyppi"
-            value={OrganizationTypeValue}
+            value={orgType}
             onChange={handleOrganizationTypeChange}
             onBlur={() => setIsOrganizationTypeTouched(true)}
             className={`input-field ${
