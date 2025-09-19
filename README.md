@@ -46,8 +46,9 @@ npm run dev
 `<br/><br/>
 run backend<br/>
 `
-cd backend/api
-dotnet run
+cd backend/
+npm install
+node server.js
 `
 
 ### 🔧 Environment Setup
