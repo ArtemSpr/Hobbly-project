@@ -43,7 +43,6 @@ app.post("/api/auth/register/user", async (req, res) => {
   }
 });
 
-// Registration for organizer
 app.post("/api/auth/register/org", async (req, res) => {
   try {
     const {
@@ -97,7 +96,6 @@ app.post("/api/auth/register/org", async (req, res) => {
       role: "organizer",
     };
 
-    // Adding newOrg to users array
     users.push(newOrg);
     console.log("Organizer was registered");
 
@@ -150,11 +148,12 @@ app.post("/api/auth/login", async (req, res) => {
   }
 });
 
+// Forgot password (not ready yet)
 app.post("/api/auth/forgotPassword", async (req, res) => {
   const { email } = req.body;
 
   if (!email) {
-    return res.status(400).json({ error: "Email and password required" });
+    return res.status(400).json({ error: "Email required" });
   }
 
   const existingUser = users.find((user) => user.email === email);
@@ -162,6 +161,24 @@ app.post("/api/auth/forgotPassword", async (req, res) => {
   if (!existingUser) {
     return res.status(404).json({ error: "User not found" });
   }
+});
+
+app.put("/api/user/changePassword", async (req, res) => {
+  const { email, oldPassword, newPassword } = req.body;
+
+  if (!email || !oldPassword || !newPassword) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
+
+  const existingUser = users.find((user) => user.email === email);
+
+  if (!existingUser) {
+    return res.status(404).json({ error: "User not found" });
+  }
+
+  existingUser.password = await bcrypt.hash(newPassword, 10);
+
+  res.status(200).json({ message: "Password updated successfully" });
 });
 
 const PORT = 5234;
