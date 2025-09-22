@@ -120,7 +120,20 @@ html {
 }
 
 .account-passwordChange.hidden {
-    display: none;
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+.account-passwordChange.hidden::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(192, 192, 192, 0.5);
+    pointer-events: none;
+    z-index: 1;
 }
 
 .password-card-form {
@@ -174,4 +187,40 @@ html {
     font-family: "Poppins",
         sans-serif;
     font-weight: 500;
+    color: var(--color-white);
+}
+
+.logOut-cont {
+    background-color: rgba(32, 112, 127, 0.35);
+    backdrop-filter: blur(10px) saturate(120%);
+    -webkit-backdrop-filter: blur(10px) saturate(120%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 6px 18px rgba(16, 24, 32, 0.25);
+    border-radius: 8px;
+    width: 90%;
+    margin: 35vh 5% 0 5%;
+    padding: 20px;
+}
+
+.logOut-el a {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    transition: 0.5s;
+}
+
+.logOut-el:hover {
+    transform: translateX(10px);
+    transition: 0.5s;
+    cursor: pointer;
+}
+
+.logOut-el img {
+    height: 30px;
+}
+
+.logOut-el span {
+    color: var(--color-event-end);
+
 }

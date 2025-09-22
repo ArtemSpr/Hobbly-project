@@ -5,8 +5,12 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 import ProfileImage from "../../assets/image/prof-1.jpg";
+
 import CopyWhite from "../../assets/icons/copy-white.png";
 import CopyGrey from "../../assets/icons/copy-grey.png";
+
+import LogOut from "../../assets/icons/logOut-icon.png";
+
 import HomeIcon from "../../assets/icons/home-white.svg";
 import MapIcon from "../../assets/icons/map-white.svg";
 import AccountIcon from "../../assets/icons/account-icon.png";
@@ -242,6 +246,15 @@ const Account = ({ userData }) => {
             </div>
           </div>
         </form>
+      </div>
+
+      <div className="logOut-cont">
+        <div className="logOut-el">
+          <Link to="/navigation" className={"active"}>
+            <img src={LogOut} alt="Home" />
+            <span>LogOut</span>
+          </Link>
+        </div>
       </div>
 
       {/* Footer */}
