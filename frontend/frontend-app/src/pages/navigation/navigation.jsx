@@ -42,6 +42,7 @@ function Navigation() {
     address: "",
   });
 
+
   const [searchTerm, setSearchTerm] = useState("");
   const eventRefs = useRef({});
   const [currentPage, setCurrentPage] = useState(1);
@@ -305,6 +306,9 @@ function Navigation() {
         <div className="navi-logo">
           <img src={Logo} alt="Logo" />
         </div>
+         
+
+
         <div className="search-container">
           <div className="search-input-wrapper">
             <input
@@ -549,7 +553,7 @@ function Navigation() {
                       <div className="filter-version">
                         <div className="filter-version-item">Uusin ensin</div>
                         <div className="filter-version-item">Vanhin ensin</div>
-                        <div className="filter-version-item">Tännän</div>
+                        <div className="filter-version-item">Tänään</div>
                         <div className="filter-version-item">Tämä viikko</div>
                         <div className="filter-version-item">Tämä kuukausi</div>
                       </div>
