@@ -30,6 +30,7 @@ html {
   scroll-behavior: smooth;
 }
 
+
 * {
   box-sizing: border-box;
 }
@@ -42,12 +43,15 @@ html {
   flex-direction: row;
 }
 
+/* ===== ACCOUNT ===== */
+
 .navigation-account {
   display: block;
   position: fixed;
   z-index: 1000;
   background-color: var(--color-dark-teal);
   height: 100vh;
+  width: 307px;
 }
 
 .nav-account-profile {
@@ -105,16 +109,66 @@ html {
   box-shadow: 0 6px 18px rgba(16, 24, 32, 0.25);
   border-radius: 8px;
   width: 90%;
-  margin: 25vh 5% 0 5%;
+  left: 5%;
+  bottom: 5vh;
   padding: 20px;
-  transition: margin 0.3s ease;
   position: absolute;
 }
 
-.nav-logOut-cont.fix {
-  margin: 35vh 5% 0 5%;
-  transition: margin 0.3s ease;
+.showHide-block {
+  display: flex;
+  background-color: rgba(32, 112, 127, 0.35);
+  backdrop-filter: blur(10px) saturate(120%);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 6px 18px rgba(16, 24, 32, 0.25);
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+  align-items: center;
 }
+
+.passwordIcon {
+  transition: transform 0.3s ease;
+  height: 25px;
+  margin-left: 5px;
+}
+
+.passwordIcon.rotated {
+  transform: rotate(-90deg);
+}
+
+.hide {
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+  position: absolute;
+}
+
+.show {
+  opacity: 1;
+  transform: translateY(0);
+  position: static;
+}
+
+.add-events-cont {
+  display: none;
+}
+
+.add-events-cont.shown {
+  display: block;
+  background-color: rgba(32, 112, 127, 0.35);
+  backdrop-filter: blur(10px) saturate(120%);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 6px 18px rgba(16, 24, 32, 0.25);
+  border-radius: 8px;
+  width: 90%;
+  margin: 10px 5%;
+  padding: 10px;
+}
+
+/* ====== NAVIGATION HEADER ====== */
 
 .navigation-cont {
   display: flex;
@@ -143,8 +197,6 @@ html {
   transform: translateY(-100%);
 }
 
-
-
 .navi-logo img {
   height: 50px;
   max-width: 200px;
@@ -157,7 +209,7 @@ html {
   object-fit: contain;
 }
 
-/*==============================*/
+/*==========================*/
 /*====== SEARCH INPUT ======*/
 .search-container {
   display: flex;
@@ -246,7 +298,7 @@ html {
   flex: 1;
   padding: 80px 0 100px 0;
   position: relative;
-
+  height: 200px;
 }
 
 .event-cards-container {
@@ -399,7 +451,6 @@ html {
   gap: 8px;
 }
 
-/* Common style for all small blocks */
 .event-date,
 .event-start-time,
 .event-end-time,
@@ -451,7 +502,6 @@ html {
   min-width: 0;
 }
 
-/* TIME BLOCK COLORS */
 .event-date {
   background-color: rgba(143, 143, 143, 0.3);
   color: #333333;
@@ -467,7 +517,6 @@ html {
   color: #b71c1c;
 }
 
-/* CONTACT BLOCK COLORS */
 .event-address {
   background-color: rgba(25, 118, 210, 0.35);
   color: #0d47a1;
@@ -489,7 +538,6 @@ html {
   color: #0d47a1;
 }
 
-/* BONUS INFO COLORS */
 .event-capacity {
   background-color: rgba(97, 97, 97, 0.35);
   color: #212121;
@@ -500,7 +548,7 @@ html {
   color: #1b5e20;
 }
 
-/*==============================*/
+/*=============================*/
 /*====== LINKS & SPECIAL ======*/
 .event-location.shown a {
   text-decoration: underline;
@@ -570,7 +618,7 @@ html {
   text-decoration: underline;
 }
 
-/*==============================*/
+/*=========================*/
 /*====== BUY TICKETS ======*/
 .or-text {
   display: none;
@@ -622,7 +670,7 @@ html {
   flex-shrink: 0;
 }
 
-/*==============================*/
+/*========================*/
 /*====== PAGINATION ======*/
 .pagination-arrows {
   display: flex;
@@ -664,7 +712,7 @@ html {
   color: var(--color-yellow);
 }
 
-/*=====================*/
+/*====================*/
 /*====== FOOTER ======*/
 .navigation-footer {
   display: flex;
@@ -729,7 +777,7 @@ a.active img {
   font-weight: 600;
 }
 
-/*==============================*/
+/*===========================*/
 /*====== FILTER SYSTEM ======*/
 .filter-wrapper {
   position: fixed;
@@ -1056,6 +1104,8 @@ a.active img {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
 }
 
+
+
 /*========================*/
 /*====== ANIMATIONS ======*/
 @keyframes moveToCenter {
@@ -1149,6 +1199,7 @@ a.active img {
 
 /* Large Desktop (1440px+) */
 @media (min-width: 1440px) {
+
   .event-cards-container {
     grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
     max-width: 1600px;
@@ -1180,10 +1231,15 @@ a.active img {
   .navigation-footer {
     display: none !important;
   }
+
+  .fixed {
+    overflow: hidden;
+  }
 }
 
 /* Desktop (1024px - 1439px) */
 @media (min-width: 1024px) and (max-width: 1439px) {
+
   .event-cards-container {
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 25px;
@@ -1212,10 +1268,18 @@ a.active img {
   .navigation-footer {
     display: none;
   }
+
+  .fixed {
+    overflow: hidden;
+  }
 }
 
 /* Tablet Landscape (768px - 1023px) */
 @media (min-width: 768px) and (max-width: 1023px) {
+
+  .fixed {
+    height: 810px;
+  }
 
   .navigation-account {
     display: none;
@@ -1272,6 +1336,8 @@ a.active img {
   a.active img {
     height: 34px;
   }
+
+
 }
 
 /* Tablet Portrait (481px - 767px) */
@@ -1389,6 +1455,7 @@ a.active img {
     font-size: 14px;
     min-height: 45px;
   }
+
 }
 
 /* Mobile Large (376px - 480px) */
@@ -1529,6 +1596,7 @@ a.active img {
     font-size: 13px;
     min-height: 42px;
   }
+
 }
 
 /* Mobile Small (320px - 375px) */
@@ -1762,6 +1830,7 @@ a.active img {
     min-height: 40px;
     border-radius: 20px;
   }
+
 }
 
 /* Very Small Mobile (280px - 319px) */
@@ -1865,6 +1934,7 @@ a.active img {
     font-size: 11px;
     min-height: 38px;
   }
+
 }
 
 /* Landscape orientation adjustments */

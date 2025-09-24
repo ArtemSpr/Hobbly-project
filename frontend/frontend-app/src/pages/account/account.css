@@ -106,22 +106,10 @@ html {
     justify-items: end;
 }
 
-.account-passwordChange {
-    display: flex;
-    flex-direction: row;
-    background-color: rgba(32, 112, 127, 0.35);
-    backdrop-filter: blur(10px) saturate(120%);
-    -webkit-backdrop-filter: blur(10px) saturate(120%);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 0 6px 18px rgba(16, 24, 32, 0.25);
-    border-radius: 8px;
-    width: 90%;
-    margin: 20px 5% 0 5%;
-}
+
 
 .account-passwordChange.hidden {
-    pointer-events: none;
-    opacity: 0.8;
+    display: none;
 }
 
 .account-passwordChange.hidden::after {
@@ -129,8 +117,8 @@ html {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 90%;
+    height: 90%;
     background: rgba(192, 192, 192, 0.5);
     pointer-events: none;
     z-index: 1;
@@ -198,8 +186,10 @@ html {
     box-shadow: 0 6px 18px rgba(16, 24, 32, 0.25);
     border-radius: 8px;
     width: 90%;
-    margin: 35vh 5% 0 5%;
+    left: 5%;
+    bottom: 15vh;
     padding: 20px;
+    position: absolute;
 }
 
 .logOut-el a {
@@ -223,4 +213,40 @@ html {
 .logOut-el span {
     color: var(--color-event-end);
 
+}
+
+@media (min-width: 1024px) {
+    .account-passwordChange {
+        display: flex;
+        flex-direction: column;
+        border-radius: 8px;
+        width: 90%;
+        margin: 20px 5% 0 5%;
+    }
+
+    .password-card-form {
+        padding: 20px;
+        width: 100%;
+        background-color: rgba(32, 112, 127, 0.35);
+        backdrop-filter: blur(10px) saturate(120%);
+        -webkit-backdrop-filter: blur(10px) saturate(120%);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow: 0 6px 18px rgba(16, 24, 32, 0.25);
+        border-radius: 8px;
+    }
+}
+
+@media (max-width:767px) {
+    .account-passwordChange {
+        display: flex;
+        flex-direction: row;
+        background-color: rgba(32, 112, 127, 0.35);
+        backdrop-filter: blur(10px) saturate(120%);
+        -webkit-backdrop-filter: blur(10px) saturate(120%);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow: 0 6px 18px rgba(16, 24, 32, 0.25);
+        border-radius: 8px;
+        width: 90%;
+        margin: 20px 5% 0 5%;
+    }
 }

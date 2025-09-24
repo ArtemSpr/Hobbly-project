@@ -2,7 +2,9 @@ import { Link } from "react-router-dom";
 import { useEffect, useState, useRef, use } from "react";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import axios from "axios";
+
 import "./navigation.css";
+import AddEvent from "./addEvent/addEvent";
 
 // ---- LOGO ----
 import Logo from "../../assets/icons/yellow-big-logo.png";
@@ -11,6 +13,7 @@ import SearchGray from "../../assets/icons/search-grey.png";
 // ---- ACCOUNT ----
 import ProfileImage from "../../assets/image/prof-1.jpg";
 import LogOut from "../../assets/icons/logOut-icon.png";
+import ArrowLeft from "../../assets/icons/arrow-left-icon.png";
 // ---- EVENT IMAGE ----
 import ThirdEventImage from "../../assets/image/event-3.webp";
 // ---- EVENT ICONS ----
@@ -30,7 +33,19 @@ import HomeIcon from "../../assets/icons/home-white.svg";
 import MapIcon from "../../assets/icons/map-white.svg";
 import AccountIcon from "../../assets/icons/account-icon.png";
 
-//! TO DO: active page should be yellow in footer
+// #TODO: Active page will be highlighted in yellow
+// #TODO: Move filter block to separate component
+
+// #TODO: Organization page
+// #TODO:   Adding new events
+
+// #TODO: Admine page
+// #TODO:   Dashboard
+
+// #TODO: Server URL protection (користувач не може просто ввести в пошукову строку ендпоінт)
+// #TODO: Скопіювати стиль зміни пароля до мобільної версії
+// #FIXME: Change filter slider to list in tablets and desktop
+// #IDEA: User can like events
 
 function Navigation({ userData }) {
   const [events, setEvents] = useState([]);
@@ -76,6 +91,9 @@ function Navigation({ userData }) {
     number: false,
     special: false,
   });
+  const [isElOpen, setIsElOpen] = useState(false);
+  const [isCreateEventOpen, setIsCreateEventOpen] = useState(false);
+
   // ======= FILTER PANEL =======
 
   const applyFilterButton = () => {
@@ -451,7 +469,7 @@ function Navigation({ userData }) {
     try {
       setFilterParams((prev) => {
         const newParams = [...prev];
-        const districtValue = districtObj.value || districtObj; // підтримка і старого і нового формату
+        const districtValue = districtObj.value || districtObj;
 
         if (newParams[1].includes(districtValue)) {
           newParams[1] = newParams[1].filter((item) => item !== districtValue);
@@ -634,12 +652,27 @@ function Navigation({ userData }) {
     }
   };
 
+  // ------ GUEST ROLE ------
   useEffect(() => {
     const passwordBoard = document.querySelector(".account-passwordChange");
     if (!userData) {
       passwordBoard.classList.add("hidden");
     }
   }, []);
+  // ------ ORGANIZER ROLE ------
+  useEffect(() => {
+    const addEvents = document.querySelector(".add-events-cont");
+
+    if (userData?.role === "organizer") {
+      addEvents.classList.add("shown");
+    }
+  }, []);
+
+  if (isCreateEventOpen) {
+    document.documentElement.classList.add("fixed");
+  } else {
+    document.documentElement.classList.remove("fixed");
+  }
 
   return (
     <div className="navigation">
@@ -656,8 +689,26 @@ function Navigation({ userData }) {
           <div className="profile-role">{userData?.role || "guest"}</div>
         </div>
 
+        {/* --------- PASSWORD CHANGING --------- */}
         <div className="account-passwordChange">
-          <form className="password-card-form" onSubmit={handleSubmit}>
+          <div
+            className="showHide-block"
+            onClick={() => {
+              setIsElOpen(!isElOpen);
+            }}
+          >
+            <span>
+              {isElOpen ? "Hide password chanage" : "Show password chanage"}
+            </span>
+            <img
+              src={ArrowLeft}
+              className={`passwordIcon ${isElOpen ? "rotated" : ""}`}
+            ></img>
+          </div>
+          <form
+            className={`password-card-form ${isElOpen ? "show" : "hide"}`}
+            onSubmit={handleSubmit}
+          >
             <div className="passwordChange-title">
               <span>Change Password</span>
             </div>
@@ -761,7 +812,13 @@ function Navigation({ userData }) {
             </div>
           </form>
         </div>
-
+        {/* --------- ADDING NEW EVENTS --------- */}
+        <div
+          className="add-events-cont"
+          onClick={() => setIsCreateEventOpen(!isCreateEventOpen)}
+        >
+          Create own event
+        </div>
         <div className="nav-logOut-cont">
           <div className="logOut-el">
             <Link to="/" className={"active"}>
@@ -777,7 +834,9 @@ function Navigation({ userData }) {
           <div className="navi-logo">
             <img src={Logo} alt="Logo" />
           </div>
-          <div className="search-container">
+          <div
+            className={`search-container ${isCreateEventOpen ? "hide" : ""}`}
+          >
             <div className="search-input-wrapper">
               <input
                 type="text"
@@ -792,7 +851,16 @@ function Navigation({ userData }) {
 
         {/* ============ MAIN START ============ */}
         <main className="main-content" ref={containerRef}>
-          <div className="event-cards-container">
+          <div
+            className={`create-event-cont ${isCreateEventOpen ? "" : "hide"}`}
+          >
+            <AddEvent userData={userData} />
+          </div>
+          <div
+            className={`event-cards-container ${
+              isCreateEventOpen ? "hide" : ""
+            }`}
+          >
             {filteredEvents.slice(startIndex, endIndex).map((event) => (
               <div
                 ref={(el) => (eventRefs.current[event.id] = el)}
@@ -986,7 +1054,7 @@ function Navigation({ userData }) {
             ))}
           </div>
 
-          <div className="filter-wrapper">
+          <div className={`filter-wrapper ${isCreateEventOpen ? "hide" : ""}`}>
             {buttonVisible && (
               <div
                 className={`filter-button ${isCentered ? "centered" : ""}`}
@@ -1099,7 +1167,10 @@ function Navigation({ userData }) {
             )}
           </div>
 
-          <div className="pagination-arrows" id="pagination-arrows">
+          <div
+            className={`pagination-arrows ${isCreateEventOpen ? "hide" : ""}`}
+            id="pagination-arrows"
+          >
             <button
               className="prev"
               onClick={() => setCurrentPage((prev) => prev - 1)}
