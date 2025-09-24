@@ -1,12 +1,12 @@
-/*==============================*/
+/*==========================*/
 /*====== IMPORT FONTS ======*/
 @import url("https://fonts.googleapis.com/css2?family=Kanit:wght@500&family=Montserrat&display=swap");
 
-/*==============================*/
+/*===========================*/
 /*====== SPLIDE SLIDER ======*/
 @import '@splidejs/react-splide/css';
 
-/*==============================*/
+/*=========================*/
 /*====== ROOT COLORS ======*/
 :root {
   --color-dark-teal: #073b3a;
@@ -30,13 +30,147 @@ html {
   scroll-behavior: smooth;
 }
 
+
 * {
   box-sizing: border-box;
 }
 
-/*==============================*/
+/*=================================*/
 /*====== NAVIGATION / HEADER ======*/
+
 .navigation {
+  display: flex;
+  flex-direction: row;
+}
+
+/* ===== ACCOUNT ===== */
+
+.navigation-account {
+  display: block;
+  position: fixed;
+  z-index: 1000;
+  background-color: var(--color-dark-teal);
+  height: 100vh;
+  width: 307px;
+}
+
+.nav-account-profile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(32, 112, 127, 0.35);
+  backdrop-filter: blur(10px) saturate(120%);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 6px 18px rgba(16, 24, 32, 0.25);
+  border-radius: 8px;
+  width: 90%;
+  height: auto;
+  margin: 100px 5% 0 5%;
+  padding: 10px;
+  z-index: 999;
+  transition: margin 0.3s ease;
+}
+
+.nav-account-profile.top {
+  margin: 10px 5% 0 5%;
+  transition: margin 0.3s ease;
+}
+
+.nav-account-profile img {
+  height: 80px;
+  width: 80px;
+  border-radius: 50px;
+}
+
+.nav-profile-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 15px;
+  border-radius: 12px;
+}
+
+.nav-profile-info span {
+  margin-left: 12px;
+  line-height: 1.6;
+  letter-spacing: 0.3px;
+  padding: 3px 10px;
+  transition: all 0.3s ease;
+}
+
+.nav-logOut-cont {
+  background-color: rgba(32, 112, 127, 0.35);
+  backdrop-filter: blur(10px) saturate(120%);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 6px 18px rgba(16, 24, 32, 0.25);
+  border-radius: 8px;
+  width: 90%;
+  left: 5%;
+  bottom: 5vh;
+  padding: 20px;
+  position: absolute;
+}
+
+.showHide-block {
+  display: flex;
+  background-color: rgba(32, 112, 127, 0.35);
+  backdrop-filter: blur(10px) saturate(120%);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 6px 18px rgba(16, 24, 32, 0.25);
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+  align-items: center;
+}
+
+.passwordIcon {
+  transition: transform 0.3s ease;
+  height: 25px;
+  margin-left: 5px;
+}
+
+.passwordIcon.rotated {
+  transform: rotate(-90deg);
+}
+
+.hide {
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+  position: absolute;
+}
+
+.show {
+  opacity: 1;
+  transform: translateY(0);
+  position: static;
+}
+
+.add-events-cont {
+  display: none;
+}
+
+.add-events-cont.shown {
+  display: block;
+  background-color: rgba(32, 112, 127, 0.35);
+  backdrop-filter: blur(10px) saturate(120%);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 6px 18px rgba(16, 24, 32, 0.25);
+  border-radius: 8px;
+  width: 90%;
+  margin: 10px 5%;
+  padding: 10px;
+}
+
+/* ====== NAVIGATION HEADER ====== */
+
+.navigation-cont {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -63,8 +197,6 @@ html {
   transform: translateY(-100%);
 }
 
-
-
 .navi-logo img {
   height: 50px;
   max-width: 200px;
@@ -77,7 +209,7 @@ html {
   object-fit: contain;
 }
 
-/*==============================*/
+/*==========================*/
 /*====== SEARCH INPUT ======*/
 .search-container {
   display: flex;
@@ -166,7 +298,7 @@ html {
   flex: 1;
   padding: 80px 0 100px 0;
   position: relative;
-
+  height: 200px;
 }
 
 .event-cards-container {
@@ -319,7 +451,6 @@ html {
   gap: 8px;
 }
 
-/* Common style for all small blocks */
 .event-date,
 .event-start-time,
 .event-end-time,
@@ -371,7 +502,6 @@ html {
   min-width: 0;
 }
 
-/* TIME BLOCK COLORS */
 .event-date {
   background-color: rgba(143, 143, 143, 0.3);
   color: #333333;
@@ -387,7 +517,6 @@ html {
   color: #b71c1c;
 }
 
-/* CONTACT BLOCK COLORS */
 .event-address {
   background-color: rgba(25, 118, 210, 0.35);
   color: #0d47a1;
@@ -409,7 +538,6 @@ html {
   color: #0d47a1;
 }
 
-/* BONUS INFO COLORS */
 .event-capacity {
   background-color: rgba(97, 97, 97, 0.35);
   color: #212121;
@@ -420,7 +548,7 @@ html {
   color: #1b5e20;
 }
 
-/*==============================*/
+/*=============================*/
 /*====== LINKS & SPECIAL ======*/
 .event-location.shown a {
   text-decoration: underline;
@@ -490,7 +618,7 @@ html {
   text-decoration: underline;
 }
 
-/*==============================*/
+/*=========================*/
 /*====== BUY TICKETS ======*/
 .or-text {
   display: none;
@@ -542,7 +670,7 @@ html {
   flex-shrink: 0;
 }
 
-/*==============================*/
+/*========================*/
 /*====== PAGINATION ======*/
 .pagination-arrows {
   display: flex;
@@ -584,7 +712,7 @@ html {
   color: var(--color-yellow);
 }
 
-/*==============================*/
+/*====================*/
 /*====== FOOTER ======*/
 .navigation-footer {
   display: flex;
@@ -649,7 +777,7 @@ a.active img {
   font-weight: 600;
 }
 
-/*==============================*/
+/*===========================*/
 /*====== FILTER SYSTEM ======*/
 .filter-wrapper {
   position: fixed;
@@ -976,7 +1104,9 @@ a.active img {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
 }
 
-/*==============================*/
+
+
+/*========================*/
 /*====== ANIMATIONS ======*/
 @keyframes moveToCenter {
   0% {
@@ -1064,16 +1194,18 @@ a.active img {
   }
 }
 
-/*==============================*/
+/*===============================*/
 /*====== RESPONSIVE DESIGN ======*/
 
 /* Large Desktop (1440px+) */
 @media (min-width: 1440px) {
+
   .event-cards-container {
     grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
     max-width: 1600px;
     gap: 30px;
     padding: 70px 40px 40px;
+    margin: 0 auto 0 320px;
   }
 
   .event-card {
@@ -1095,14 +1227,24 @@ a.active img {
     max-width: 1200px;
     margin: 0 auto;
   }
+
+  .navigation-footer {
+    display: none !important;
+  }
+
+  .fixed {
+    overflow: hidden;
+  }
 }
 
 /* Desktop (1024px - 1439px) */
 @media (min-width: 1024px) and (max-width: 1439px) {
+
   .event-cards-container {
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 25px;
     padding: 70px 30px 30px;
+    margin: 0 auto 0 320px;
   }
 
   .event-card {
@@ -1124,12 +1266,25 @@ a.active img {
   }
 
   .navigation-footer {
-    padding: 10px 30px;
+    display: none;
+  }
+
+  .fixed {
+    overflow: hidden;
   }
 }
 
 /* Tablet Landscape (768px - 1023px) */
 @media (min-width: 768px) and (max-width: 1023px) {
+
+  .fixed {
+    height: 810px;
+  }
+
+  .navigation-account {
+    display: none;
+  }
+
   .event-cards-container {
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 20px;
@@ -1181,10 +1336,17 @@ a.active img {
   a.active img {
     height: 34px;
   }
+
+
 }
 
 /* Tablet Portrait (481px - 767px) */
 @media (min-width: 481px) and (max-width: 767px) {
+
+  .navigation-account {
+    display: none;
+  }
+
   .event-cards-container {
     grid-template-columns: 1fr;
     gap: 20px;
@@ -1293,10 +1455,16 @@ a.active img {
     font-size: 14px;
     min-height: 45px;
   }
+
 }
 
 /* Mobile Large (376px - 480px) */
 @media (min-width: 376px) and (max-width: 480px) {
+
+  .navigation-account {
+    display: none;
+  }
+
   .event-cards-container {
     padding: 60px 15px 15px;
     gap: 15px;
@@ -1428,10 +1596,16 @@ a.active img {
     font-size: 13px;
     min-height: 42px;
   }
+
 }
 
 /* Mobile Small (320px - 375px) */
 @media (max-width: 375px) {
+
+  .navigation-account {
+    display: none;
+  }
+
   .event-cards-container {
     padding: 50px 10px 10px;
     gap: 12px;
@@ -1656,10 +1830,16 @@ a.active img {
     min-height: 40px;
     border-radius: 20px;
   }
+
 }
 
 /* Very Small Mobile (280px - 319px) */
 @media (max-width: 319px) {
+
+  .navigation-account {
+    display: none;
+  }
+
   .event-cards-container {
     padding: 45px 8px 8px;
     gap: 10px;
@@ -1754,6 +1934,7 @@ a.active img {
     font-size: 11px;
     min-height: 38px;
   }
+
 }
 
 /* Landscape orientation adjustments */
@@ -1763,7 +1944,7 @@ a.active img {
   }
 
   .navigation-footer {
-    height: 50px;
+    height: 80px;
   }
 
   .main-content {
@@ -1773,7 +1954,7 @@ a.active img {
   }
 
   .search-container {
-    margin-top: 70px;
+    margin-top: 120px;
   }
 
   .filter-button {

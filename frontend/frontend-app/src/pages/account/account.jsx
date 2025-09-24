@@ -1,17 +1,21 @@
 import "./account.css";
 
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
+import axios from "axios";
 
 import ProfileImage from "../../assets/image/prof-1.jpg";
+
 import CopyWhite from "../../assets/icons/copy-white.png";
 import CopyGrey from "../../assets/icons/copy-grey.png";
+
+import LogOut from "../../assets/icons/logOut-icon.png";
+
 import HomeIcon from "../../assets/icons/home-white.svg";
 import MapIcon from "../../assets/icons/map-white.svg";
 import AccountIcon from "../../assets/icons/account-icon.png";
 
 const Account = ({ userData }) => {
-  const location = useLocation();
   const [copyIcon, setCopyIcon] = useState(CopyGrey);
 
   const [password, setPassword] = useState("");
@@ -79,24 +83,60 @@ const Account = ({ userData }) => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsPasswordTouched(true);
     setIsRepPasswordTouched(true);
 
     if (isPasswordInvalid || !doPasswordsMatch) return;
 
-    console.log("Пароль збережений:", password);
+    const passwordInfo = {
+      email: userData?.email,
+      oldPassword: password,
+      newPassword: repPassword,
+    };
+
+    if (
+      !passwordInfo.email ||
+      !passwordInfo.oldPassword ||
+      !passwordInfo.newPassword
+    ) {
+      console.error("Some of passwordInfo values are not valid");
+      return;
+    }
+
+    try {
+      const response = await axios.put(
+        "/api/user/changePassword",
+        passwordInfo
+      );
+      if (response.status === 200) {
+        setPassword("");
+        setRepPassword("");
+        alert("Password saved");
+        console.log("Password saved:", repPassword);
+      }
+    } catch (error) {
+      console.error("Error updating password:", error);
+      alert("Something went wrong");
+    }
   };
+
+  useEffect(() => {
+    const passwordBoard = document.querySelector(".account-passwordChange");
+    if (!userData) {
+      passwordBoard.classList.add("hidden");
+    }
+  }, []);
 
   return (
     <div className="account-container">
       <div className="account-profile">
         <img src={ProfileImage} alt="Profile" />
         <div className="profile-info">
-          <span className="profile-name">{userData?.name}</span>
+          <span className="profile-name">{userData?.name || "user"} </span>
           <span className="profile-email">
-            {userData?.email}{" "}
+            {userData?.email || "userEmail@gmail.com"}{" "}
             <img
               src={copyIcon}
               onClick={copyToClipboard}
@@ -105,7 +145,7 @@ const Account = ({ userData }) => {
             />
           </span>
         </div>
-        <div className="profile-role">{userData?.role}</div>
+        <div className="profile-role">{userData?.role || "guest"}</div>
       </div>
 
       <div className="account-passwordChange">
@@ -114,7 +154,6 @@ const Account = ({ userData }) => {
             <span>Change Password</span>
           </div>
           <div className="passwordChange-content">
-            {/* Основний пароль */}
             <div className="password-input-wrapper">
               <input
                 type={showPassword ? "text" : "password"}
@@ -162,8 +201,6 @@ const Account = ({ userData }) => {
                 </li>
               </ul>
             )}
-
-            {/* Повтор пароля */}
             <div className="password-input-wrapper">
               <input
                 type={showPassword ? "text" : "password"}
@@ -193,7 +230,7 @@ const Account = ({ userData }) => {
             )}
 
             <div className="passwordChange-buttons">
-              <div
+              <button
                 type="button"
                 className="passwordChange-cancel"
                 onClick={() => {
@@ -202,40 +239,40 @@ const Account = ({ userData }) => {
                 }}
               >
                 Cancel
-              </div>
-              <div className="passwordChange-save" type="submit">
+              </button>
+              <button className="passwordChange-save" type="submit">
                 Save
-              </div>
+              </button>
             </div>
           </div>
         </form>
       </div>
 
+      <div className="logOut-cont">
+        <div className="logOut-el">
+          <Link to="/navigation" className={"active"}>
+            <img src={LogOut} alt="Home" />
+            <span>LogOut</span>
+          </Link>
+        </div>
+      </div>
+
       {/* Footer */}
       <footer className="navigation-footer">
         <div className="footer-el">
-          <Link
-            to="/navigation"
-            className={location.pathname === "/navigation" ? "active" : ""}
-          >
+          <Link to="/navigation" className={"active"}>
             <img src={HomeIcon} alt="Home" />
             <span>Kotisivu</span>
           </Link>
         </div>
         <div className="footer-el">
-          <Link
-            to="/map"
-            className={location.pathname === "/map" ? "active" : ""}
-          >
+          <Link to="/map" className={"active"}>
             <img src={MapIcon} alt="Map" />
             <span>Kartta</span>
           </Link>
         </div>
         <div className="footer-el">
-          <Link
-            to="/account"
-            className={location.pathname === "/account" ? "active" : ""}
-          >
+          <Link to="/account" className={"active"}>
             <img src={AccountIcon} alt="Account" />
             <span>Account</span>
           </Link>
