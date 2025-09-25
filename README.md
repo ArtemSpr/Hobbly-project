@@ -23,7 +23,7 @@ To simplify event discovery for users and provide tools for organizers to create
 
 ## 🛠 Technologies and Stack
 - **Frontend:** React, CSS, HTML  
-- **Backend / API:** C# (.NET), Axios  
+- **Backend / API:** C# (.NET), Axios, Node.js
 - **Database:** MongoDB  
 - **Cloud Services:** Azure  
 - **Other Tools:** Figma (design), Git + GitHub (version control and collaboration)  
@@ -46,8 +46,9 @@ npm run dev
 `<br/><br/>
 run backend<br/>
 `
-cd backend/api
-dotnet run
+cd backend/
+npm install
+node server.js
 `
 
 ### 🔧 Environment Setup
