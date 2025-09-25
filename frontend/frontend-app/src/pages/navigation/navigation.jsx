@@ -219,6 +219,10 @@ function Navigation({ userData }) {
         if (coords) {
           const locationData = {
             id: event.id,
+            image:
+              event.images && event.images.length > 0
+                ? event.images[0].url
+                : ThirdEventImage,
             name: event.name?.fi || event.name?.en || "No Name",
             latitude: coords[1],
             longitude: coords[0],

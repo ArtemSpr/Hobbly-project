@@ -9,16 +9,14 @@ import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "./map.css";
 
-const iconUrl = () => {
-  
-}
+// const iconUrl = () => {};
 
-const iconMark = L.icon({
-  iconUrl: markIcon,
-  iconSize: [32, 32],
-  iconAnchor: [16, 32],
-  popupAnchor: [0, -32],
-});
+// const iconMark = L.icon({
+//   iconUrl: loc.image || markIcon,
+//   iconSize: [32, 32],
+//   iconAnchor: [16, 32],
+//   popupAnchor: [0, -32],
+// });
 
 const Map = () => {
   const { state } = useLocation();
@@ -59,7 +57,15 @@ const Map = () => {
                 <Marker
                   key={loc.id}
                   position={[loc.latitude, loc.longitude]}
-                  icon={iconMark}
+                  icon={L.divIcon({
+                    className: "custom-marker",
+                    html: `<div class="marker-image" style="background-image: url('${
+                      loc.image || markIcon
+                    }')"></div>`,
+                    iconSize: [40, 40],
+                    iconAnchor: [20, 40],
+                    popupAnchor: [0, -40],
+                  })}
                 >
                   <Popup>{loc.name}</Popup>
                 </Marker>
