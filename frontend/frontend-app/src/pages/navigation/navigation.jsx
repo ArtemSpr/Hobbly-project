@@ -4,7 +4,9 @@ import { Splide, SplideSlide } from "@splidejs/react-splide";
 import axios from "axios";
 
 import "./navigation.css";
+
 import AddEvent from "./addEvent/addEvent";
+import OwnEvents from "./ownEvents/ownEvents";
 
 // ---- LOGO ----
 import Logo from "../../assets/icons/yellow-big-logo.png";
@@ -92,7 +94,11 @@ function Navigation({ userData }) {
     special: false,
   });
   const [isElOpen, setIsElOpen] = useState(false);
+  // ------- NEW EVENT STATES -------
   const [isCreateEventOpen, setIsCreateEventOpen] = useState(false);
+  const [newEvents, setNewEvents] = useState([]);
+  const [newEventImage, setNewEventImage] = useState(null);
+  const [isOwnEventClosen, setIsOwnEventClosen] = useState(false);
 
   // ======= FILTER PANEL =======
 
@@ -311,12 +317,12 @@ function Navigation({ userData }) {
 
   const filteredEvents = events.filter((event) => {
     const name =
-      typeof event.name.fi === "string"
-        ? event.name.fi
-        : typeof event.name.sv === "string"
-        ? event.name.sv
-        : typeof event.name.en === "string"
-        ? event.name.en
+      typeof event.name?.fi === "string"
+        ? event.name?.fi
+        : typeof event.name?.sv === "string"
+        ? event.name?.sv
+        : typeof event.name?.en === "string"
+        ? event.name?.en
         : "";
     return name.toLowerCase().includes(searchTerm.toLowerCase());
   });
@@ -674,6 +680,30 @@ function Navigation({ userData }) {
     document.documentElement.classList.remove("fixed");
   }
 
+  const handleEventData = (formData, image) => {
+    try {
+      setNewEvents((prev) => [...prev, formData]);
+      setNewEventImage(image);
+      // setEvents((prev) => [...prev, formData]);
+      console.log("Form submitted:", { ...formData });
+      setIsCreateEventOpen(!isCreateEventOpen);
+    } catch (error) {
+      console.error("Error with setting new event data");
+    }
+  };
+
+  const ownEventsCloser = () => {
+    setIsOwnEventClosen(!isOwnEventClosen);
+  };
+
+  useEffect(() => {
+    console.log("Actual newEvents array:", newEvents);
+  }, [newEvents]);
+
+  useEffect(() => {
+    console.log("Actual image:", newEventImage);
+  }, [newEventImage]);
+
   return (
     <div className="navigation">
       {/* ========== NAVIGATION ACCOUNT ==========*/}
@@ -854,204 +884,232 @@ function Navigation({ userData }) {
           <div
             className={`create-event-cont ${isCreateEventOpen ? "" : "hide"}`}
           >
-            <AddEvent userData={userData} />
+            <AddEvent userData={userData} onData={handleEventData} />
+          </div>
+
+          <div
+            className={`own-event-cards-container ${
+              isCreateEventOpen ? "hide" : ""
+            }`}
+          >
+            <div className="event-cards-title" onClick={ownEventsCloser}>
+              Own events{" "}
+              <img
+                src={ArrowLeft}
+                className={`title-arrow ${isOwnEventClosen ? "rotated" : ""}`}
+              ></img>
+            </div>
+            <div
+              className={`own-event-cards-block ${
+                isOwnEventClosen ? "hide" : ""
+              }`}
+            >
+              <OwnEvents
+                newEvents={newEvents}
+                setNewEvents={setNewEvents}
+                newEventImage={newEventImage}
+              />
+            </div>
           </div>
           <div
             className={`event-cards-container ${
               isCreateEventOpen ? "hide" : ""
             }`}
           >
-            {filteredEvents.slice(startIndex, endIndex).map((event) => (
-              <div
-                ref={(el) => (eventRefs.current[event.id] = el)}
-                className={`event-card ${
-                  activeEventId === event.id ? "active" : ""
-                }`}
-                key={event.id}
-                onClick={() =>
-                  handleEventClick(event, eventRefs.current[event.id])
-                }
-              >
-                <div className="event-card-image">
-                  <img
-                    src={
-                      event.images && event.images[0]
-                        ? event.images[0].url
-                        : ThirdEventImage
-                    }
-                    alt={
-                      event.name?.fi ||
-                      event.name?.sv ||
-                      event.name?.en ||
-                      "Event"
-                    }
-                  />
-                </div>
-                <div className="event-card-content">
-                  <div className="org-name">
-                    {event.provider?.fi ||
-                      event.provider?.sv ||
-                      event.provider?.en ||
-                      "Company"}
-                  </div>
-                  <div className="event-title">
-                    {event.name?.fi ||
-                      event.name?.sv ||
-                      event.name?.en ||
-                      "Event title"}
-                  </div>
-
-                  <div className="card-detail-info">
-                    <div
-                      className={`event-time ${
-                        activeEventId === event.id ? "shown" : ""
-                      }`}
-                    >
-                      <div className="event-date">
-                        <img src={EventDate} alt="Event Date" />
-                        <span>{getDay(event.start_time)}</span>{" "}
-                      </div>
-                      <div className="event-start-time">
-                        <img src={EventStart} alt="Start Time" />
-                        <span>{getTime(event.start_time)}</span>
-                      </div>
-                      <div className="event-end-time">
-                        <img src={EventEnd} alt="End Time" />
-                        <span>{getTime(event.end_time)}</span>
-                      </div>
-                    </div>
-
-                    <div
-                      className={`event-location ${
-                        activeEventId === event.id ? "shown" : ""
-                      }`}
-                    >
-                      <div className="event-contact">
-                        <div className="event-email">
-                          <img src={EventEmail} alt="Event Email" />
-                          {eventLocation.contactEmail || "Tuntematon"}
-                        </div>
-                        <div className="event-phone">
-                          <img src={EventPhone} alt="Event Phone" />
-                          {eventLocation.contactPhone || "Tuntematon"}
-                        </div>
-                      </div>
-                      <div className="event-bonus-info">
-                        <div className="event-address">
-                          <img src={EventLocation} alt="Event Address" />
-                          {eventLocation.address || "Tuntematon"}
-                        </div>
-
-                        <div
-                          className={`event-capacity ${
-                            activeEventId === event.id ? "shown" : ""
-                          }`}
-                        >
-                          <img src={EventCapa} alt="Event Capacity" />
-                          {event.maximum_capacity || "Tuntematon"}
-                        </div>
-                        <div
-                          className={`event-free ${
-                            activeEventId === event.id ? "shown" : ""
-                          }`}
-                        >
-                          <img src={EventPrice} alt="Event Free" />
-                          {event.is_free ? "Ilmainen" : "Maksullinen"}{" "}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    className={
-                      activeEventId === event.id
-                        ? "event-description"
-                        : " event-short-description"
-                    }
-                  >
-                    <br />
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: getTruncatedText(
-                          activeEventId === event.id
-                            ? event.description?.fi
-                            : event.short_description?.fi,
-                          1200,
-                          eventLocation.info_url.fi ||
-                            eventLocation.info_url.sv ||
-                            eventLocation.info_url.en
-                        ),
-                      }}
+            <div className="event-cards-title">All events</div>
+            <div className="event-cards-block">
+              {filteredEvents.slice(startIndex, endIndex).map((event) => (
+                <div
+                  ref={(el) => (eventRefs.current[event.id] = el)}
+                  className={`event-card ${
+                    activeEventId === event.id ? "active" : ""
+                  }`}
+                  key={event.id}
+                  onClick={() =>
+                    handleEventClick(event, eventRefs.current[event.id])
+                  }
+                >
+                  <div className="event-card-image">
+                    <img
+                      src={
+                        event.images && event.images[0]
+                          ? event.images[0].url
+                          : ThirdEventImage
+                      }
+                      alt={
+                        event.name?.fi ||
+                        event.name?.sv ||
+                        event.name?.en ||
+                        "Event"
+                      }
                     />
+                  </div>
+                  <div className="event-card-content">
+                    <div className="org-name">
+                      {event.provider?.fi ||
+                        event.provider?.sv ||
+                        event.provider?.en ||
+                        "Company"}
+                    </div>
+                    <div className="event-title">
+                      {event.name?.fi ||
+                        event.name?.sv ||
+                        event.name?.en ||
+                        "Event title"}
+                    </div>
 
-                    {eventLocation.info_url ? (
-                      <a
-                        href={eventLocation.info_url}
-                        target="_blank"
-                        className={`read-more-link ${
+                    <div className="card-detail-info">
+                      <div
+                        className={`event-time ${
                           activeEventId === event.id ? "shown" : ""
                         }`}
                       >
-                        <img
-                          src={EventLink}
-                          alt="icon"
-                          className={`read-more-icon ${
-                            activeEventId === event.id ? "shown" : ""
-                          }`}
-                        />
-                        Lue lisää linkistä
-                      </a>
-                    ) : (
-                      <a
-                        href="#"
-                        target="_blank"
-                        className={`read-more-nolink ${
+                        <div className="event-date">
+                          <img src={EventDate} alt="Event Date" />
+                          <span>{getDay(event.start_time)}</span>{" "}
+                        </div>
+                        <div className="event-start-time">
+                          <img src={EventStart} alt="Start Time" />
+                          <span>{getTime(event.start_time)}</span>
+                        </div>
+                        <div className="event-end-time">
+                          <img src={EventEnd} alt="End Time" />
+                          <span>{getTime(event.end_time)}</span>
+                        </div>
+                      </div>
+
+                      <div
+                        className={`event-location ${
                           activeEventId === event.id ? "shown" : ""
                         }`}
                       >
-                        <img
-                          src={EventLink}
-                          alt="icon"
-                          className={`read-more-icon ${
-                            activeEventId === event.id ? "shown" : ""
-                          }`}
-                        />
-                        Linkki lisätään myöhemmin
-                      </a>
-                    )}
+                        <div className="event-contact">
+                          <div className="event-email">
+                            <img src={EventEmail} alt="Event Email" />
+                            {eventLocation.contactEmail || "Tuntematon"}
+                          </div>
+                          <div className="event-phone">
+                            <img src={EventPhone} alt="Event Phone" />
+                            {eventLocation.contactPhone || "Tuntematon"}
+                          </div>
+                        </div>
+                        <div className="event-bonus-info">
+                          <div className="event-address">
+                            <img src={EventLocation} alt="Event Address" />
+                            {eventLocation.address || "Tuntematon"}
+                          </div>
 
-                    {event.offers?.[0]?.info_url?.fi ||
-                    event.offers?.[0]?.info_url?.sv ||
-                    event.offers?.[0]?.info_url?.en ? (
-                      <div className="event-offer">
-                        <span
-                          className={`or-text ${
-                            activeEventId === event.id ? "shown" : ""
-                          }`}
-                        >
-                          Tai
-                        </span>
+                          <div
+                            className={`event-capacity ${
+                              activeEventId === event.id ? "shown" : ""
+                            }`}
+                          >
+                            <img src={EventCapa} alt="Event Capacity" />
+                            {event.maximum_capacity || "Tuntematon"}
+                          </div>
+                          <div
+                            className={`event-free ${
+                              activeEventId === event.id ? "shown" : ""
+                            }`}
+                          >
+                            <img src={EventPrice} alt="Event Free" />
+                            {event.is_free ? "Ilmainen" : "Maksullinen"}{" "}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      className={
+                        activeEventId === event.id
+                          ? "event-description"
+                          : " event-short-description"
+                      }
+                    >
+                      <br />
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: getTruncatedText(
+                            activeEventId === event.id
+                              ? event.description?.fi
+                              : event.short_description?.fi,
+                            1200,
+                            eventLocation.info_url.fi ||
+                              eventLocation.info_url.sv ||
+                              eventLocation.info_url.en
+                          ),
+                        }}
+                      />
+
+                      {eventLocation.info_url ? (
                         <a
-                          href={event.offers?.[0]?.info_url.fi}
+                          href={eventLocation.info_url}
                           target="_blank"
-                          className={`offer-link ${
+                          className={`read-more-link ${
                             activeEventId === event.id ? "shown" : ""
                           }`}
                         >
                           <img
-                            src={EventPrice}
-                            alt="Event Price"
-                            className={`event-price-icon ${
+                            src={EventLink}
+                            alt="icon"
+                            className={`read-more-icon ${
                               activeEventId === event.id ? "shown" : ""
                             }`}
                           />
-                          Ostaa liput tästä
+                          Lue lisää linkistä
                         </a>
-                      </div>
-                    ) : null}
+                      ) : (
+                        <a
+                          href="#"
+                          target="_blank"
+                          className={`read-more-nolink ${
+                            activeEventId === event.id ? "shown" : ""
+                          }`}
+                        >
+                          <img
+                            src={EventLink}
+                            alt="icon"
+                            className={`read-more-icon ${
+                              activeEventId === event.id ? "shown" : ""
+                            }`}
+                          />
+                          Linkki lisätään myöhemmin
+                        </a>
+                      )}
+
+                      {event.offers?.[0]?.info_url?.fi ||
+                      event.offers?.[0]?.info_url?.sv ||
+                      event.offers?.[0]?.info_url?.en ? (
+                        <div className="event-offer">
+                          <span
+                            className={`or-text ${
+                              activeEventId === event.id ? "shown" : ""
+                            }`}
+                          >
+                            Tai
+                          </span>
+                          <a
+                            href={event.offers?.[0]?.info_url.fi}
+                            target="_blank"
+                            className={`offer-link ${
+                              activeEventId === event.id ? "shown" : ""
+                            }`}
+                          >
+                            <img
+                              src={EventPrice}
+                              alt="Event Price"
+                              className={`event-price-icon ${
+                                activeEventId === event.id ? "shown" : ""
+                              }`}
+                            />
+                            Ostaa liput tästä
+                          </a>
+                        </div>
+                      ) : null}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
 
           <div className={`filter-wrapper ${isCreateEventOpen ? "hide" : ""}`}>

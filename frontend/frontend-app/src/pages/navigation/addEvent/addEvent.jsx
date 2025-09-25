@@ -1,12 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
+
 import "./addEvent.css";
 
-// #TODO: Додати це в мобільну версію
-// #TODO: Зробити коректний адаптив
-// #TODO: Вимнкути скрол
-// #TODO: Додати функціонал на кнопку
+// #TODO: Add this page to mobile version
+// #TODO: Do response
 
-const AddEvent = ({ userData }) => {
+const AddEvent = ({ userData, onData }) => {
   const [image, setImage] = useState(null);
 
   // Form states
@@ -24,11 +24,9 @@ const AddEvent = ({ userData }) => {
     description: "",
   });
 
-  // Validation states
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
 
-  // Description character limit
   const MAX_DESCRIPTION_LENGTH = 750;
 
   const handleFileChange = (e) => {
@@ -41,7 +39,6 @@ const AddEvent = ({ userData }) => {
     }
   };
 
-  // Validation functions
   const validateField = (name, value) => {
     switch (name) {
       case "date":
@@ -168,7 +165,7 @@ const AddEvent = ({ userData }) => {
     );
 
     if (Object.keys(newErrors).length === 0) {
-      console.log("Form submitted:", { ...formData, image });
+      onData(formData, image);
     }
   };
 
