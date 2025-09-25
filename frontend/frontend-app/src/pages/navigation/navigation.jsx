@@ -2,15 +2,21 @@ import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef, use } from "react";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import axios from "axios";
+
 import "./navigation.css";
+import AddEvent from "./addEvent/addEvent";
 
+// ---- LOGO ----
 import Logo from "../../assets/icons/yellow-big-logo.png";
-import SearchIcon from "../../assets/icons/search-white.svg";
-import HomeIcon from "../../assets/icons/home-white.svg";
-import MapIcon from "../../assets/icons/map-white.svg";
-import AccountIcon from "../../assets/icons/account-icon.png";
+// ----- SEARCH BAR -----
+import SearchGray from "../../assets/icons/search-grey.png";
+// ---- ACCOUNT ----
+import ProfileImage from "../../assets/image/prof-1.jpg";
+import LogOut from "../../assets/icons/logOut-icon.png";
+import ArrowLeft from "../../assets/icons/arrow-left-icon.png";
+// ---- EVENT IMAGE ----
 import ThirdEventImage from "../../assets/image/event-3.webp";
-
+// ---- EVENT ICONS ----
 import EventDate from "../../assets/icons/date-icon.png";
 import EventCapa from "../../assets/icons/capacity-icon.png";
 import EventStart from "../../assets/icons/clock-icon.png";
@@ -20,12 +26,28 @@ import EventLink from "../../assets/icons/link-icon.png";
 import EventPhone from "../../assets/icons/phone-icon.png";
 import EventLocation from "../../assets/icons/location-icon.png";
 import EventPrice from "../../assets/icons/price-icon.png";
+// ---- FILTER ----
 import FilterIcon from "../../assets/icons/filter-icon.png";
-import SearchGray from "../../assets/icons/search-grey.png";
+// ---- FOOTER ----
+import HomeIcon from "../../assets/icons/home-white.svg";
+import MapIcon from "../../assets/icons/map-white.svg";
+import AccountIcon from "../../assets/icons/account-icon.png";
 
-//! TO DO: active page should be yellow in footer
+// #TODO: Active page will be highlighted in yellow
+// #TODO: Move filter block to separate component
 
-function Navigation() {
+// #TODO: Organization page
+// #TODO:   Adding new events
+
+// #TODO: Admine page
+// #TODO:   Dashboard
+
+// #TODO: Server URL protection (користувач не може просто ввести в пошукову строку ендпоінт)
+// #TODO: Скопіювати стиль зміни пароля до мобільної версії
+// #FIXME: Change filter slider to list in tablets and desktop
+// #IDEA: User can like events
+
+function Navigation({ userData }) {
   const [events, setEvents] = useState([]);
   const [apiPage, setApiPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -57,6 +79,21 @@ function Navigation() {
   const [apiLink, setApiLink] = useState(
     "https://api.hel.fi/linkedevents/v1/event/"
   );
+  // ------- ACCOUNT STATES -------
+  const [password, setPassword] = useState("");
+  const [repPassword, setRepPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [isPasswordTouched, setIsPasswordTouched] = useState(false);
+  const [isRepPasswordTouched, setIsRepPasswordTouched] = useState(false);
+  const [passwordValidations, setPasswordValidations] = useState({
+    length: false,
+    upper: false,
+    lower: false,
+    number: false,
+    special: false,
+  });
+  const [isElOpen, setIsElOpen] = useState(false);
+  const [isCreateEventOpen, setIsCreateEventOpen] = useState(false);
 
   // ======= FILTER PANEL =======
 
@@ -238,13 +275,19 @@ function Navigation() {
   useEffect(() => {
     let lastScroll = 0;
     const header = document.getElementById("main-header");
-    if (!header) return;
+    const account = document.querySelector(".nav-account-profile");
+    const logOut = document.querySelector(".nav-logOut-cont");
+    if (!header || !account || !logOut) return;
     const handleScroll = () => {
       const currentScroll = window.scrollY;
       if (currentScroll > lastScroll) {
         header.classList.add("hidden");
+        account.classList.add("top");
+        logOut.classList.add("fix");
       } else {
         header.classList.remove("hidden");
+        account.classList.remove("top");
+        logOut.classList.remove("fix");
       }
       lastScroll = currentScroll;
     };
@@ -466,7 +509,7 @@ function Navigation() {
     try {
       setFilterParams((prev) => {
         const newParams = [...prev];
-        const districtValue = districtObj.value || districtObj; // підтримка і старого і нового формату
+        const districtValue = districtObj.value || districtObj;
 
         if (newParams[1].includes(districtValue)) {
           newParams[1] = newParams[1].filter((item) => item !== districtValue);
@@ -568,375 +611,650 @@ function Navigation() {
     setCurrentPage(1);
   };
 
+  // ========= ACCOUNT FUNCTIONS =========
+
+  const isPasswordInvalid =
+    !passwordValidations.length ||
+    !passwordValidations.upper ||
+    !passwordValidations.lower ||
+    !passwordValidations.number ||
+    !passwordValidations.special;
+
+  const doPasswordsMatch = password === repPassword;
+
+  const validatePassword = (pass) => {
+    setPasswordValidations({
+      length: pass.length >= 8 && pass.length <= 20,
+      upper: /[A-Z]/.test(pass),
+      lower: /[a-z]/.test(pass),
+      number: /[0-9]/.test(pass),
+      special: /[!@#$%^&*(),.?":{}|<>]/.test(pass),
+    });
+  };
+
+  const handlePasswordChange = (e) => {
+    const val = e.target.value;
+    setPassword(val);
+    setIsPasswordTouched(true);
+    validatePassword(val);
+  };
+
+  const handleRepPasswordChange = (e) => {
+    const val = e.target.value;
+    setRepPassword(val);
+    setIsRepPasswordTouched(true);
+  };
+
+  useEffect(() => {
+    const passChecker = document.querySelector(".password-checklist");
+    if (!passChecker) return;
+    if (isPasswordTouched && isPasswordInvalid) {
+      passChecker.classList.remove("hidden");
+    } else {
+      passChecker.classList.add("hidden");
+    }
+  }, [password, isPasswordTouched, isPasswordInvalid]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsPasswordTouched(true);
+    setIsRepPasswordTouched(true);
+
+    if (isPasswordInvalid || !doPasswordsMatch) return;
+
+    const passwordInfo = {
+      email: userData?.email,
+      oldPassword: password,
+      newPassword: repPassword,
+    };
+
+    if (
+      !passwordInfo.email ||
+      !passwordInfo.oldPassword ||
+      !passwordInfo.newPassword
+    ) {
+      console.error("Some of passwordInfo values are not valid");
+      return;
+    }
+
+    try {
+      const response = await axios.put(
+        "/api/user/changePassword",
+        passwordInfo
+      );
+      if (response.status === 200) {
+        setPassword("");
+        setRepPassword("");
+        alert("Password saved");
+        console.log("Password saved:", repPassword);
+      }
+    } catch (error) {
+      console.error("Error updating password:", error);
+      alert("Something went wrong");
+    }
+  };
+
+  // ------ GUEST ROLE ------
+  useEffect(() => {
+    const passwordBoard = document.querySelector(".account-passwordChange");
+    if (!userData) {
+      passwordBoard.classList.add("hidden");
+    }
+  }, []);
+  // ------ ORGANIZER ROLE ------
+  useEffect(() => {
+    const addEvents = document.querySelector(".add-events-cont");
+
+    if (userData?.role === "organizer") {
+      addEvents.classList.add("shown");
+    }
+  }, []);
+
+  if (isCreateEventOpen) {
+    document.documentElement.classList.add("fixed");
+  } else {
+    document.documentElement.classList.remove("fixed");
+  }
+
   return (
     <div className="navigation">
-      {/* ============ HEADER START ============ */}
-      <header id="main-header" className="navi-header">
-        <div className="navi-logo">
-          <img src={Logo} alt="Logo" />
+      {/* ========== NAVIGATION ACCOUNT ==========*/}
+      <div className="navigation-account">
+        <div className="nav-account-profile">
+          <img src={ProfileImage} alt="Profile" />
+          <div className="nav-profile-info">
+            <span className="profile-name">{userData?.name || "user"} </span>
+            <span className="profile-email">
+              {userData?.email || "userEmail@gmail.com"}{" "}
+            </span>
+          </div>
+          <div className="profile-role">{userData?.role || "guest"}</div>
         </div>
-        <div className="search-container">
-          <div className="search-input-wrapper">
-            <input
-              type="text"
-              placeholder="Hae tapahtumia..."
-              value={searchTerm}
-              onChange={(e) => handleSearch(e)}
-            />
-            <img src={SearchGray} alt="Search" className="search-icon" />
+
+        {/* --------- PASSWORD CHANGING --------- */}
+        <div className="account-passwordChange">
+          <div
+            className="showHide-block"
+            onClick={() => {
+              setIsElOpen(!isElOpen);
+            }}
+          >
+            <span>
+              {isElOpen ? "Hide password chanage" : "Show password chanage"}
+            </span>
+            <img
+              src={ArrowLeft}
+              className={`passwordIcon ${isElOpen ? "rotated" : ""}`}
+            ></img>
+          </div>
+          <form
+            className={`password-card-form ${isElOpen ? "show" : "hide"}`}
+            onSubmit={handleSubmit}
+          >
+            <div className="passwordChange-title">
+              <span>Change Password</span>
+            </div>
+            <div className="passwordChange-content">
+              <div className="password-input-wrapper">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="Enter password"
+                  value={password}
+                  onChange={handlePasswordChange}
+                  onBlur={() => setIsPasswordTouched(true)}
+                  className={`input-field ${
+                    isPasswordInvalid && isPasswordTouched
+                      ? "input-field-red"
+                      : ""
+                  }`}
+                />
+                <span
+                  className="password-toggle-icon"
+                  onClick={() => setShowPassword((p) => !p)}
+                  style={{ cursor: "pointer" }}
+                >
+                  {showPassword ? "🙈" : "👁️"}
+                </span>
+              </div>
+              {password && (
+                <ul className="password-checklist hidden">
+                  <li
+                    className={passwordValidations.length ? "valid" : "invalid"}
+                  >
+                    8–20 merkkiä
+                  </li>
+                  <li
+                    className={passwordValidations.upper ? "valid" : "invalid"}
+                  >
+                    Vähintään yksi iso kirjain
+                  </li>
+                  <li
+                    className={passwordValidations.lower ? "valid" : "invalid"}
+                  >
+                    Vähintään yksi pieni kirjain
+                  </li>
+                  <li
+                    className={passwordValidations.number ? "valid" : "invalid"}
+                  >
+                    Vähintään yksi numero
+                  </li>
+                  <li
+                    className={
+                      passwordValidations.special ? "valid" : "invalid"
+                    }
+                  >
+                    Vähintään yksi erikoismerkki (!@#$)
+                  </li>
+                </ul>
+              )}
+              <div className="password-input-wrapper">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="repPassword"
+                  placeholder="Repeat password"
+                  value={repPassword}
+                  onChange={handleRepPasswordChange}
+                  onBlur={() => setIsRepPasswordTouched(true)}
+                  className={`input-field ${
+                    !doPasswordsMatch && isRepPasswordTouched
+                      ? "input-field-red"
+                      : ""
+                  }`}
+                />
+                <span
+                  className="password-toggle-icon"
+                  onClick={() => setShowPassword((p) => !p)}
+                  style={{ cursor: "pointer" }}
+                >
+                  {showPassword ? "🙈" : "👁️"}
+                </span>
+              </div>
+              {!doPasswordsMatch && isRepPasswordTouched && (
+                <div className="password-checklist not-match">
+                  <li className="invalid">Passwords do not match</li>
+                </div>
+              )}
+
+              <div className="passwordChange-buttons">
+                <button
+                  type="button"
+                  className="passwordChange-cancel"
+                  onClick={() => {
+                    setPassword("");
+                    setRepPassword("");
+                  }}
+                >
+                  Cancel
+                </button>
+                <button className="passwordChange-save" type="submit">
+                  Save
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+        {/* --------- ADDING NEW EVENTS --------- */}
+        <div
+          className="add-events-cont"
+          onClick={() => setIsCreateEventOpen(!isCreateEventOpen)}
+        >
+          Create own event
+        </div>
+        <div className="nav-logOut-cont">
+          <div className="logOut-el">
+            <Link to="/" className={"active"}>
+              <img src={LogOut} alt="Home" />
+              <span>LogOut</span>
+            </Link>
           </div>
         </div>
-      </header>
+      </div>
+      <div className="navigation-cont">
+        {/* ============ HEADER START ============ */}
+        <header id="main-header" className="navi-header">
+          <div className="navi-logo">
+            <img src={Logo} alt="Logo" />
+          </div>
+          <div
+            className={`search-container ${isCreateEventOpen ? "hide" : ""}`}
+          >
+            <div className="search-input-wrapper">
+              <input
+                type="text"
+                placeholder="Hae tapahtumia..."
+                value={searchTerm}
+                onChange={(e) => handleSearch(e)}
+              />
+              <img src={SearchGray} alt="Search" className="search-icon" />
+            </div>
+          </div>
+        </header>
 
-      {/* ============ MAIN START ============ */}
-      <main className="main-content" ref={containerRef}>
-        <div className="event-cards-container">
-          {filteredEvents.slice(startIndex, endIndex).map((event) => (
-            <div
-              ref={(el) => (eventRefs.current[event.id] = el)}
-              className={`event-card ${
-                activeEventId === event.id ? "active" : ""
-              }`}
-              key={event.id}
-              onClick={() =>
-                handleEventClick(event, eventRefs.current[event.id])
-              }
-            >
-              <div className="event-card-image">
-                <img
-                  src={
-                    event.images && event.images[0]
-                      ? event.images[0].url
-                      : ThirdEventImage
-                  }
-                  alt={
-                    event.name?.fi ||
-                    event.name?.sv ||
-                    event.name?.en ||
-                    "Event"
-                  }
-                />
-              </div>
-              <div className="event-card-content">
-                <div className="org-name">
-                  {event.provider?.fi ||
-                    event.provider?.sv ||
-                    event.provider?.en ||
-                    "Company"}
-                </div>
-                <div className="event-title">
-                  {event.name?.fi ||
-                    event.name?.sv ||
-                    event.name?.en ||
-                    "Event title"}
-                </div>
-
-                <div className="card-detail-info">
-                  <div
-                    className={`event-time ${
-                      activeEventId === event.id ? "shown" : ""
-                    }`}
-                  >
-                    <div className="event-date">
-                      <img src={EventDate} alt="Event Date" />
-                      <span>{getDay(event.start_time)}</span>{" "}
-                    </div>
-                    <div className="event-start-time">
-                      <img src={EventStart} alt="Start Time" />
-                      <span>{getTime(event.start_time)}</span>
-                    </div>
-                    <div className="event-end-time">
-                      <img src={EventEnd} alt="End Time" />
-                      <span>{getTime(event.end_time)}</span>
-                    </div>
-                  </div>
-
-                  <div
-                    className={`event-location ${
-                      activeEventId === event.id ? "shown" : ""
-                    }`}
-                  >
-                    <div className="event-contact">
-                      <div className="event-email">
-                        <img src={EventEmail} alt="Event Email" />
-                        {eventLocation.contactEmail || "Tuntematon"}
-                      </div>
-                      <div className="event-phone">
-                        <img src={EventPhone} alt="Event Phone" />
-                        {eventLocation.contactPhone || "Tuntematon"}
-                      </div>
-                    </div>
-                    <div className="event-bonus-info">
-                      <div className="event-address">
-                        <img src={EventLocation} alt="Event Address" />
-                        {eventLocation.address || "Tuntematon"}
-                      </div>
-
-                      <div
-                        className={`event-capacity ${
-                          activeEventId === event.id ? "shown" : ""
-                        }`}
-                      >
-                        <img src={EventCapa} alt="Event Capacity" />
-                        {event.maximum_capacity || "Tuntematon"}
-                      </div>
-                      <div
-                        className={`event-free ${
-                          activeEventId === event.id ? "shown" : ""
-                        }`}
-                      >
-                        <img src={EventPrice} alt="Event Free" />
-                        {event.is_free ? "Ilmainen" : "Maksullinen"}{" "}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  className={
-                    activeEventId === event.id
-                      ? "event-description"
-                      : " event-short-description"
-                  }
-                >
-                  <br />
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: getTruncatedText(
-                        activeEventId === event.id
-                          ? event.description?.fi
-                          : event.short_description?.fi,
-                        1200,
-                        eventLocation.info_url.fi ||
-                          eventLocation.info_url.sv ||
-                          eventLocation.info_url.en
-                      ),
-                    }}
+        {/* ============ MAIN START ============ */}
+        <main className="main-content" ref={containerRef}>
+          <div
+            className={`create-event-cont ${isCreateEventOpen ? "" : "hide"}`}
+          >
+            <AddEvent userData={userData} />
+          </div>
+          <div
+            className={`event-cards-container ${
+              isCreateEventOpen ? "hide" : ""
+            }`}
+          >
+            {filteredEvents.slice(startIndex, endIndex).map((event) => (
+              <div
+                ref={(el) => (eventRefs.current[event.id] = el)}
+                className={`event-card ${
+                  activeEventId === event.id ? "active" : ""
+                }`}
+                key={event.id}
+                onClick={() =>
+                  handleEventClick(event, eventRefs.current[event.id])
+                }
+              >
+                <div className="event-card-image">
+                  <img
+                    src={
+                      event.images && event.images[0]
+                        ? event.images[0].url
+                        : ThirdEventImage
+                    }
+                    alt={
+                      event.name?.fi ||
+                      event.name?.sv ||
+                      event.name?.en ||
+                      "Event"
+                    }
                   />
+                </div>
+                <div className="event-card-content">
+                  <div className="org-name">
+                    {event.provider?.fi ||
+                      event.provider?.sv ||
+                      event.provider?.en ||
+                      "Company"}
+                  </div>
+                  <div className="event-title">
+                    {event.name?.fi ||
+                      event.name?.sv ||
+                      event.name?.en ||
+                      "Event title"}
+                  </div>
 
-                  {eventLocation.info_url ? (
-                    <a
-                      href={eventLocation.info_url}
-                      target="_blank"
-                      className={`read-more-link ${
+                  <div className="card-detail-info">
+                    <div
+                      className={`event-time ${
                         activeEventId === event.id ? "shown" : ""
                       }`}
                     >
-                      <img
-                        src={EventLink}
-                        alt="icon"
-                        className={`read-more-icon ${
-                          activeEventId === event.id ? "shown" : ""
-                        }`}
-                      />
-                      Lue lisää linkistä
-                    </a>
-                  ) : (
-                    <a
-                      href="#"
-                      target="_blank"
-                      className={`read-more-nolink ${
+                      <div className="event-date">
+                        <img src={EventDate} alt="Event Date" />
+                        <span>{getDay(event.start_time)}</span>{" "}
+                      </div>
+                      <div className="event-start-time">
+                        <img src={EventStart} alt="Start Time" />
+                        <span>{getTime(event.start_time)}</span>
+                      </div>
+                      <div className="event-end-time">
+                        <img src={EventEnd} alt="End Time" />
+                        <span>{getTime(event.end_time)}</span>
+                      </div>
+                    </div>
+
+                    <div
+                      className={`event-location ${
                         activeEventId === event.id ? "shown" : ""
                       }`}
                     >
-                      <img
-                        src={EventLink}
-                        alt="icon"
-                        className={`read-more-icon ${
-                          activeEventId === event.id ? "shown" : ""
-                        }`}
-                      />
-                      Linkki lisätään myöhemmin
-                    </a>
-                  )}
+                      <div className="event-contact">
+                        <div className="event-email">
+                          <img src={EventEmail} alt="Event Email" />
+                          {eventLocation.contactEmail || "Tuntematon"}
+                        </div>
+                        <div className="event-phone">
+                          <img src={EventPhone} alt="Event Phone" />
+                          {eventLocation.contactPhone || "Tuntematon"}
+                        </div>
+                      </div>
+                      <div className="event-bonus-info">
+                        <div className="event-address">
+                          <img src={EventLocation} alt="Event Address" />
+                          {eventLocation.address || "Tuntematon"}
+                        </div>
 
-                  {event.offers?.[0]?.info_url?.fi ||
-                  event.offers?.[0]?.info_url?.sv ||
-                  event.offers?.[0]?.info_url?.en ? (
-                    <div className="event-offer">
-                      <span
-                        className={`or-text ${
-                          activeEventId === event.id ? "shown" : ""
-                        }`}
-                      >
-                        Tai
-                      </span>
+                        <div
+                          className={`event-capacity ${
+                            activeEventId === event.id ? "shown" : ""
+                          }`}
+                        >
+                          <img src={EventCapa} alt="Event Capacity" />
+                          {event.maximum_capacity || "Tuntematon"}
+                        </div>
+                        <div
+                          className={`event-free ${
+                            activeEventId === event.id ? "shown" : ""
+                          }`}
+                        >
+                          <img src={EventPrice} alt="Event Free" />
+                          {event.is_free ? "Ilmainen" : "Maksullinen"}{" "}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    className={
+                      activeEventId === event.id
+                        ? "event-description"
+                        : " event-short-description"
+                    }
+                  >
+                    <br />
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: getTruncatedText(
+                          activeEventId === event.id
+                            ? event.description?.fi
+                            : event.short_description?.fi,
+                          1200,
+                          eventLocation.info_url.fi ||
+                            eventLocation.info_url.sv ||
+                            eventLocation.info_url.en
+                        ),
+                      }}
+                    />
+
+                    {eventLocation.info_url ? (
                       <a
-                        href={event.offers?.[0]?.info_url.fi}
+                        href={eventLocation.info_url}
                         target="_blank"
-                        className={`offer-link ${
+                        className={`read-more-link ${
                           activeEventId === event.id ? "shown" : ""
                         }`}
                       >
                         <img
-                          src={EventPrice}
-                          alt="Event Price"
-                          className={`event-price-icon ${
+                          src={EventLink}
+                          alt="icon"
+                          className={`read-more-icon ${
                             activeEventId === event.id ? "shown" : ""
                           }`}
                         />
-                        Ostaa liput tästä
+                        Lue lisää linkistä
                       </a>
-                    </div>
-                  ) : null}
+                    ) : (
+                      <a
+                        href="#"
+                        target="_blank"
+                        className={`read-more-nolink ${
+                          activeEventId === event.id ? "shown" : ""
+                        }`}
+                      >
+                        <img
+                          src={EventLink}
+                          alt="icon"
+                          className={`read-more-icon ${
+                            activeEventId === event.id ? "shown" : ""
+                          }`}
+                        />
+                        Linkki lisätään myöhemmin
+                      </a>
+                    )}
+
+                    {event.offers?.[0]?.info_url?.fi ||
+                    event.offers?.[0]?.info_url?.sv ||
+                    event.offers?.[0]?.info_url?.en ? (
+                      <div className="event-offer">
+                        <span
+                          className={`or-text ${
+                            activeEventId === event.id ? "shown" : ""
+                          }`}
+                        >
+                          Tai
+                        </span>
+                        <a
+                          href={event.offers?.[0]?.info_url.fi}
+                          target="_blank"
+                          className={`offer-link ${
+                            activeEventId === event.id ? "shown" : ""
+                          }`}
+                        >
+                          <img
+                            src={EventPrice}
+                            alt="Event Price"
+                            className={`event-price-icon ${
+                              activeEventId === event.id ? "shown" : ""
+                            }`}
+                          />
+                          Ostaa liput tästä
+                        </a>
+                      </div>
+                    ) : null}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
 
-        <div className="filter-wrapper">
-          {buttonVisible && (
-            <div
-              className={`filter-button ${isCentered ? "centered" : ""}`}
-              onClick={toggleFilterPanel}
-            >
-              <img src={FilterIcon} alt="Filter" />
-            </div>
-          )}
-
-          {showFilterPanel && (
-            <div
-              className={`filter-panel ${
-                showFilterPanel && !isClosing ? "open" : "closing"
-              }`}
-            >
-              <Splide
-                ref={titleRef}
-                className="slider"
-                aria-label="Filter Titles"
-                options={{
-                  type: "loop",
-                  arrows: false,
-                  pagination: false,
-                }}
+          <div className={`filter-wrapper ${isCreateEventOpen ? "hide" : ""}`}>
+            {buttonVisible && (
+              <div
+                className={`filter-button ${isCentered ? "centered" : ""}`}
+                onClick={toggleFilterPanel}
               >
-                <SplideSlide>
-                  <div className="filter-title">Aika</div>
-                </SplideSlide>
-                <SplideSlide>
-                  <div className="filter-title">Paikkakunta</div>
-                </SplideSlide>
-                <SplideSlide>
-                  <div className="filter-title">Avainsanat</div>
-                </SplideSlide>
-              </Splide>
-              <div className="filter-rows-container">
+                <img src={FilterIcon} alt="Filter" />
+              </div>
+            )}
+
+            {showFilterPanel && (
+              <div
+                className={`filter-panel ${
+                  showFilterPanel && !isClosing ? "open" : "closing"
+                }`}
+              >
                 <Splide
-                  ref={optionsRef}
-                  aria-label="Filter Options"
+                  ref={titleRef}
                   className="slider"
+                  aria-label="Filter Titles"
                   options={{
-                    perPage: 1,
-                    interval: 3000,
+                    type: "loop",
                     arrows: false,
-                    pagination: true,
-                    speed: 500,
+                    pagination: false,
                   }}
                 >
                   <SplideSlide>
-                    <div className="filter-row">
-                      <div className="filter-version">
-                        {filterTime.map((time) => (
-                          <div
-                            key={time}
-                            className="filter-version-item"
-                            onClick={() => filterTimeHandler(time)}
-                          >
-                            {time}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
+                    <div className="filter-title">Aika</div>
                   </SplideSlide>
                   <SplideSlide>
-                    <div className="filter-row">
-                      <div className="filter-places-container">
-                        {districts.map((district) => (
-                          <label
-                            key={district.value}
-                            onClick={() => filterPlaceHandler(district)}
-                          >
-                            <input
-                              type="checkbox"
-                              checked={filterParams[1].includes(district.value)}
-                              readOnly
-                            />
-                            <span>{district.name}</span>
-                          </label>
-                        ))}
-                      </div>
-                    </div>
+                    <div className="filter-title">Paikkakunta</div>
                   </SplideSlide>
                   <SplideSlide>
-                    <div className="filter-row">
-                      <div className="filter-keywords-container">
-                        {keywords.map((keyword) => (
-                          <span
-                            key={keyword}
-                            onClick={() => filterKeywordHandler(keyword)}
-                          >
-                            {keyword}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
+                    <div className="filter-title">Avainsanat</div>
                   </SplideSlide>
                 </Splide>
-              </div>
-              <div id="filter-buttons" className="filter-button-container">
-                <div className="discard-button" onClick={declineFilterButton}>
-                  Hylkää
+                <div className="filter-rows-container">
+                  <Splide
+                    ref={optionsRef}
+                    aria-label="Filter Options"
+                    className="slider"
+                    options={{
+                      perPage: 1,
+                      interval: 3000,
+                      arrows: false,
+                      pagination: true,
+                      speed: 500,
+                    }}
+                  >
+                    <SplideSlide>
+                      <div className="filter-row">
+                        <div className="filter-version">
+                          {filterTime.map((time) => (
+                            <div
+                              key={time}
+                              className="filter-version-item"
+                              onClick={() => filterTimeHandler(time)}
+                            >
+                              {time}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </SplideSlide>
+                    <SplideSlide>
+                      <div className="filter-row">
+                        <div className="filter-places-container">
+                          {districts.map((district) => (
+                            <label
+                              key={district.value}
+                              onClick={() => filterPlaceHandler(district)}
+                            >
+                              <input
+                                type="checkbox"
+                                checked={filterParams[1].includes(
+                                  district.value
+                                )}
+                                readOnly
+                              />
+                              <span>{district.name}</span>
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+                    </SplideSlide>
+                    <SplideSlide>
+                      <div className="filter-row">
+                        <div className="filter-keywords-container">
+                          {keywords.map((keyword) => (
+                            <span
+                              key={keyword}
+                              onClick={() => filterKeywordHandler(keyword)}
+                            >
+                              {keyword}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </SplideSlide>
+                  </Splide>
                 </div>
-                <div className="apply-button" onClick={applyFilterButton}>
-                  Hyväksy
+                <div id="filter-buttons" className="filter-button-container">
+                  <div className="discard-button" onClick={declineFilterButton}>
+                    Hylkää
+                  </div>
+                  <div className="apply-button" onClick={applyFilterButton}>
+                    Hyväksy
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
 
-        <div className="pagination-arrows" id="pagination-arrows">
-          <button
-            className="prev"
-            onClick={() => setCurrentPage((prev) => prev - 1)}
+          <div
+            className={`pagination-arrows ${isCreateEventOpen ? "hide" : ""}`}
+            id="pagination-arrows"
           >
-            &lt; Prev
-          </button>
-          <button
-            className="next"
-            onClick={() => setCurrentPage((prev) => prev + 1)}
-          >
-            Next &gt;
-          </button>
-        </div>
-      </main>
-      {/* ============ FOOTER START ============ */}
-      <footer className="navigation-footer">
-        <div className="footer-el">
-          <Link to="/navigation" className="active">
-            <img src={HomeIcon} alt="Home" />
-            <span>Kotisivu</span>
-          </Link>
-        </div>
+            <button
+              className="prev"
+              onClick={() => setCurrentPage((prev) => prev - 1)}
+            >
+              &lt; Prev
+            </button>
+            <button
+              className="next"
+              onClick={() => setCurrentPage((prev) => prev + 1)}
+            >
+              Next &gt;
+            </button>
+          </div>
+        </main>
+        {/* ============ FOOTER START ============ */}
+        <footer className="navigation-footer">
+          <div className="footer-el">
+            <Link to="/navigation" className="active">
+              <img src={HomeIcon} alt="Home" />
+              <span>Kotisivu</span>
+            </Link>
+          </div>
 
-        <div className="footer-el">
-          <Link
-            to="/map"
-            state={{ locations: eventLocations }}
-            className="active"
-          >
-            <img src={MapIcon} alt="Map" />
-            <span>Kartta</span>
-          </Link>
-        </div>
+          <div className="footer-el">
+            <Link
+              to="/map"
+              state={{ locations: eventLocations }}
+              className="active"
+            >
+              <img src={MapIcon} alt="Map" />
+              <span>Kartta</span>
+            </Link>
+          </div>
 
-        <div className="footer-el">
-          <Link to="/account" className="active">
-            <img src={AccountIcon} alt="Map" />
-            <span>Account</span>
-          </Link>
-        </div>
-      </footer>
+          <div className="footer-el">
+            <Link to="/account" className="active">
+              <img src={AccountIcon} alt="Map" />
+              <span>Account</span>
+            </Link>
+          </div>
+        </footer>
+      </div>
     </div>
   );
 }
