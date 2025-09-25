@@ -10,6 +10,12 @@
   margin-top: -100px;
   left: 10px;
 }
+.leaflet-marker-icon.custom-icon {
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgb(115, 255, 0);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* тень */
+}
 .back-button {
   position: absolute;
   right: 10px;

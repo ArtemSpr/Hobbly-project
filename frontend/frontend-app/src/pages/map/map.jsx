@@ -9,10 +9,6 @@ import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "./map.css";
 
-const iconUrl = () => {
-  
-}
-
 const iconMark = L.icon({
   iconUrl: markIcon,
   iconSize: [32, 32],
@@ -59,7 +55,13 @@ const Map = () => {
                 <Marker
                   key={loc.id}
                   position={[loc.latitude, loc.longitude]}
-                  icon={iconMark}
+                  icon={L.icon({
+                    iconUrl: loc.image || markIcon,
+                    iconSize: [32, 32],
+                    iconAnchor: [16, 32],
+                    popupAnchor: [0, -32],
+                    className: "custom-icon",
+                  })}
                 >
                   <Popup>{loc.name}</Popup>
                 </Marker>
