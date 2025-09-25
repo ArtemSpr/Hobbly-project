@@ -48,7 +48,12 @@ const Map = () => {
             tileSize={512}
             zoomOffset={-1}
           />
-          <MarkerClusterGroup spiderfyOnClick showCoverageOnHover>
+          <MarkerClusterGroup
+            spiderfyOnClick
+            showCoverageOnHover
+            spiderfyDistanceMultiplier={3}
+            maxClusterRadius={70}
+          >
             {locations
               .filter((loc) => loc.latitude && loc.longitude)
               .map((loc) => (
@@ -57,9 +62,9 @@ const Map = () => {
                   position={[loc.latitude, loc.longitude]}
                   icon={L.icon({
                     iconUrl: loc.image || markIcon,
-                    iconSize: [32, 32],
-                    iconAnchor: [16, 32],
-                    popupAnchor: [0, -32],
+                    iconSize: [64, 64],
+                    iconAnchor: [32, 64],
+                    popupAnchor: [0, -64],
                     className: "custom-icon",
                   })}
                 >
