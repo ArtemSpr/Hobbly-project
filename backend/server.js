@@ -181,6 +181,22 @@ app.put("/api/user/changePassword", async (req, res) => {
   res.status(200).json({ message: "Password updated successfully" });
 });
 
+// GET endpoint
+app.get("/api/users", (req, res) => {
+  try {
+    if (users.length === 0) {
+      return res.status(404).json({ message: "No users found" });
+    }
+
+    const safeUsers = users.map(({ password, ...rest }) => rest);
+
+    res.status(200).json(safeUsers);
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    res.status(500).json({ error: "Failed to fetch users" });
+  }
+});
+
 const PORT = 5234;
 app.listen(PORT, () => {
   console.log(`Server work in port http://localhost:${PORT}`);

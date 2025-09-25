@@ -1,0 +1,14 @@
+GET  http://localhost:5234/api/users
+
+###
+
+//just for testing
+POST  http://localhost:5234/api/auth/register/user
+Content-Type: application/json
+
+{
+  "name": "valentin",
+  "email": "well@mail.r",
+  "password": "hello maffaka"
+}
+//
