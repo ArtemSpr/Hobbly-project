@@ -127,19 +127,20 @@ const Account = ({ userData }) => {
     if (!userData) {
       passwordBoard.classList.add("hidden");
     }
-  }, []);
+  }, [userData]);
 
   return (
     <div className="account-container">
       <div className="account-profile">
         <img src={ProfileImage} alt="Profile" />
         <div className="profile-info">
-          <span className="profile-name">{userData?.name || "user"} </span>
+          <span className="profile-name" onClick={copyToClipboard}>
+            {userData?.name || "user"}{" "}
+          </span>
           <span className="profile-email">
             {userData?.email || "userEmail@gmail.com"}{" "}
             <img
               src={copyIcon}
-              onClick={copyToClipboard}
               alt="Copy email"
               style={{ cursor: "pointer", width: "18px" }}
             />

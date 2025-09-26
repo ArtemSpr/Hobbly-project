@@ -28,8 +28,6 @@ const UserForm = ({ sendDataToParent }) => {
   });
   const [errorMessage, setErrorMessage] = useState("");
 
-  // const [userData, setUserData] = useState("");
-
   const isNameInvalid = name.length < 3;
   const isEmailInvalid = !email || !/\S+@\S+\.\S+/.test(email);
   const isPasswordInvalid =
@@ -76,7 +74,7 @@ const UserForm = ({ sendDataToParent }) => {
     if (isNameInvalid || isEmailInvalid || isPasswordInvalid) return;
 
     try {
-      const response = await axios.post(`/api/auth/register/user`, {
+      const response = await axios.post("/api/auth/register/user", {
         name,
         email,
         password,
@@ -89,14 +87,19 @@ const UserForm = ({ sendDataToParent }) => {
         navigate("/navigation");
       }
     } catch (error) {
-      if (error.response) {
-        console.error("Server Error:", error.response.data);
-        setErrorMessage(error.response?.data?.error || "Server error");
-      } else if (error.request) {
-        console.error("No response from server:", error.request);
-        setErrorMessage("No response from server, please try again later");
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          console.error("Server Error:", error.response.data);
+          setErrorMessage(error.response.data.error || "Server error");
+        } else if (error.request) {
+          console.error("No response from server:", error.request);
+          setErrorMessage("No response from server, please try again later");
+        } else {
+          console.error("Error:", error.message);
+          setErrorMessage("An unexpected error occurred");
+        }
       } else {
-        console.error("Error:", error.message);
+        console.error("Unexpected Error:", error);
         setErrorMessage("An unexpected error occurred");
       }
     }
@@ -135,7 +138,7 @@ const UserForm = ({ sendDataToParent }) => {
         </div>
         {isNameInvalid && isNameTouched && (
           <ul className="password-checklist">
-            <li>Nimen on oltava vähintään 3 merkkiä pitkä</li>
+            <li key="name-length">Nimen on oltava vähintään 3 merkkiä pitkä</li>
           </ul>
         )}
 
@@ -155,7 +158,7 @@ const UserForm = ({ sendDataToParent }) => {
         </div>
         {isEmailInvalid && isEmailTouched && (
           <ul className="password-checklist">
-            <li>Anna voimassa oleva sähköpostiosoite</li>
+            <li key="email-invalid">Anna voimassa oleva sähköpostiosoite</li>
           </ul>
         )}
 
@@ -181,25 +184,40 @@ const UserForm = ({ sendDataToParent }) => {
         </div>
         {password && (
           <ul className="password-checklist">
-            <li className={passwordValidations.length ? "valid" : "invalid"}>
+            <li
+              key="pass-length"
+              className={passwordValidations.length ? "valid" : "invalid"}
+            >
               8–20 merkkiä
             </li>
-            <li className={passwordValidations.upper ? "valid" : "invalid"}>
+            <li
+              key="pass-upper"
+              className={passwordValidations.upper ? "valid" : "invalid"}
+            >
               Vähintään yksi iso kirjain
             </li>
-            <li className={passwordValidations.lower ? "valid" : "invalid"}>
+            <li
+              key="pass-lower"
+              className={passwordValidations.lower ? "valid" : "invalid"}
+            >
               Vähintään yksi pieni kirjain
             </li>
-            <li className={passwordValidations.number ? "valid" : "invalid"}>
+            <li
+              key="pass-number"
+              className={passwordValidations.number ? "valid" : "invalid"}
+            >
               Vähintään yksi numero
             </li>
-            <li className={passwordValidations.special ? "valid" : "invalid"}>
+            <li
+              key="pass-special"
+              className={passwordValidations.special ? "valid" : "invalid"}
+            >
               Vähintään yksi erikoismerkki (!@#$)
             </li>
           </ul>
         )}
         <div className="errorBlock">
-          <img src={ErrorIcon}></img>
+          <img src={ErrorIcon} alt="Error" />
           <span>{errorMessage}</span>
         </div>
 

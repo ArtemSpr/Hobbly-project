@@ -3,9 +3,6 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import eyeIcon from "../../assets/icons/icons8-eye-48.png";
-import eyeSlashIcon from "../../assets/icons/icons8-closed-eye-24.png";
-
 import ErrorIcon from "../../assets/icons/error.png";
 
 const SignIn = ({ sendDataToParent }) => {
@@ -20,6 +17,7 @@ const SignIn = ({ sendDataToParent }) => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [errorActive, setErrorActive] = useState(false);
 
   const navigate = useNavigate();
 
@@ -48,14 +46,7 @@ const SignIn = ({ sendDataToParent }) => {
   };
 
   useEffect(() => {
-    const errorBlock = document.querySelector(".errorBlock");
-    if (errorBlock) {
-      if (errorMessage) {
-        errorBlock.classList.add("active");
-      } else {
-        errorBlock.classList.remove("active");
-      }
-    }
+    setErrorActive(Boolean(errorMessage));
   }, [errorMessage]);
 
   const handleSubmit = async (e) => {
@@ -66,23 +57,18 @@ const SignIn = ({ sendDataToParent }) => {
       sendDataToParent(response.data.user);
 
       if (response.status === 200) {
-        console.log("✅ Login Successful:", response.data);
         setErrorMessage("");
         navigate("/navigation");
       }
     } catch (error) {
       if (error.response) {
-        console.error("Server Error:", error.response.data);
         setErrorMessage(error.response?.data?.error || "Server error");
       } else if (error.request) {
-        console.error("No response from server:", error.request);
         setErrorMessage("No response from server, please try again later");
       } else {
-        console.error("Error:", error.message);
         setErrorMessage("An unexpected error occurred");
       }
     }
-    console.log("Sign In Data:", formData);
   };
 
   return (
@@ -115,8 +101,9 @@ const SignIn = ({ sendDataToParent }) => {
             {showPassword ? "🙈" : "👁️"}
           </span>
         </div>
-        <div className="errorBlock">
-          <img src={ErrorIcon}></img>
+
+        <div className={`errorBlock ${errorActive ? "active" : ""}`}>
+          <img src={ErrorIcon} alt="Error" />
           <span>{errorMessage}</span>
         </div>
 
