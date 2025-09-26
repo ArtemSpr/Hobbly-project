@@ -4,43 +4,34 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import markIcon from "../../assets/icons/yellow-logo.png";
 import MarkerClusterGroup from "react-leaflet-markercluster";
-import "leaflet/dist/leaflet.css";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "./map.css";
-
-// const iconUrl = () => {};
-
-// const iconMark = L.icon({
-//   iconUrl: loc.image || markIcon,
-//   iconSize: [32, 32],
-//   iconAnchor: [16, 32],
-//   popupAnchor: [0, -32],
-// });
 
 const Map = () => {
   const { state } = useLocation();
   const locations = state?.locations || [];
   console.log("Got locations:", locations);
+
   return (
     <div className="map">
       <div className="map-cont">
         <MapContainer
           center={[60.17, 24.93]} // Helsinki
-          zoom={12} // default zoom level
-          minZoom={11} // minimum zoom level
-          maxZoom={17} // maximum zoom level
+          zoom={12}
+          minZoom={11}
+          maxZoom={17}
           maxBounds={[
             [59.8, 24.4],
             [60.5, 25.5],
-          ]} // bounding box for the map
-          maxBoundsViscosity={1.0} // "stickiness" to bounds
-          scrollWheelZoom={true} // zoom with mouse wheel
-          doubleClickZoom={true} // zoom with double-click
-          dragging={true} // drag the map
-          zoomControl={true} // show zoom control buttons
-          touchZoom={true} // zoom on touch devices
-          preferCanvas={true} // performance optimization for many markers
+          ]}
+          maxBoundsViscosity={1.0}
+          scrollWheelZoom
+          doubleClickZoom
+          dragging
+          zoomControl
+          touchZoom
+          preferCanvas
           style={{ height: "100%", width: "100%" }}
         >
           <TileLayer
@@ -69,9 +60,16 @@ const Map = () => {
                 >
                   <Popup>
                     <div>
-                      {" "}
-                      <img src={loc.image}></img>
-                      <span>Repudiandae fuga consequatur necessitatibus.</span>
+                      <img
+                        src={loc.image || markIcon}
+                        alt={loc.name || "location"}
+                        style={{
+                          width: "80px",
+                          height: "80px",
+                          objectFit: "cover",
+                        }}
+                      />
+                      <span>{loc.name || "No name"}</span>
                     </div>
                   </Popup>
                 </Marker>
