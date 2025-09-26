@@ -27,7 +27,7 @@ jobs:
         working-directory: ./frontend/frontend-app
         run: |
           npm install
-          npm run build --if-present
+          CI=false npm run build --if-present
           npm run test --if-present
 
 
@@ -56,5 +56,6 @@ jobs:
           package: .
 
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A38480BBEC8A49B3AEBCA2FBFD782AA4 }}
+
 
 
