@@ -37,7 +37,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: node-app
+          name: node-app-${{ github.sha }}
           path: ./backend
           if-no-files-found: ignore
 
@@ -67,6 +67,7 @@ jobs:
           package: .
 
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A38480BBEC8A49B3AEBCA2FBFD782AA4 }}
+
 
 
 
