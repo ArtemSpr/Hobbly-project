@@ -235,7 +235,6 @@ function Navigation({ userData }) {
             return [...prev, locationData];
           });
 
-          // for check
           console.log("Saved location:", locationData);
         }
       } catch (error) {

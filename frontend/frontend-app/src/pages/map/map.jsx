@@ -67,7 +67,13 @@ const Map = () => {
                     popupAnchor: [0, -40],
                   })}
                 >
-                  <Popup>{loc.name}</Popup>
+                  <Popup>
+                    <div>
+                      {" "}
+                      <img src={loc.image}></img>
+                      <span>Repudiandae fuga consequatur necessitatibus.</span>
+                    </div>
+                  </Popup>
                 </Marker>
               ))}
           </MarkerClusterGroup>
