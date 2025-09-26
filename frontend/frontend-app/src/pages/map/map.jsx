@@ -8,6 +8,17 @@ import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "./map.css";
 
+
+
+// const iconUrl = () => {};
+
+// const iconMark = L.icon({
+//   iconUrl: loc.image || markIcon,
+//   iconSize: [32, 32],
+//   iconAnchor: [16, 32],
+//   popupAnchor: [0, -32],
+// });
+
 const Map = () => {
   const { state } = useLocation();
   const locations = state?.locations || [];
@@ -41,21 +52,25 @@ const Map = () => {
             tileSize={512}
             zoomOffset={-1}
           />
-          <MarkerClusterGroup spiderfyOnClick showCoverageOnHover>
+          <MarkerClusterGroup
+            spiderfyOnClick
+            showCoverageOnHover
+            spiderfyDistanceMultiplier={3}
+            maxClusterRadius={70}
+          >
             {locations
               .filter((loc) => loc.latitude && loc.longitude)
               .map((loc) => (
                 <Marker
                   key={loc.id}
                   position={[loc.latitude, loc.longitude]}
-                  icon={L.divIcon({
-                    className: "custom-marker",
-                    html: `<div class="marker-image" style="background-image: url('${
-                      loc.image || markIcon
-                    }')"></div>`,
-                    iconSize: [40, 40],
-                    iconAnchor: [20, 40],
-                    popupAnchor: [0, -40],
+              
+                  icon={L.icon({
+                    iconUrl: loc.image || markIcon,
+                    iconSize: [64, 64],
+                    iconAnchor: [32, 64],
+                    popupAnchor: [0, -64],
+                    className: "custom-icon",
                   })}
                 >
                   <Popup>
