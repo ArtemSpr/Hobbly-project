@@ -25,8 +25,8 @@ jobs:
 
       - name: switch to correct folder
         run: |
-          cd frontend
-          cd frontend-app
+          cd frontend/frontend-app
+
 
       - name: npm install, build, and test
         run: |
@@ -59,3 +59,4 @@ jobs:
           package: .
 
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A38480BBEC8A49B3AEBCA2FBFD782AA4 }}
+
