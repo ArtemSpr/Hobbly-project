@@ -120,8 +120,8 @@ app.get("/api/users", (req, res) => {
 const buildPath = path.join(__dirname, "public");
 app.use(express.static(buildPath));
 
-// Catch-all to serve index.html for React routing
-app.get("*", (req, res) => {
+// Catch-all to serve index.html for React routing - FIXED
+app.get('/*', (req, res) => {
   res.sendFile(path.join(buildPath, "index.html"));
 });
 
