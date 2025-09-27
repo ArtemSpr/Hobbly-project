@@ -1,13 +1,16 @@
 import express from "express";
 import bcrypt from "bcrypt";
-const app = express();
 import path from "path";
 
+const app = express();
 app.use(express.json());
-const __dirname = path.resolve();
 
+const __dirname = path.resolve();
 const users = [];
 
+// ---------------- API ROUTES ---------------- //
+
+// User registration
 app.post("/api/auth/register/user", async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -19,10 +22,10 @@ app.post("/api/auth/register/user", async (req, res) => {
         .json({ error: "Name, email and password required" });
     }
 
-    const exists = users.some((user) => user.email === email);
-    if (exists) {
+    if (users.some((u) => u.email === email)) {
       return res.status(409).json({ error: "User already exists" });
     }
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = {
@@ -33,25 +36,24 @@ app.post("/api/auth/register/user", async (req, res) => {
     };
 
     users.push(newUser);
-
-    console.log("User was registered:", newUser);
+    console.log("User registered:", newUser);
 
     res
       .status(201)
       .json({ message: "User registered successfully", user: newUser });
   } catch (error) {
-    console.error("Error with user registering:", error);
-    res.status(500).json({ error: "User not registered due to server error" });
+    console.error("Error registering user:", error);
+    res.status(500).json({ error: "Server error" });
   }
 });
 
+// Organizer registration
 app.post("/api/auth/register/org", async (req, res) => {
   try {
     const {
       name,
       email,
       password,
-      // LogoValue,
       description,
       address,
       city,
@@ -64,7 +66,6 @@ app.post("/api/auth/register/org", async (req, res) => {
       !name ||
       !email ||
       !password ||
-      // !LogoValue ||
       !description ||
       !address ||
       !city ||
@@ -75,20 +76,16 @@ app.post("/api/auth/register/org", async (req, res) => {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
-    const existingUser = users.find((user) => user.email === email);
-
-    if (existingUser) {
+    if (users.find((u) => u.email === email)) {
       return res.status(409).json({ error: "User already exists" });
     }
 
-    // Hash password before storing
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newOrg = {
       name,
       email,
       password: hashedPassword,
-      // LogoValue,
       description,
       address,
       city,
@@ -99,114 +96,79 @@ app.post("/api/auth/register/org", async (req, res) => {
     };
 
     users.push(newOrg);
-    console.log("Organizer was registered");
+    console.log("Organizer registered");
 
-    res.status(201).json({
-      message: "Organizer registered successfully",
-      user: { ...newOrg, password: undefined },
-    });
+    res
+      .status(201)
+      .json({
+        message: "Organizer registered successfully",
+        user: { ...newOrg, password: undefined },
+      });
   } catch (error) {
-    console.error("Error with organizer registering " + error);
-    res.status(500).json({
-      error: "User not registered due to server error",
-    });
+    console.error("Error registering organizer:", error);
+    res.status(500).json({ error: "Server error" });
   }
 });
 
+// Login
 app.post("/api/auth/login", async (req, res) => {
   const { email, password } = req.body;
+  if (!email || !password)
+    return res.status(400).json({ error: "Email and password required" });
 
-  try {
-    if (!email || !password) {
-      return res.status(400).json({ error: "Email and password required" });
-    }
+  const user = users.find((u) => u.email === email);
+  if (!user) return res.status(404).json({ error: "User not found" });
 
-    const existingUser = users.find((user) => user.email === email);
+  const isValid = await bcrypt.compare(password, user.password);
+  if (!isValid) return res.status(401).json({ error: "Invalid password" });
 
-    if (!existingUser) {
-      return res.status(404).json({ error: "User not found" });
-    }
-
-    const isPasswordValid = await bcrypt.compare(
-      password,
-      existingUser.password
-    );
-
-    if (!isPasswordValid) {
-      return res.status(401).json({ error: "Invalid password" });
-    }
-
-    return res.status(200).json({
+  res
+    .status(200)
+    .json({
       message: "Login successful",
-      user: {
-        name: existingUser.name,
-        email: existingUser.email,
-        role: existingUser.role,
-      },
+      user: { name: user.name, email: user.email, role: user.role },
     });
-  } catch (error) {
-    console.error("Login error:", error);
-    return res.status(500).json({ error: "Server error during login" });
-  }
 });
 
-// Forgot password (not ready yet)
-app.post("/api/auth/forgotPassword", async (req, res) => {
-  const { email } = req.body;
-
-  if (!email) {
-    return res.status(400).json({ error: "Email required" });
-  }
-
-  const existingUser = users.find((user) => user.email === email);
-
-  if (!existingUser) {
-    return res.status(404).json({ error: "User not found" });
-  }
-});
-
+// Change password
 app.put("/api/user/changePassword", async (req, res) => {
   const { email, oldPassword, newPassword } = req.body;
-
-  if (!email || !oldPassword || !newPassword) {
+  if (!email || !oldPassword || !newPassword)
     return res.status(400).json({ error: "Missing required fields" });
-  }
 
-  const existingUser = users.find((user) => user.email === email);
+  const user = users.find((u) => u.email === email);
+  if (!user) return res.status(404).json({ error: "User not found" });
 
-  if (!existingUser) {
-    return res.status(404).json({ error: "User not found" });
-  }
+  const isValid = await bcrypt.compare(oldPassword, user.password);
+  if (!isValid)
+    return res.status(401).json({ error: "Old password incorrect" });
 
-  existingUser.password = await bcrypt.hash(newPassword, 10);
-
+  user.password = await bcrypt.hash(newPassword, 10);
   res.status(200).json({ message: "Password updated successfully" });
 });
 
-// GET endpoint
+// Get all users
 app.get("/api/users", (req, res) => {
-  try {
-    if (users.length === 0) {
-      return res.status(404).json({ message: "No users found" });
-    }
-
-    const safeUsers = users.map(({ password, ...rest }) => rest);
-
-    res.status(200).json(safeUsers);
-  } catch (error) {
-    console.error("Error fetching users:", error);
-    res.status(500).json({ error: "Failed to fetch users" });
-  }
+  const safeUsers = users.map(({ password, ...rest }) => rest);
+  res
+    .status(safeUsers.length ? 200 : 404)
+    .json(safeUsers.length ? safeUsers : { message: "No users found" });
 });
 
+// ---------------- SERVE FRONTEND ---------------- //
 const buildPath = path.join(__dirname, "public");
 app.use(express.static(buildPath));
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(buildPath, "index.html"));
+// Catch-all для обслуговування index.html для React маршрутизації - АЛЬТЕРНАТИВНИЙ ПІДХІД
+app.use((req, res, next) => {
+  // Якщо це не API запит і файл не існує, віддаємо index.html
+  if (!req.path.startsWith("/api") && !req.path.includes(".")) {
+    res.sendFile(path.join(buildPath, "index.html"));
+  } else {
+    next();
+  }
 });
 
+// ---------------- START SERVER ---------------- //
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

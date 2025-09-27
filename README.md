@@ -79,15 +79,10 @@ MONGODB_URI=your_mongodb_connection_string
 
 ### ⚙️ Backend
 **backend/api/**  
-- 📦 bin/  
-- 📂 controllers/  
-- 📂 models/  
-- 📦 obj/  
-- ⚙️ properties/  
-- 📄 api.http  
-- 📄 *.cs  
-- 📄 *.csproj  
-- 📄 appsettings.json / other .json files  
+- 📄 package.json
+- 📄 package-lock.json
+- 📄 server.js
+- 📄 file.http
 
 ### 🗂 Root Files
 - 📄 README.md  
@@ -97,7 +92,7 @@ MONGODB_URI=your_mongodb_connection_string
 
 
 ### 🔗 Frontend and Backend Interaction
-- Frontend sends HTTP requests (via Axios) to the .NET API  
+- Frontend sends HTTP requests (via Axios) to the API
 - Backend processes requests, interacts with MongoDB, and returns data in JSON format  
 - Frontend displays data (event lists or map view)  
 
