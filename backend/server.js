@@ -8,11 +8,6 @@ const __dirname = path.resolve();
 
 const users = [];
 
-app.use(express.static(path.join(__dirname, "public"))); // или build
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
-});
-
 app.post("/api/auth/register/user", async (req, res) => {
   try {
     const { name, email, password } = req.body;
