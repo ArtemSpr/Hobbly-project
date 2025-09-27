@@ -1,9 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
-import eyeIcon from "../../assets/icons/icons8-eye-48.png";
-import eyeSlashIcon from "../../assets/icons/icons8-closed-eye-24.png";
 import ErrorIcon from "../../assets/icons/error.png";
 
 import "./userForm.css";

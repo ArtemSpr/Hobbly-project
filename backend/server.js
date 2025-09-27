@@ -204,10 +204,15 @@ app.get("/api/users", (req, res) => {
   }
 });
 
-const PORT = 5234;
-app.listen(PORT, () => {
-  console.log(`Server work in port http://localhost:${PORT}`);
+const buildPath = path.join(__dirname, "public");
+app.use(express.static(buildPath));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(buildPath, "index.html"));
 });
+
+const PORT = process.env.PORT || 5234;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Server running on port ${port}`));
