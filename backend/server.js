@@ -98,12 +98,10 @@ app.post("/api/auth/register/org", async (req, res) => {
     users.push(newOrg);
     console.log("Organizer registered");
 
-    res
-      .status(201)
-      .json({
-        message: "Organizer registered successfully",
-        user: { ...newOrg, password: undefined },
-      });
+    res.status(201).json({
+      message: "Organizer registered successfully",
+      user: { ...newOrg, password: undefined },
+    });
   } catch (error) {
     console.error("Error registering organizer:", error);
     res.status(500).json({ error: "Server error" });
@@ -122,12 +120,10 @@ app.post("/api/auth/login", async (req, res) => {
   const isValid = await bcrypt.compare(password, user.password);
   if (!isValid) return res.status(401).json({ error: "Invalid password" });
 
-  res
-    .status(200)
-    .json({
-      message: "Login successful",
-      user: { name: user.name, email: user.email, role: user.role },
-    });
+  res.status(200).json({
+    message: "Login successful",
+    user: { name: user.name, email: user.email, role: user.role },
+  });
 });
 
 // Change password
@@ -155,20 +151,39 @@ app.get("/api/users", (req, res) => {
     .json(safeUsers.length ? safeUsers : { message: "No users found" });
 });
 
+// Health check endpoint
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "OK", timestamp: new Date().toISOString() });
+});
+
 // ---------------- SERVE FRONTEND ---------------- //
 const buildPath = path.join(__dirname, "public");
 app.use(express.static(buildPath));
 
-// Catch-all для обслуговування index.html для React маршрутизації - АЛЬТЕРНАТИВНИЙ ПІДХІД
 app.use((req, res, next) => {
-  // Якщо це не API запит і файл не існує, віддаємо index.html
-  if (!req.path.startsWith("/api") && !req.path.includes(".")) {
-    res.sendFile(path.join(buildPath, "index.html"));
-  } else {
-    next();
+  if (req.path.startsWith("/api/")) {
+    return next();
   }
+
+  if (req.path.match(/\.[^/]+$/)) {
+    return next();
+  }
+
+  res.sendFile(path.join(buildPath, "index.html"), (err) => {
+    if (err) {
+      res.status(500).send("Error loading page");
+    }
+  });
 });
 
 // ---------------- START SERVER ---------------- //
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+console.log("Starting server...");
+console.log("Build path:", buildPath);
+console.log("Port:", PORT);
+
+app.listen(PORT, () => {
+  console.log(`Server successfully started and running on port ${PORT}`);
+  console.log(`Environment: ${process.env.NODE_ENV || "development"}`);
+});
