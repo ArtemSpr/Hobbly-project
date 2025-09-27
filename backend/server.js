@@ -120,9 +120,14 @@ app.get("/api/users", (req, res) => {
 const buildPath = path.join(__dirname, "public");
 app.use(express.static(buildPath));
 
-// Catch-all to serve index.html for React routing - FIXED
-app.get('/*', (req, res) => {
-  res.sendFile(path.join(buildPath, "index.html"));
+// Catch-all для обслуговування index.html для React маршрутизації - АЛЬТЕРНАТИВНИЙ ПІДХІД
+app.use((req, res, next) => {
+  // Якщо це не API запит і файл не існує, віддаємо index.html
+  if (!req.path.startsWith('/api') && !req.path.includes('.')) {
+    res.sendFile(path.join(buildPath, "index.html"));
+  } else {
+    next();
+  }
 });
 
 // ---------------- START SERVER ---------------- //
