@@ -47,6 +47,8 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: node-app
+          path: ./backend
+
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
@@ -55,3 +57,4 @@ jobs:
           slot-name: 'Production'
           package: ./backend
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A38480BBEC8A49B3AEBCA2FBFD782AA4 }}
+
