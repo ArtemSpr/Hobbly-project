@@ -2,6 +2,7 @@
   "name": "hobbly-backend",
   "version": "1.0.0",
   "description": "Backend for Hobbly project",
+  "type": "module",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

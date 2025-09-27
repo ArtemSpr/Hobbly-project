@@ -1,6 +1,6 @@
-const express = require("express");
+import express from "express";
+import bcrypt from "bcrypt";
 const app = express();
-const bcrypt = require("bcrypt");
 import path from "path";
 
 app.use(express.json());
