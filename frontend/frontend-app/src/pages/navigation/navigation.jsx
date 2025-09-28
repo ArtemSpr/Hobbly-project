@@ -773,7 +773,7 @@ function Navigation({ userData }) {
             }}
           >
             <span>
-              {isElOpen ? "Hide password change" : "Show password chanage"}
+              {isElOpen ? "Hide password change" : "Show password change"}
             </span>
             <img
               src={ArrowLeft}
