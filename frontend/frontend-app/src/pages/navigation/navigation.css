@@ -1347,10 +1347,12 @@ a.active img {
     color: white;
   }
   .mapBut:hover {
+    opacity: 75%;
+  }
+  .mapButIns:hover {
     transform: translateX(10px);
     transition: 0.5s;
     cursor: pointer;
-    opacity: 75%;
   }
 }
 
