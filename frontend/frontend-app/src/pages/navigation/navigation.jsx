@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState, useRef, use } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import axios from "axios";
 
@@ -773,12 +773,13 @@ function Navigation({ userData }) {
             }}
           >
             <span>
-              {isElOpen ? "Hide password chanage" : "Show password chanage"}
+              {isElOpen ? "Hide password change" : "Show password chanage"}
             </span>
             <img
               src={ArrowLeft}
+              alt="Arrow"
               className={`passwordIcon ${isElOpen ? "rotated" : ""}`}
-            ></img>
+            />
           </div>
           <form
             className={`password-card-form ${isElOpen ? "show" : "hide"}`}
