@@ -895,6 +895,16 @@ function Navigation({ userData }) {
         >
           Create own event
         </div>
+        <div className="mapBut">
+          <Link
+            to="/map"
+            state={{ locations: eventLocations }}
+            className="active"
+          >
+            <img src={MapIcon} alt="Map" />
+            <span>Map</span>
+          </Link>
+        </div>
         <div className="nav-logOut-cont">
           <div className="logOut-el">
             <Link to="/" className={"active"}>
@@ -904,6 +914,7 @@ function Navigation({ userData }) {
           </div>
         </div>
       </div>
+
       <div className="navigation-cont">
         {/* ============ HEADER START ============ */}
         <header id="main-header" className="navi-header">
@@ -1299,14 +1310,16 @@ function Navigation({ userData }) {
           </div>
 
           <div className="footer-el">
-            <Link
-              to="/map"
-              state={{ locations: eventLocations }}
-              className="active"
-            >
-              <img src={MapIcon} alt="Map" />
-              <span>Kartta</span>
-            </Link>
+            <div className="mapButphone">
+              <Link
+                to="/map"
+                state={{ locations: eventLocations }}
+                className="active"
+              >
+                <img src={MapIcon} alt="Map" />
+                <span>Kartta</span>
+              </Link>
+            </div>
           </div>
 
           <div className="footer-el">
