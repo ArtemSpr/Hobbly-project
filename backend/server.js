@@ -1,7 +1,8 @@
+import path from "path";
+
 const express = require("express");
 const app = express();
 const bcrypt = require("bcrypt");
-import path from "path";
 
 app.use(express.json());
 const __dirname = path.resolve();
