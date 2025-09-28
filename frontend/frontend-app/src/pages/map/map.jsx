@@ -9,12 +9,22 @@ import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "./map.css";
 
+
 const iconMark = L.icon({
   iconUrl: markIcon,
   iconSize: [32, 32],
   iconAnchor: [16, 32],
   popupAnchor: [0, -32],
 });
+
+// const iconUrl = () => {};
+
+// const iconMark = L.icon({
+//   iconUrl: loc.image || markIcon,
+//   iconSize: [32, 32],
+//   iconAnchor: [16, 32],
+//   popupAnchor: [0, -32],
+// });
 
 const Map = () => {
   const { state } = useLocation();
@@ -60,6 +70,7 @@ const Map = () => {
                 <Marker
                   key={loc.id}
                   position={[loc.latitude, loc.longitude]}
+              
                   icon={L.icon({
                     iconUrl: loc.image || markIcon,
                     iconSize: [64, 64],
@@ -68,7 +79,13 @@ const Map = () => {
                     className: "custom-icon",
                   })}
                 >
-                  <Popup>{loc.name}</Popup>
+                  <Popup>
+                    <div>
+                      {" "}
+                      <img src={loc.image}></img>
+                      <span>Repudiandae fuga consequatur necessitatibus.</span>
+                    </div>
+                  </Popup>
                 </Marker>
               ))}
           </MarkerClusterGroup>
