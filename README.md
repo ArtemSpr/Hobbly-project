@@ -5,6 +5,8 @@
 ## 📖 Short Description
 **Hobbly Project** is a web application designed for convenient searching, viewing, and organizing events. Its goal is to help users quickly find interesting events in their city or region, view them on a map, share with friends, and easily access tickets or registration. The project targets both event attendees and organizers, who can create and manage their own events through a simple interface.
 
+Application URL: https://hobbly.azurewebsites.net
+
 ---
 
 ## 🎯 Main Goal

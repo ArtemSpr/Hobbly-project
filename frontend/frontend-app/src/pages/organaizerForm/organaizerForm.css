@@ -52,7 +52,7 @@ img {
     position: relative;
 }
 
-.back-button {
+.back-button-sign {
     color: var(--color-white);
     background: none;
     border: none;
@@ -69,8 +69,9 @@ img {
     top: 15%;
     right: 10%;
     font-size: 1.75rem;
-    font-weight: 700;
-    font-family: Kanit, sans-serif;
+    font-weight: 600;
+    font-family: "Outfit", sans-serif;
+
 }
 
 .card-heading small {
@@ -128,6 +129,7 @@ img {
     background-color: rgba(255, 255, 255, 0.05);
     border-radius: 10px;
     font-size: 0.85rem;
+    font-family: "Work Sans", sans-serif;
     color: var(--color-gray);
 }
 
@@ -163,7 +165,7 @@ img {
     padding: 1em;
     font-size: 1.25rem;
     font-weight: 500;
-    font-family: Montserrat, sans-serif;
+    font-family: "Work Sans", sans-serif;
     background-color: var(--color-green);
     border-radius: 6px;
     color: var(--color-deep-dark);

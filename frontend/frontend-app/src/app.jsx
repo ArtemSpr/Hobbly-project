@@ -18,10 +18,16 @@ import Account from "./pages/account/account";
 
 function App() {
   const [userData, setUserData] = useState(null);
+  const [isCreateEventOpen, setIsCreateEventOpen] = useState(false);
 
   const handleChildData = (data) => {
     setUserData(data);
-    console.log("Father get an information");
+    console.log("Main router get an info");
+  };
+
+  const handleOpenCreateEvent = (value) => {
+    setIsCreateEventOpen(value);
+    console.log("Main router get a value about creating own event");
   };
   return (
     <Router>
@@ -43,11 +49,26 @@ function App() {
         />
         <Route
           path="/navigation"
-          element={<Navigation userData={userData} />}
+          element={
+            <Navigation
+              userData={userData}
+              isCreateEventOpen={isCreateEventOpen}
+              setIsCreateEventOpen={setIsCreateEventOpen}
+            />
+          }
         />
         <Route path="/map" element={<Map userData={userData} />} />
         <Route path="/passwordVerif" element={<PasswordVerif />} />
-        <Route path="/account" element={<Account userData={userData} />} />
+        <Route
+          path="/account"
+          element={
+            <Account
+              userData={userData}
+              isCreateEventOpen={isCreateEventOpen}
+              setIsCreateEventOpen={setIsCreateEventOpen}
+            />
+          }
+        />
       </Routes>
     </Router>
   );

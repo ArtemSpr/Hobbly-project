@@ -1,14 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./organaizerForm.css";
-
-import eyeIcon from "../../assets/icons/icons8-eye-48.png";
-import eyeSlashIcon from "../../assets/icons/icons8-closed-eye-24.png";
 import axios from "axios";
 
-// ! TO DO : add space checker for description
-
-const OrganaizerForm = ({ sendDataToParent }) => {
+const OrganizerForm = ({ sendDataToParent }) => {
   const navigate = useNavigate();
   const [name, setNameValue] = useState("");
   const [email, setEmailValue] = useState("");
@@ -226,14 +221,14 @@ const OrganaizerForm = ({ sendDataToParent }) => {
   return (
     <div className="card-org">
       <div className="card-image">
-        <div className="back-button">
+        <div className="back-button-sign">
           <Link to="/signUp" className="back-link">
             ←
           </Link>
         </div>
         <h2 className="card-heading">
-          Aloita
-          <small>Luo järjestäjätilisi</small>
+          Start
+          <small>Create your organizer account</small>
         </h2>
       </div>
 
@@ -242,7 +237,7 @@ const OrganaizerForm = ({ sendDataToParent }) => {
         <div className="userForm-input">
           <input
             type="text"
-            placeholder="Organisaation koko nimi"
+            placeholder="Organization full name"
             value={name}
             onChange={handleNameChanges}
             onBlur={() => setIsNameTouched(true)}
@@ -253,7 +248,7 @@ const OrganaizerForm = ({ sendDataToParent }) => {
         </div>
         {isNameInvalid && isNameTouched && (
           <ul className="password-checklist">
-            <li>Nimen on oltava vähintään 3 merkkiä pitkä</li>
+            <li>Name must be at least 3 characters long</li>
           </ul>
         )}
 
@@ -261,7 +256,7 @@ const OrganaizerForm = ({ sendDataToParent }) => {
         <div className="userForm-input">
           <input
             type="email"
-            placeholder="Sähköposti"
+            placeholder="Email"
             value={email}
             onChange={handleEmailChange}
             onBlur={() => setIsEmailTouched(true)}
@@ -272,7 +267,7 @@ const OrganaizerForm = ({ sendDataToParent }) => {
         </div>
         {isEmailInvalid && isEmailTouched && (
           <ul className="password-checklist">
-            <li>Anna voimassa oleva sähköpostiosoite</li>
+            <li>Please enter a valid email address</li>
           </ul>
         )}
 
@@ -280,7 +275,7 @@ const OrganaizerForm = ({ sendDataToParent }) => {
         <div className="password-input-wrapper">
           <input
             type={showPassword ? "text" : "password"}
-            placeholder="Salasana"
+            placeholder="Password"
             value={password}
             onChange={handlePasswordChange}
             onBlur={() => setIsPasswordTouched(true)}
@@ -319,7 +314,7 @@ const OrganaizerForm = ({ sendDataToParent }) => {
         <div className="userForm-input">
           <input
             type="text"
-            placeholder="Kuvaus"
+            placeholder="Description"
             value={description}
             onChange={descriptionChecker}
             onBlur={() => setIsDescriptionTouched(true)}
@@ -332,7 +327,7 @@ const OrganaizerForm = ({ sendDataToParent }) => {
         </div>
         {isDescriptionInvalid && isDescriptionTouched && (
           <ul className="password-checklist">
-            <li>Kuvauksen on oltava 25–300 merkkiä pitkä</li>
+            <li>Description must be 25–300 characters long</li>
           </ul>
         )}
 
@@ -340,7 +335,7 @@ const OrganaizerForm = ({ sendDataToParent }) => {
         <div className="userForm-input">
           <input
             type="text"
-            placeholder="Osoite"
+            placeholder="Address"
             value={address}
             onChange={handleAddressChange}
             onBlur={() => setIsAddressTouched(true)}
@@ -351,7 +346,7 @@ const OrganaizerForm = ({ sendDataToParent }) => {
         </div>
         {isAddressInvalid && isAddressTouched && (
           <ul className="password-checklist">
-            <li>Osoitteen on oltava vähintään 5 merkkiä pitkä</li>
+            <li>Address must be at least 5 characters long</li>
           </ul>
         )}
 
@@ -359,7 +354,7 @@ const OrganaizerForm = ({ sendDataToParent }) => {
         <div className="userForm-input">
           <input
             type="text"
-            placeholder="Kaupunki"
+            placeholder="City"
             value={city}
             onChange={handleCityChange}
             onBlur={() => setIsCityTouched(true)}
@@ -370,7 +365,7 @@ const OrganaizerForm = ({ sendDataToParent }) => {
         </div>
         {isCityInvalid && isCityTouched && (
           <ul className="password-checklist">
-            <li>Kaupunki on pakollinen tieto</li>
+            <li>City is required</li>
           </ul>
         )}
 
@@ -378,7 +373,7 @@ const OrganaizerForm = ({ sendDataToParent }) => {
         <div className="userForm-input">
           <input
             type="text"
-            placeholder="Postinumero"
+            placeholder="Postal Code"
             value={postalCode}
             onChange={handlePostalCodeChange}
             onBlur={() => setIsPostalCodeTouched(true)}
@@ -391,7 +386,7 @@ const OrganaizerForm = ({ sendDataToParent }) => {
         </div>
         {isPostalCodeInvalid && isPostalCodeTouched && (
           <ul className="password-checklist">
-            <li>Postinumeron on oltava 5–10 numeroa</li>
+            <li>Postal code must be 5–10 digits</li>
           </ul>
         )}
 
@@ -399,7 +394,7 @@ const OrganaizerForm = ({ sendDataToParent }) => {
         <div className="userForm-input">
           <input
             type="text"
-            placeholder="Tunnistenumero"
+            placeholder="Identification Number"
             value={idNumber}
             onChange={handleIdentificationNumberChange}
           />
@@ -410,7 +405,7 @@ const OrganaizerForm = ({ sendDataToParent }) => {
           <input
             type="text"
             list="organization-types"
-            placeholder="Organisaation tyyppi"
+            placeholder="Organization Type"
             value={orgType}
             onChange={handleOrganizationTypeChange}
             onBlur={() => setIsOrganizationTypeTouched(true)}
@@ -421,20 +416,20 @@ const OrganaizerForm = ({ sendDataToParent }) => {
             }`}
           />
           <datalist id="organization-types">
-            <option value="Yhdistys" />
-            <option value="Yksityinen" />
-            <option value="Osakeyhtiö" />
+            <option value="Association" />
+            <option value="Private" />
+            <option value="Limited Company" />
           </datalist>
         </div>
         {isOrganizationTypeInvalid && isOrganizationTypeTouched && (
           <ul className="password-checklist">
-            <li>Valitse organisaation tyyppi</li>
+            <li>Please select an organization type</li>
           </ul>
         )}
 
         <div className="action">
           <button type="submit" className="action-button">
-            Rekisteröidy
+            Register
           </button>
         </div>
       </form>
@@ -442,4 +437,4 @@ const OrganaizerForm = ({ sendDataToParent }) => {
   );
 };
 
-export default OrganaizerForm;
+export default OrganizerForm;

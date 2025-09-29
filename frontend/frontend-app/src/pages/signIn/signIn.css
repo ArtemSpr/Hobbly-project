@@ -4,9 +4,6 @@
   box-sizing: border-box;
 }
 
-
-@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@500&family=Montserrat&display=swap');
-
 :root {
   --color-dark-teal: #073b3a;
   --color-yellow: #f5ff65;
@@ -24,13 +21,12 @@
   align-items: center;
   padding: 20px;
   color: var(--color-white);
-  font-family: 'Montserrat', sans-serif;
   text-align: center;
 }
 
 .sign-in-container h2 {
   font-size: clamp(1.8rem, 5vw, 2.4rem);
-  font-family: 'Kanit', sans-serif;
+  font-family: "Outfit", sans-serif;
   margin: 80px 0 40px 0;
   color: var(--color-white);
 }
@@ -52,7 +48,7 @@
   background-color: transparent;
   color: var(--color-white);
   outline: none;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Work Sans", sans-serif;
 }
 
 .sign-in-form input::placeholder {
@@ -69,7 +65,7 @@
   font-size: 1.1rem;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Outfit', sans-serif;
 }
 
 .sign-in-form button:hover {
@@ -87,6 +83,8 @@
   text-decoration: none;
   display: block;
   margin-top: 8px;
+  font-family: "Work Sans", sans-serif;
+
 }
 
 .sign-in-links a:hover {

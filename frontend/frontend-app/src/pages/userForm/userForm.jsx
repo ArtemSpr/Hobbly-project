@@ -108,13 +108,13 @@ const UserForm = ({ sendDataToParent }) => {
         <button
           type="button"
           onClick={() => navigate(-1)}
-          className="back-button"
+          className="back-button-sign"
         >
           ←
         </button>
         <h2 className="card-heading">
-          Aloita
-          <small>Luo käyttäjätilisi</small>
+          Start
+          <small>Create your account</small>
         </h2>
       </div>
 
@@ -124,7 +124,7 @@ const UserForm = ({ sendDataToParent }) => {
           <input
             type="text"
             name="name"
-            placeholder="Koko nimi"
+            placeholder="Full name"
             value={name}
             onChange={(e) => setName(e.target.value)}
             onBlur={() => setIsNameTouched(true)}
@@ -135,7 +135,7 @@ const UserForm = ({ sendDataToParent }) => {
         </div>
         {isNameInvalid && isNameTouched && (
           <ul className="password-checklist">
-            <li key="name-length">Nimen on oltava vähintään 3 merkkiä pitkä</li>
+            <li key="name-length">Name must be at least 3 characters long</li>
           </ul>
         )}
 
@@ -144,7 +144,7 @@ const UserForm = ({ sendDataToParent }) => {
           <input
             type="email"
             name="email"
-            placeholder="Sähköposti"
+            placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             onBlur={() => setIsEmailTouched(true)}
@@ -155,7 +155,7 @@ const UserForm = ({ sendDataToParent }) => {
         </div>
         {isEmailInvalid && isEmailTouched && (
           <ul className="password-checklist">
-            <li key="email-invalid">Anna voimassa oleva sähköpostiosoite</li>
+            <li key="email-invalid">Please enter a valid email address</li>
           </ul>
         )}
 
@@ -164,7 +164,7 @@ const UserForm = ({ sendDataToParent }) => {
           <input
             type={showPassword ? "text" : "password"}
             name="password"
-            placeholder="Salasana"
+            placeholder="Password"
             value={password}
             onChange={handlePasswordChange}
             onBlur={() => setIsPasswordTouched(true)}
@@ -185,31 +185,31 @@ const UserForm = ({ sendDataToParent }) => {
               key="pass-length"
               className={passwordValidations.length ? "valid" : "invalid"}
             >
-              8–20 merkkiä
+              8–20 characters
             </li>
             <li
               key="pass-upper"
               className={passwordValidations.upper ? "valid" : "invalid"}
             >
-              Vähintään yksi iso kirjain
+              At least one uppercase letter
             </li>
             <li
               key="pass-lower"
               className={passwordValidations.lower ? "valid" : "invalid"}
             >
-              Vähintään yksi pieni kirjain
+              At least one lowercase letter
             </li>
             <li
               key="pass-number"
               className={passwordValidations.number ? "valid" : "invalid"}
             >
-              Vähintään yksi numero
+              At least one number
             </li>
             <li
               key="pass-special"
               className={passwordValidations.special ? "valid" : "invalid"}
             >
-              Vähintään yksi erikoismerkki (!@#$)
+              At least one special character (!@#$)
             </li>
           </ul>
         )}
@@ -220,7 +220,7 @@ const UserForm = ({ sendDataToParent }) => {
 
         <div className="action">
           <button type="submit" className="action-button">
-            Rekisteröidy
+            Register
           </button>
         </div>
       </form>

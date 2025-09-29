@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@500&family=Montserrat&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500&family=Work+Sans:ital@0;1&display=swap');
 
 :root {
     --color-dark-teal: #073b3a;
@@ -16,7 +16,10 @@ a {
 
 a span {
     color: var(--color-deep-dark);
+    font-family: 'Work Sans', sans-serif;
 }
+
+.register-page {}
 
 .btn-style {
     padding: 15px 16px;
@@ -24,7 +27,6 @@ a span {
     text-align: center;
     width: 85%;
     margin: 0 auto 15px auto;
-    font-family: 'Kanit', sans-serif;
     font-size: 18px;
     cursor: pointer;
 }
@@ -80,5 +82,4 @@ a span {
     text-align: center;
     margin-top: 20px;
     color: var(--color-gray);
-    font-family: 'Montserrat', sans-serif;
 }

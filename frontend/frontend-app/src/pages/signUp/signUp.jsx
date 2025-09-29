@@ -14,7 +14,7 @@ const SignUp = () => {
             Organizer
           </Link>
         </div>
-        <div className="back-button">
+        <div className="back-button-sign">
           <Link to="/" className="back-link">
             ←
           </Link>
