@@ -177,7 +177,7 @@ app.use((req, res, next) => {
 });
 
 // ---------------- START SERVER ---------------- //
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5234;
 
 console.log("Starting server...");
 console.log("Build path:", buildPath);
