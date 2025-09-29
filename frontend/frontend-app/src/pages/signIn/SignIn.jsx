@@ -74,6 +74,11 @@ const SignIn = ({ sendDataToParent }) => {
   return (
     <div className="sign-in-container">
       <h2>Sign In</h2>
+      <div className="back-button-sign">
+        <Link to="/" className="back-link">
+          ←
+        </Link>
+      </div>
       <form onSubmit={handleSubmit} className="sign-in-form">
         <input
           type="email"

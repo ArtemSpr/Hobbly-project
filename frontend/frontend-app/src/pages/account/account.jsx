@@ -9,13 +9,15 @@ import ProfileImage from "../../assets/image/prof-1.jpg";
 import CopyWhite from "../../assets/icons/copy-white.png";
 import CopyGrey from "../../assets/icons/copy-grey.png";
 
+import GreenPlus from "../../assets/icons/greenPlus.png";
+
 import LogOut from "../../assets/icons/logOut-icon.png";
 
 import HomeIcon from "../../assets/icons/home-white.svg";
 import MapIcon from "../../assets/icons/map-white.svg";
 import AccountIcon from "../../assets/icons/account-icon.png";
 
-const Account = ({ userData }) => {
+const Account = ({ userData, isCreateEventOpen, setIsCreateEventOpen }) => {
   const [copyIcon, setCopyIcon] = useState(CopyGrey);
 
   const [password, setPassword] = useState("");
@@ -128,6 +130,17 @@ const Account = ({ userData }) => {
       passwordBoard.classList.add("hidden");
     }
   }, [userData]);
+
+  useEffect(() => {
+    const addEvents = document.querySelector(".add-events-cont");
+
+    if (userData?.role === "organizer") {
+      addEvents.classList.add("shown");
+    }
+  }, []);
+  useEffect(() => {
+    console.log("is CreateEventOpen ", isCreateEventOpen);
+  }, [isCreateEventOpen]);
 
   return (
     <div className="account-container">
@@ -249,9 +262,18 @@ const Account = ({ userData }) => {
         </form>
       </div>
 
+      <div
+        className="add-events-cont account-create-event"
+        onClick={() => setIsCreateEventOpen(!isCreateEventOpen)}
+      >
+        <Link to="/navigation" className={"active"}>
+          <span> Create own event</span> <img src={GreenPlus}></img>
+        </Link>
+      </div>
+
       <div className="logOut-cont">
         <div className="logOut-el">
-          <Link to="/navigation" className={"active"}>
+          <Link to="/" className={"active"}>
             <img src={LogOut} alt="Home" />
             <span>LogOut</span>
           </Link>
