@@ -63,7 +63,7 @@ const OwnEvents = ({ newEvents, setNewEvents, newEventImage }) => {
           <div className="event-card-image">
             <img
               src={newEventImage?.url || ThirdEventImage}
-              alt={newEventImage.name || "Event"}
+              alt={newEventImage?.name || "Event"}
             />
           </div>
           <div className="event-card-content">

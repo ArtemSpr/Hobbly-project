@@ -178,6 +178,12 @@ html {
     color: var(--color-white);
 }
 
+.account-create-event {
+
+    text-align: center;
+}
+
+
 .logOut-cont {
     background-color: rgba(32, 112, 127, 0.35);
     backdrop-filter: blur(10px) saturate(120%);
@@ -214,6 +220,8 @@ html {
     color: var(--color-event-end);
 
 }
+
+
 
 @media (min-width: 1024px) {
     .account-passwordChange {

@@ -34,9 +34,10 @@ import FilterIcon from "../../assets/icons/filter-icon.png";
 import HomeIcon from "../../assets/icons/home-white.svg";
 import MapIcon from "../../assets/icons/map-white.svg";
 import AccountIcon from "../../assets/icons/account-icon.png";
+import { divIcon } from "leaflet";
 
 // #TODO: Active page will be highlighted in yellow
-// #TODO: Move filter block to separate component
+// #TODO: Пошукове поле відкривається лише пілся натискання на іконку
 
 // #TODO: Organization page
 // #TODO:   Adding new events
@@ -49,7 +50,7 @@ import AccountIcon from "../../assets/icons/account-icon.png";
 // #FIXME: Change filter slider to list in tablets and desktop
 // #IDEA: User can like events
 
-function Navigation({ userData }) {
+function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
   const [events, setEvents] = useState([]);
   const [apiPage, setApiPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -96,7 +97,6 @@ function Navigation({ userData }) {
   });
   const [isElOpen, setIsElOpen] = useState(false);
   // ------- NEW EVENT STATES -------
-  const [isCreateEventOpen, setIsCreateEventOpen] = useState(false);
   const [newEvents, setNewEvents] = useState([]);
   const [newEventImage, setNewEventImage] = useState(null);
   const [isOwnEventClosen, setIsOwnEventClosen] = useState(false);
@@ -235,7 +235,7 @@ function Navigation({ userData }) {
             return [...prev, locationData];
           });
 
-          console.log("Saved location:", locationData);
+          // console.log("Saved location:", locationData);
         }
       } catch (error) {
         console.error(`Failed to fetch location for event ${event.id}:`, error);
@@ -706,8 +706,12 @@ function Navigation({ userData }) {
   // ------ GUEST ROLE ------
   useEffect(() => {
     const passwordBoard = document.querySelector(".account-passwordChange");
+    const eventsCardTitle = document.querySelector(".event-cards-title");
+    const ownEventsContent = document.querySelector(".own-events-content");
     if (!userData) {
       passwordBoard.classList.add("hidden");
+      ownEventsContent.classList.add("hidden");
+      eventsCardTitle.classList.add("hidden");
     }
   }, []);
   // ------ ORGANIZER ROLE ------
@@ -719,11 +723,15 @@ function Navigation({ userData }) {
     }
   }, []);
 
-  if (isCreateEventOpen) {
-    document.documentElement.classList.add("fixed");
-  } else {
-    document.documentElement.classList.remove("fixed");
-  }
+  useEffect(() => {
+    const mainContent = document.querySelector(".main-content");
+
+    if (isCreateEventOpen) {
+      mainContent.classList.add("fixed");
+    } else {
+      mainContent.classList.remove("fixed");
+    }
+  }, [isCreateEventOpen]);
 
   const handleEventData = (formData, image) => {
     try {
@@ -742,12 +750,21 @@ function Navigation({ userData }) {
   };
 
   useEffect(() => {
+    const noOwnEventsText = document.querySelector(".noOwnEvents");
+
+    if (newEvents.length === 0 && userData) {
+      noOwnEventsText.classList.toggle("shown");
+    }
     console.log("Actual newEvents array:", newEvents);
   }, [newEvents]);
 
   useEffect(() => {
     console.log("Actual image:", newEventImage);
   }, [newEventImage]);
+
+  useEffect(() => {
+    console.log("is CreateEventOpen ", isCreateEventOpen);
+  }, [isCreateEventOpen]);
 
   return (
     <div className="navigation">
@@ -961,6 +978,15 @@ function Navigation({ userData }) {
                 isOwnEventClosen ? "hide" : ""
               }`}
             >
+              <span
+                className={`noOwnEvents ${newEvents.length > 0 ? "hide" : ""}`}
+              >
+                No new events yet.{" "}
+                <span onClick={() => setIsCreateEventOpen(!isCreateEventOpen)}>
+                  Add one?
+                </span>
+              </span>
+
               <OwnEvents
                 newEvents={newEvents}
                 setNewEvents={setNewEvents}
@@ -1324,7 +1350,7 @@ function Navigation({ userData }) {
 
           <div className="footer-el">
             <Link to="/account" className="active">
-              <img src={AccountIcon} alt="Map" />
+              <img src={AccountIcon} alt="Account" />
               <span>Account</span>
             </Link>
           </div>
