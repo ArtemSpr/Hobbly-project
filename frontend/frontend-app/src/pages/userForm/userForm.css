@@ -164,7 +164,7 @@ input:-webkit-autofill {
 @media (max-width: 480px) {
     .card {
         max-width: 100%;
-        height: auto;
+        height: 100vh;
         padding: 1rem;
     }
 
