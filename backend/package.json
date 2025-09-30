@@ -1,15 +1,15 @@
 {
   "name": "hobbly-backend",
   "version": "1.0.0",
-  "description": "Backend for Hobbly project",
-  "type": "module",
+  "description": "",
   "main": "server.js",
+  "type": "module",
   "scripts": {
     "start": "node server.js",
-    "build-frontend": "cd ../frontend/frontend-app && npm install && npm run build && cp -r build ../../backend/public"
+    "dev": "nodemon server.js"
   },
   "engines": {
-    "node": "22.x"
+    "node": "20.x"
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
