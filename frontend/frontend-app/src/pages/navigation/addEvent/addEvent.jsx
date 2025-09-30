@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 import axios from "axios";
 
 import "./addEvent.css";
 
 // #TODO: Add this page to mobile version
-// #TODO: Do response
+// #TODO: Add response
 
 const AddEvent = ({ userData, onData }) => {
   const [image, setImage] = useState(null);
@@ -26,6 +28,8 @@ const AddEvent = ({ userData, onData }) => {
 
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
+
+  const navigate = useNavigate();
 
   const MAX_DESCRIPTION_LENGTH = 750;
 
@@ -149,8 +153,7 @@ const AddEvent = ({ userData, onData }) => {
       }
     }
   };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const newErrors = {};
@@ -164,9 +167,31 @@ const AddEvent = ({ userData, onData }) => {
       Object.keys(formData).reduce((acc, key) => ({ ...acc, [key]: true }), {})
     );
 
-    if (Object.keys(newErrors).length === 0) {
-      onData(formData, image);
+    if (Object.keys(newErrors).length > 0) return;
+
+    const dataToSend = {
+      ...formData,
+      imageUrl: image?.url || "",
+      organizer: userData._id,
+    };
+
+    try {
+      const response = await axios.post(`/api/events`, dataToSend);
+
+      if (response.status === 200) {
+        navigate("/navigation");
+      }
+    } catch (error) {
+      if (error.response) {
+        console.error(error.response?.data?.error || "Server error");
+      } else if (error.request) {
+        console.error("No response from server, please try again later");
+      } else {
+        console.error("An unexpected error occurred");
+      }
     }
+
+    onData(dataToSend, image);
   };
 
   return (
