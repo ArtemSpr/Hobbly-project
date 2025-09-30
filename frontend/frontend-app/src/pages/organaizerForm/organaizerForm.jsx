@@ -196,7 +196,6 @@ const OrganizerForm = ({ sendDataToParent }) => {
         name,
         email,
         password,
-        // LogoValue,
         description,
         address,
         city,
@@ -208,6 +207,7 @@ const OrganizerForm = ({ sendDataToParent }) => {
       if (response.status === 201) {
         console.log("Registration successful:", response.data);
         sendDataToParent(response.data.user);
+        console.log("id ", response.data.user._id);
         navigate("/navigation");
       }
     } catch (error) {
@@ -402,10 +402,7 @@ const OrganizerForm = ({ sendDataToParent }) => {
 
         {/* Organization Type */}
         <div className="userForm-input">
-          <input
-            type="text"
-            list="organization-types"
-            placeholder="Organization Type"
+          <select
             value={orgType}
             onChange={handleOrganizationTypeChange}
             onBlur={() => setIsOrganizationTypeTouched(true)}
@@ -414,13 +411,16 @@ const OrganizerForm = ({ sendDataToParent }) => {
                 ? "input-field-red"
                 : ""
             }`}
-          />
-          <datalist id="organization-types">
-            <option value="Association" />
-            <option value="Private" />
-            <option value="Limited Company" />
-          </datalist>
+          >
+            <option value="" disabled>
+              Select Organization Type
+            </option>
+            <option value="Association">Association</option>
+            <option value="Private">Private</option>
+            <option value="Limited Company">Limited Company</option>
+          </select>
         </div>
+
         {isOrganizationTypeInvalid && isOrganizationTypeTouched && (
           <ul className="password-checklist">
             <li>Please select an organization type</li>
