@@ -33,12 +33,12 @@
     margin: 20px auto;
     box-sizing: border-box;
     padding: 20px;
-    background-color: rgba(32, 112, 127, 0.35);
-    backdrop-filter: blur(10px) saturate(120%);
-    -webkit-backdrop-filter: blur(10px) saturate(120%);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 0 6px 18px rgba(16, 24, 32, 0.25);
-    border-radius: 8px;
+    background-color: rgba(7, 59, 58, 0.4);
+    backdrop-filter: blur(12px) saturate(150%);
+    -webkit-backdrop-filter: blur(12px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    border-radius: 16px;
 }
 
 /* Top section: image + form inputs */
@@ -289,6 +289,7 @@ select[name="eventType"]:focus {
         width: 85vw;
         margin: 20px auto;
         padding: 15px;
+
     }
 
     .form-inputs {

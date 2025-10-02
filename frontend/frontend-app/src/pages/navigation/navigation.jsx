@@ -9,13 +9,14 @@ import AddEvent from "./addEvent/addEvent";
 import OwnEvents from "./ownEvents/ownEvents";
 
 // ---- LOGO ----
-import Logo from "../../assets/icons/yellow-big-logo.png";
+import Logo from "../../assets/icons/bigGreenLogo.png";
 // ----- SEARCH BAR -----
 import SearchGray from "../../assets/icons/search-grey.png";
 // ---- ACCOUNT ----
 import ProfileImage from "../../assets/image/prof-1.jpg";
 import LogOut from "../../assets/icons/logOut-icon.png";
 import ArrowLeft from "../../assets/icons/arrow-left-icon.png";
+import GreenPlus from "../../assets/icons/greenPlus.png";
 // ---- EVENT IMAGE ----
 import ThirdEventImage from "../../assets/image/event-3.webp";
 // ---- EVENT ICONS ----
@@ -29,23 +30,18 @@ import EventPhone from "../../assets/icons/phone-icon.png";
 import EventLocation from "../../assets/icons/location-icon.png";
 import EventPrice from "../../assets/icons/price-icon.png";
 // ---- FILTER ----
-import FilterIcon from "../../assets/icons/filter-icon.png";
+import FilterIcon from "../../assets/icons/filter-icon-white.png";
 // ---- FOOTER ----
 import HomeIcon from "../../assets/icons/home-white.svg";
-import MapIcon from "../../assets/icons/map-white.svg";
+import MapIcon from "../../assets/icons/map-white.png";
 import AccountIcon from "../../assets/icons/account-icon.png";
 import { divIcon } from "leaflet";
 
-// #TODO: Active page will be highlighted in yellow
 // #TODO: Пошукове поле відкривається лише пілся натискання на іконку
-
-// #TODO: Organization page
-// #TODO:   Adding new events
 
 // #TODO: Admine page
 // #TODO:   Dashboard
 
-// #TODO: Server URL protection (користувач не може просто ввести в пошукову строку ендпоінт)
 // #TODO: Скопіювати стиль зміни пароля до мобільної версії
 // #FIXME: Change filter slider to list in tablets and desktop
 // #IDEA: User can like events
@@ -224,6 +220,8 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
                 ? event.images[0].url
                 : ThirdEventImage,
             name: event.name?.fi || event.name?.en || "No Name",
+            description: event.description?.fi || "",
+            shortDescription: event.short_description?.fi || "",
             latitude: coords[1],
             longitude: coords[0],
           };
@@ -718,7 +716,7 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
   useEffect(() => {
     const addEvents = document.querySelector(".add-events-cont");
 
-    if (userData?.role === "organizer") {
+    if (userData?.role === "organizer" || userData?.role === "admin") {
       addEvents.classList.add("shown");
     }
   }, []);
@@ -906,11 +904,14 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
           </form>
         </div>
         {/* --------- ADDING NEW EVENTS --------- */}
+
         <div
-          className="add-events-cont"
+          className="add-events-cont account-create-event"
           onClick={() => setIsCreateEventOpen(!isCreateEventOpen)}
         >
-          Create own event
+          <Link to="/navigation" className={"active"}>
+            <span> Create own event</span> <img src={GreenPlus}></img>
+          </Link>
         </div>
         <div className="mapBut">
           <Link

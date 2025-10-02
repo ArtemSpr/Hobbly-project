@@ -14,7 +14,7 @@ import GreenPlus from "../../assets/icons/greenPlus.png";
 import LogOut from "../../assets/icons/logOut-icon.png";
 
 import HomeIcon from "../../assets/icons/home-white.svg";
-import MapIcon from "../../assets/icons/map-white.svg";
+import MapIcon from "../../assets/icons/map-white.png";
 import AccountIcon from "../../assets/icons/account-icon.png";
 
 const Account = ({ userData, isCreateEventOpen, setIsCreateEventOpen }) => {
@@ -158,8 +158,8 @@ const Account = ({ userData, isCreateEventOpen, setIsCreateEventOpen }) => {
               style={{ cursor: "pointer", width: "18px" }}
             />
           </span>
+          <div className="profile-role">{userData?.role || "guest"}</div>
         </div>
-        <div className="profile-role">{userData?.role || "guest"}</div>
       </div>
 
       <div className="account-passwordChange">
