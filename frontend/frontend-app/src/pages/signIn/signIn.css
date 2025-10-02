@@ -14,7 +14,11 @@
 }
 
 .sign-in-container {
-  background-color: var(--color-deep-green);
+  background: linear-gradient(
+    160deg,
+    var(--color-dark-teal),
+    var(--color-deep-dark)
+  );
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -56,20 +60,31 @@
 }
 
 .sign-in-form button {
+  display: block;
+  text-align: center;
   width: 100%;
-  padding: 16px;
-  border: none;
-  border-radius: 50px;
-  background-color: var(--color-green);
-  color: var(--color-deep-green);
-  font-size: 1.1rem;
+  padding: 18px;
+  color: var(--color-green);
+  border-color: var(--color-green);
+  border-radius: var(--radius-large);
+  font-family: "Work Sans", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 500;
+  text-decoration: none;
+  background-color: transparent;
   cursor: pointer;
-  transition: background-color 0.2s ease;
-  font-family: 'Outfit', sans-serif;
+  transition: var(--transition-fast);
 }
 
-.sign-in-form button:hover {
-  background-color: #4de46b;
+.sign-in-form button:hover,
+.sign-in-form button:focus {
+  background-color: var(--color-green);
+  color: var(--color-deep-dark);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+.sign-in-form button:active {
+  transform: translateY(-1px);
 }
 
 .sign-in-links {
@@ -84,13 +99,11 @@
   display: block;
   margin-top: 8px;
   font-family: "Work Sans", sans-serif;
-
 }
 
 .sign-in-links a:hover {
   text-decoration: underline;
 }
-
 
 .password-checklist {
   list-style: none;
@@ -127,8 +140,6 @@
   color: var(--color-green);
 }
 
-
-
 .password-input-wrapper {
   position: relative;
   width: 100%;
@@ -144,7 +155,7 @@
   background-color: transparent;
   color: var(--color-white);
   outline: none;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
 .password-toggle-icon {
@@ -190,4 +201,11 @@
   justify-content: center;
   align-items: center;
   margin-top: 10px;
+}
+
+footer {
+  font-size: 0.85rem;
+  color: var(--color-gray);
+  margin-top: auto;
+  padding-bottom: 20px;
 }

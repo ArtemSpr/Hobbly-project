@@ -1,4 +1,4 @@
-# GET  http://localhost:5234/api/users
+GET  http://localhost:5234/api/users
 
 ###
 
@@ -8,7 +8,7 @@ Content-Type: application/json
 
 {
   "name": "valentin",
-  "email": "well@mail.r",
-  "password": "hello maffaka"
+  "email": "well@gmail.com",
+  "password": "hello"
 }
 //

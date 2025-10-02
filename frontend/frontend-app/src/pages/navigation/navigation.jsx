@@ -914,14 +914,16 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
           </Link>
         </div>
         <div className="mapBut">
-          <Link
-            to="/map"
-            state={{ locations: eventLocations }}
-            className="active"
-          >
-            <img src={MapIcon} alt="Map" />
-            <span>Map</span>
-          </Link>
+          <div className="mapButIns">
+            <Link
+              to="/map"
+              state={{ locations: eventLocations }}
+              className="active"
+            >
+              <img src={MapIcon} alt="Map" />
+              <span>Map</span>
+            </Link>
+          </div>
         </div>
         <div className="nav-logOut-cont">
           <div className="logOut-el">
