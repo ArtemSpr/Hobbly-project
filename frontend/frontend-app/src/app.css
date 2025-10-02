@@ -46,7 +46,11 @@ a span {
 }
 
 .app {
-  background-color: var(--color-dark-teal);
+  background: linear-gradient(
+    160deg,
+    var(--color-dark-teal),
+    var(--color-deep-dark)
+  );
   min-height: 100vh;
   display: flex;
   justify-content: center;

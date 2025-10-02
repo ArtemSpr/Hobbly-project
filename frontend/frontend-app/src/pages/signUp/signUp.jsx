@@ -20,7 +20,7 @@ const SignUp = () => {
           </Link>
         </div>
       </div>
-      <footer>© 2025 YourApp. All rights reserved.</footer>
+      <footer>© 2025 Hobbly. All rights reserved.</footer>
     </div>
   );
 };

@@ -1436,6 +1436,7 @@ a.active img {
   .event-cards-container {
     max-width: 1400px;
     margin: 0 auto 0 320px;
+    width: calc(100% - 320px);
   }
 
   .event-cards-block {
@@ -1477,6 +1478,7 @@ a.active img {
   .own-event-cards-container,
   .event-cards-container {
     margin: 0 auto 0 320px;
+    width: calc(100% - 320px);
   }
 
   .own-event-cards-block,
