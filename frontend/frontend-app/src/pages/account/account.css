@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300; 400; 500; 600; 700& family=Poppins:wght@400; 500; 600; 700& family=JetBrains+Mono:ital, wght@1, 300& family=Quicksand:wght@300& family=Archivo+Black& display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@500&family=Inter:wght@400;500;600;700&family=Crimson+Pro:wght@600;700&display=swap');
+
 
 
 :root {
@@ -17,11 +18,22 @@
     --color-capacity: #616161;
     --color-price: #2e7d32;
     --color-or: #20707f;
+
+    --font-heading: "Montserrat Alternates", sans-serif;
+    --font-body: 'Inter', sans-serif;
 }
 
 html {
     margin: 0px;
     padding: 0px;
+}
+
+body {
+    background-image: url("../../assets/image/bg_pattern.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
 }
 
 .account-container {
@@ -33,17 +45,18 @@ html {
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
+
 }
 
 .account-profile {
     display: flex;
     flex-direction: row;
-    background-color: rgba(32, 112, 127, 0.35);
-    backdrop-filter: blur(10px) saturate(120%);
-    -webkit-backdrop-filter: blur(10px) saturate(120%);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 0 6px 18px rgba(16, 24, 32, 0.25);
-    border-radius: 8px;
+    background-color: rgba(7, 59, 58, 0.4);
+    backdrop-filter: blur(12px) saturate(150%);
+    -webkit-backdrop-filter: blur(12px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    border-radius: 16px;
     width: 90%;
     height: 120px;
     margin: 20px 5% 0 5%;
@@ -59,38 +72,38 @@ html {
     display: flex;
     flex-direction: column;
     font-size: 15px;
-    justify-content: space-evenly;
     border-radius: 12px;
 }
 
 .profile-info span {
-    margin-left: 12px;
     line-height: 1.6;
     letter-spacing: 0.3px;
     padding: 3px 10px;
     transition: all 0.3s ease;
 }
 
-.profile-email:hover {
-    color: #ffffff;
-    transform: translateX(4px);
-    cursor: pointer;
-}
-
 .profile-name {
     font-size: 20px;
-    font-family: "Popins", sans-serif;
+    font-family: var(--font-heading);
     font-weight: 700;
+    margin-left: -5px;
 }
 
 .profile-email {
     display: flex;
     flex-direction: row;
     align-items: center;
-    color: #8f8f8f;
-    font-family: "Inter", sans-serif;
+    font-family: var(--font-body);
     font-weight: 400;
+    color: var(--color-phone);
+    margin-left: 12px;
 
+}
+
+.profile-email:hover {
+    color: var(--color-white);
+    transform: translateY(-4px);
+    cursor: pointer;
 }
 
 .profile-email img {
@@ -104,6 +117,7 @@ html {
     display: flex;
     align-items: end;
     justify-items: end;
+    margin-right: 5%;
 }
 
 
@@ -131,8 +145,7 @@ html {
 
 .passwordChange-title {
     font-size: 20px;
-    font-family: "Popins", sans-serif;
-    font-weight: 700;
+    font-family: var(--font-heading);
     margin-bottom: 20px;
 }
 
@@ -148,52 +161,68 @@ html {
 }
 
 .passwordChange-cancel {
-    padding: 10px;
-    background: rgba(97, 97, 97, 0.25);
-    backdrop-filter: blur(12px) saturate(120%);
-    -webkit-backdrop-filter: blur(12px) saturate(120%);
+    padding: 12px 20px;
+    background: linear-gradient(145deg, rgba(120, 120, 120, 0.35), rgba(97, 97, 97, 0.25));
+    backdrop-filter: blur(14px) saturate(130%);
+    -webkit-backdrop-filter: blur(14px) saturate(130%);
     border-radius: 16px;
-    border: 1px solid rgba(97, 97, 97, 0.4);
-    box-shadow: 0 4px 20px rgba(97, 97, 97, 0.2);
+    border: 1px solid rgba(97, 97, 97, 0.5);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
     width: 150px;
     text-align: center;
-    font-family: "Poppins", sans-serif;
-    font-weight: 500;
-    color: var(--color-white);
+    font-family: var(--font-body);
+    font-weight: 600;
+    color: #ffffff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.passwordChange-cancel:hover {
+    background: linear-gradient(145deg, rgba(97, 97, 97, 0.5), rgba(120, 120, 120, 0.35));
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
 }
 
 .passwordChange-save {
-    padding: 10px;
-    background: rgba(76, 175, 80, 0.25);
-    backdrop-filter: blur(12px) saturate(120%);
-    -webkit-backdrop-filter: blur(12px) saturate(120%);
+    padding: 12px 20px;
+    background: linear-gradient(145deg, rgba(102, 205, 102, 0.35), rgba(76, 175, 80, 0.25));
+    backdrop-filter: blur(14px) saturate(130%);
+    -webkit-backdrop-filter: blur(14px) saturate(130%);
     border-radius: 16px;
-    border: 1px solid rgba(76, 175, 80, 0.4);
-    box-shadow: 0 4px 20px rgba(76, 175, 80, 0.2);
+    border: 1px solid rgba(76, 175, 80, 0.5);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
     width: 150px;
     text-align: center;
-    font-family: "Poppins",
-        sans-serif;
-    font-weight: 500;
-    color: var(--color-white);
+    font-family: var(--font-body);
+    font-weight: 600;
+    color: #ffffff;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
-.account-create-event {
+.passwordChange-save:hover {
+    background: linear-gradient(145deg, rgba(76, 175, 80, 0.5), rgba(102, 205, 102, 0.35));
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
+}
 
+
+.account-create-event {
     text-align: center;
 }
 
 
 .logOut-cont {
-    background-color: rgba(32, 112, 127, 0.35);
-    backdrop-filter: blur(10px) saturate(120%);
-    -webkit-backdrop-filter: blur(10px) saturate(120%);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 0 6px 18px rgba(16, 24, 32, 0.25);
-    border-radius: 8px;
+    background-color: rgba(7, 59, 58, 0.4);
+    backdrop-filter: blur(12px) saturate(150%);
+    -webkit-backdrop-filter: blur(12px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    border-radius: 16px;
+    color: var(--color-event-end);
     width: 90%;
     left: 5%;
-    bottom: 15vh;
+    bottom: 10vh;
     padding: 20px;
     position: absolute;
 }
@@ -207,20 +236,12 @@ html {
 }
 
 .logOut-el:hover {
-    transform: translateX(10px);
-    transition: 0.5s;
     cursor: pointer;
 }
 
 .logOut-el img {
     height: 30px;
 }
-
-.logOut-el span {
-    color: var(--color-event-end);
-
-}
-
 
 
 @media (min-width: 1024px) {
@@ -248,12 +269,12 @@ html {
     .account-passwordChange {
         display: flex;
         flex-direction: row;
-        background-color: rgba(32, 112, 127, 0.35);
-        backdrop-filter: blur(10px) saturate(120%);
-        -webkit-backdrop-filter: blur(10px) saturate(120%);
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        box-shadow: 0 6px 18px rgba(16, 24, 32, 0.25);
-        border-radius: 8px;
+        background-color: rgba(7, 59, 58, 0.4);
+        backdrop-filter: blur(12px) saturate(150%);
+        -webkit-backdrop-filter: blur(12px) saturate(150%);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        border-radius: 16px;
         width: 90%;
         margin: 20px 5% 0 5%;
     }

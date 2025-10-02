@@ -1,3 +1,25 @@
+:root {
+  --color-dark-teal: #073b3a;
+  --color-yellow: #f5ff65;
+  --color-green: #65ff81;
+  --color-deep-green: #021919;
+  --color-white: #ffffff;
+  --color-gray: #8f8f8f;
+  --color-event-start: #4caf50;
+  --color-event-end: #f44336;
+  --color-address: #1976d2;
+  --color-email: #e64a19;
+  --color-phone: #009688;
+  --color-link: #1565c0;
+  --color-capacity: #616161;
+  --color-price: #2e7d32;
+  --color-or: #20707f;
+
+  /* Font Variables */
+  --font-heading: "Montserrat Alternates", sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
 .map-cont {
   width: 100vw;
   height: 100vh;
@@ -21,6 +43,98 @@
   border-radius: 50%;
 }
 
+.leaflet-marker-icon.custom-icon {
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgb(115, 255, 0);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.marker-cluster-small div {
+  background-color: rgba(110, 204, 57, 0.9);
+  border: 2px solid #6ecc39;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  color: #000000;
+  font-weight: bold;
+  border-radius: 20px;
+  background-clip: padding-box;
+  opacity: 80%;
+}
+
+.marker-cluster-medium div {
+  background-color: rgba(240, 229, 12, 0.9);
+  border: 2px solid #f0e50c;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  color: #000000;
+  font-weight: bold;
+  border-radius: 20px;
+  background-clip: padding-box;
+  opacity: 80%;
+
+}
+
+.marker-cluster-large div {
+  background-color: rgba(241, 128, 23, 0.9);
+  border: 2px solid #f18017;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  color: #ffffff;
+  font-weight: bold;
+  border-radius: 20px;
+  background-clip: padding-box;
+  opacity: 80%;
+
+}
+
+.marker-cluster {
+  background-clip: padding-box;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  color: #ffffff;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* POPUP CARD */
+.leaflet-popup-content-wrapper {
+  padding: 1px;
+  background-image: url("../../assets/image/bg_pattern.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  text-align: left;
+  border-radius: 12px;
+}
+
+/* CROSS */
+.leaflet-container a.leaflet-popup-close-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border: none;
+  text-align: center;
+  width: 40px;
+  height: 40px;
+  font: 16px/24px Tahoma, Verdana, sans-serif;
+  color: var(--color-white);
+  text-decoration: none;
+  background: transparent;
+  text-align: center;
+}
+
+/* CROSS HOVER */
+.leaflet-container a.leaflet-popup-close-button:hover {
+  color: var(--color-yellow);
+}
+
+.leaflet-container a.leaflet-popup-close-button span {
+  font-size: 30px;
+  background-color: var(--color-dark-teal);
+  border: 2px solid var(--color-green);
+  padding: 0 9px;
+  border-radius: 50px;
+}
+
 .but {
   width: 100%;
   display: flex;
@@ -29,12 +143,7 @@
   margin-top: -100px;
   left: 10px;
 }
-.leaflet-marker-icon.custom-icon {
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid rgb(115, 255, 0);
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* тень */
-}
+
 
 .back-button {
   position: absolute;
@@ -42,12 +151,13 @@
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background-color: #f5ff66;
+  background-color: var(--color-dark-teal);
+  border: 2px solid var(--color-green);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 25px;
-  color: #000;
+  color: var(--color-white);
   text-decoration: none;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   z-index: 1000;
@@ -57,5 +167,34 @@
 
 .back-button:hover {
   transform: scale(1.1);
-  background-color: #f0f0f0;
+  background-color: var(--color-green);
+  color: var(--color-deep-green);
+}
+
+.marker__popup {
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(7, 59, 58, 0.4);
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  border-radius: 16px;
+  padding: 10px;
+  margin-top: 40px;
+}
+
+
+
+.popup--name {
+  color: var(--color-gray);
+  font-family: var(--font-heading);
+  font-size: 24px;
+  margin-top: 10px;
+}
+
+.popup--description {
+  color: var(--color-white);
+  font-family: var(--font-body);
+  margin-top: 10px;
 }

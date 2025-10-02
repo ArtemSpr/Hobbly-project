@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@500&family=Work+Sans:ital@0;1&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@500&family=Inter:wght@400;500;600;700&family=Crimson+Pro:wght@600;700&display=swap");
 
 :root {
   --color-dark-teal: #073b3a;
@@ -15,8 +15,7 @@ a {
 }
 
 a span {
-  color: var(--color-deep-dark);
-  font-family: "Work Sans", sans-serif;
+  font-family: var(--font-body);
 }
 
 .register-page {
@@ -37,6 +36,7 @@ a span {
 .signUp,
 .signIn {
   background-color: var(--color-green);
+  color: var(--color-deep-dark);
 }
 
 .skipPassword {

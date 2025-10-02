@@ -8,21 +8,12 @@ import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "./map.css";
 
-
-
-// const iconUrl = () => {};
-
-// const iconMark = L.icon({
-//   iconUrl: loc.image || markIcon,
-//   iconSize: [32, 32],
-//   iconAnchor: [16, 32],
-//   popupAnchor: [0, -32],
-// });
-
 const Map = () => {
   const { state } = useLocation();
   const locations = state?.locations || [];
   console.log("Got locations:", locations);
+
+  console.log("LOCATIONS", locations);
 
   return (
     <div className="map">
@@ -64,7 +55,6 @@ const Map = () => {
                 <Marker
                   key={loc.id}
                   position={[loc.latitude, loc.longitude]}
-              
                   icon={L.icon({
                     iconUrl: loc.image || markIcon,
                     iconSize: [64, 64],
@@ -74,17 +64,23 @@ const Map = () => {
                   })}
                 >
                   <Popup>
-                    <div>
+                    <div className="marker__popup">
                       <img
+                        className="popup--img"
                         src={loc.image || markIcon}
                         alt={loc.name || "location"}
                         style={{
-                          width: "80px",
-                          height: "80px",
+                          width: "100%",
+                          height: "100%",
                           objectFit: "cover",
                         }}
                       />
-                      <span>{loc.name || "No name"}</span>
+                      <span className="popup--name">
+                        {loc.name || "No name"}
+                      </span>
+                      <span className="popup--description">
+                        {loc.shortDescription || "No description"}
+                      </span>
                     </div>
                   </Popup>
                 </Marker>
