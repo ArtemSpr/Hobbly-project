@@ -288,7 +288,7 @@ select[name="eventType"]:focus {
 @media (max-width: 1200px) {
   .addEvent-form {
     width: 85vw;
-    margin: 20px auto;
+    margin: 10px 0 0 20vw;
     padding: 15px;
   }
 
@@ -313,6 +313,7 @@ select[name="eventType"]:focus {
   .addEvent-form {
     width: 95vw;
     margin: 15px auto;
+    transform: none;
     padding: 15px;
   }
 
