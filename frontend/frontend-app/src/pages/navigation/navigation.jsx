@@ -64,6 +64,7 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
     district: "",
   });
 
+
   const [searchTerm, setSearchTerm] = useState("");
   const eventRefs = useRef({});
   const [currentPage, setCurrentPage] = useState(1);
@@ -766,195 +767,23 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
 
   return (
     <div className="navigation">
-      {/* ========== NAVIGATION ACCOUNT ==========*/}
-      <div className="navigation-account">
-        <div className="nav-account-profile">
-          <img src={ProfileImage} alt="Profile" />
-          <div className="nav-profile-info">
-            <span className="profile-name">{userData?.name || "user"} </span>
-            <span className="profile-email">
-              {userData?.email || "userEmail@gmail.com"}{" "}
-            </span>
-          </div>
-          <div className="profile-role">{userData?.role || "guest"}</div>
+      /* ============ HEADER START ============ */
+      <header id="main-header" className="navi-header">
+        <div className="navi-logo">
+          <img src={Logo} alt="Logo" />
         </div>
-
-        {/* --------- PASSWORD CHANGING --------- */}
-        <div className="account-passwordChange">
-          <div
-            className="showHide-block"
-            onClick={() => {
-              setIsElOpen(!isElOpen);
-            }}
-          >
-            <span>
-              {isElOpen ? "Hide password change" : "Show password change"}
-            </span>
-            <img
-              src={ArrowLeft}
-              alt="Arrow"
-              className={`passwordIcon ${isElOpen ? "rotated" : ""}`}
+        <div className="search-container">
+          <div className="search-input-wrapper">
+            <input
+              type="text"
+              placeholder="Hae tapahtumia..."
+              value={searchTerm}
+              onChange={(e) => handleSearch(e)}
             />
-          </div>
-          <form
-            className={`password-card-form ${isElOpen ? "show" : "hide"}`}
-            onSubmit={handleSubmit}
-          >
-            <div className="passwordChange-title">
-              <span>Change Password</span>
-            </div>
-            <div className="passwordChange-content">
-              <div className="password-input-wrapper">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  name="password"
-                  placeholder="Enter password"
-                  value={password}
-                  onChange={handlePasswordChange}
-                  onBlur={() => setIsPasswordTouched(true)}
-                  className={`input-field ${
-                    isPasswordInvalid && isPasswordTouched
-                      ? "input-field-red"
-                      : ""
-                  }`}
-                />
-                <span
-                  className="password-toggle-icon"
-                  onClick={() => setShowPassword((p) => !p)}
-                  style={{ cursor: "pointer" }}
-                >
-                  {showPassword ? "🙈" : "👁️"}
-                </span>
-              </div>
-              {password && (
-                <ul className="password-checklist hidden">
-                  <li
-                    className={passwordValidations.length ? "valid" : "invalid"}
-                  >
-                    8–20 merkkiä
-                  </li>
-                  <li
-                    className={passwordValidations.upper ? "valid" : "invalid"}
-                  >
-                    Vähintään yksi iso kirjain
-                  </li>
-                  <li
-                    className={passwordValidations.lower ? "valid" : "invalid"}
-                  >
-                    Vähintään yksi pieni kirjain
-                  </li>
-                  <li
-                    className={passwordValidations.number ? "valid" : "invalid"}
-                  >
-                    Vähintään yksi numero
-                  </li>
-                  <li
-                    className={
-                      passwordValidations.special ? "valid" : "invalid"
-                    }
-                  >
-                    Vähintään yksi erikoismerkki (!@#$)
-                  </li>
-                </ul>
-              )}
-              <div className="password-input-wrapper">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  name="repPassword"
-                  placeholder="Repeat password"
-                  value={repPassword}
-                  onChange={handleRepPasswordChange}
-                  onBlur={() => setIsRepPasswordTouched(true)}
-                  className={`input-field ${
-                    !doPasswordsMatch && isRepPasswordTouched
-                      ? "input-field-red"
-                      : ""
-                  }`}
-                />
-                <span
-                  className="password-toggle-icon"
-                  onClick={() => setShowPassword((p) => !p)}
-                  style={{ cursor: "pointer" }}
-                >
-                  {showPassword ? "🙈" : "👁️"}
-                </span>
-              </div>
-              {!doPasswordsMatch && isRepPasswordTouched && (
-                <div className="password-checklist not-match">
-                  <li className="invalid">Passwords do not match</li>
-                </div>
-              )}
-
-              <div className="passwordChange-buttons">
-                <button
-                  type="button"
-                  className="passwordChange-cancel"
-                  onClick={() => {
-                    setPassword("");
-                    setRepPassword("");
-                  }}
-                >
-                  Cancel
-                </button>
-                <button className="passwordChange-save" type="submit">
-                  Save
-                </button>
-              </div>
-            </div>
-          </form>
-        </div>
-        {/* --------- ADDING NEW EVENTS --------- */}
-
-        <div
-          className="add-events-cont account-create-event"
-          onClick={() => setIsCreateEventOpen(!isCreateEventOpen)}
-        >
-          <Link to="/navigation" className={"active"}>
-            <span> Create own event</span> <img src={GreenPlus}></img>
-          </Link>
-        </div>
-        <div className="mapBut">
-          <div className="mapButIns">
-            <Link
-              to="/map"
-              state={{ locations: eventLocations }}
-              className="active"
-            >
-              <img src={MapIcon} alt="Map" />
-              <span>Map</span>
-            </Link>
+            <img src={SearchGray} alt="Search" className="search-icon" />
           </div>
         </div>
-        <div className="nav-logOut-cont">
-          <div className="logOut-el">
-            <Link to="/" className={"active"}>
-              <img src={LogOut} alt="Home" />
-              <span>LogOut</span>
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      <div className="navigation-cont">
-        {/* ============ HEADER START ============ */}
-        <header id="main-header" className="navi-header">
-          <div className="navi-logo">
-            <img src={Logo} alt="Logo" />
-          </div>
-          <div
-            className={`search-container ${isCreateEventOpen ? "hide" : ""}`}
-          >
-            <div className="search-input-wrapper">
-              <input
-                type="text"
-                placeholder="Hae tapahtumia..."
-                value={searchTerm}
-                onChange={(e) => handleSearch(e)}
-              />
-              <img src={SearchGray} alt="Search" className="search-icon" />
-            </div>
-          </div>
-        </header>
+      </header>
 
         {/* ============ MAIN START ============ */}
         <main className="main-content" ref={containerRef}>
@@ -1220,96 +1049,83 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
                   aria-label="Filter Titles"
                   options={{
                     type: "loop",
-                    arrows: false,
-                    pagination: false,
+                    perPage: 1,
+                    interval: 3000,
+                    arrows: true,
+                    pagination: true,
+                    speed: 500,
                   }}
+                  aria-label="Filter Options"
                 >
                   <SplideSlide>
-                    <div className="filter-title">Aika</div>
+                    <div className="filter-row">
+                      <div className="filter-title">Aika</div>
+                      <div className="filter-version">
+                        <div className="filter-version-item">Uusin ensin</div>
+                        <div className="filter-version-item">Vanhin ensin</div>
+                        <div className="filter-version-item">Tännän</div>
+                        <div className="filter-version-item">Tämä viikko</div>
+                        <div className="filter-version-item">Tämä kuukausi</div>
+                      </div>
+                    </div>
                   </SplideSlide>
                   <SplideSlide>
-                    <div className="filter-title">Paikkakunta</div>
+                    <div className="filter-row">
+                      <div className="filter-title">Paikkakunta</div>
+                      <div className="filter-places-container">
+                        <label>
+                          <input type="checkbox" />
+                          <span>Helsinki</span>
+                        </label>
+                        <label>
+                          <input type="checkbox" />
+                          <span>Espoo</span>
+                        </label>
+                        <label>
+                          <input type="checkbox" />
+                          <span>Vuosari</span>
+                        </label>
+                        <label>
+                          <input type="checkbox" />
+                          <span>Vantaa</span>
+                        </label>
+                        <label>
+                          <input type="checkbox" />
+                          <span>Melunmäki</span>
+                        </label>
+                      </div>
+                    </div>
                   </SplideSlide>
                   <SplideSlide>
-                    <div className="filter-title">Avainsanat</div>
+                    <div className="filter-row">
+                      <div className="filter-title">Avainsanat</div>
+                      <div className="filter-keywords-container">
+                        <span>Konsertti</span>
+                        <span>Näyttely</span>
+                        <span>Festivaali</span>
+                        <span>Seminaari</span>
+                        <span>Työpaja</span>
+                        <span>Näytelmä</span>
+                        <span>Markkinat</span>
+                        <span>Tapaaminen</span>
+                        <span>Esittely</span>
+                        <span>Juhla</span>
+                      </div>
+                    </div>
                   </SplideSlide>
                 </Splide>
-                <div className="filter-rows-container">
-                  <Splide
-                    ref={optionsRef}
-                    aria-label="Filter Options"
-                    className="slider"
-                    options={{
-                      perPage: 1,
-                      interval: 3000,
-                      arrows: false,
-                      pagination: true,
-                      speed: 500,
-                    }}
-                  >
-                    <SplideSlide>
-                      <div className="filter-row">
-                        <div className="filter-version">
-                          {filterTime.map((time) => (
-                            <div
-                              key={time}
-                              className="filter-version-item"
-                              onClick={() => filterTimeHandler(time)}
-                            >
-                              {time}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </SplideSlide>
-                    <SplideSlide>
-                      <div className="filter-row">
-                        <div className="filter-places-container">
-                          {districts.map((district) => (
-                            <label
-                              key={district.value}
-                              onClick={() => filterPlaceHandler(district)}
-                            >
-                              <input
-                                type="checkbox"
-                                checked={filterParams[1].includes(
-                                  district.value
-                                )}
-                                readOnly
-                              />
-                              <span>{district.name}</span>
-                            </label>
-                          ))}
-                        </div>
-                      </div>
-                    </SplideSlide>
-                    <SplideSlide>
-                      <div className="filter-row">
-                        <div className="filter-keywords-container">
-                          {keywords.map((keyword) => (
-                            <span
-                              key={keyword}
-                              onClick={() => filterKeywordHandler(keyword)}
-                            >
-                              {keyword}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    </SplideSlide>
-                  </Splide>
+              </div>
+              <div className="filter-button-container">
+                <div className="discard-button" onClick={toggleFilterPanel}>
+                  Hylkää suodattimet
                 </div>
-                <div id="filter-buttons" className="filter-button-container">
-                  <div className="discard-button" onClick={declineFilterButton}>
-                    Hylkää
-                  </div>
-                  <div className="apply-button" onClick={applyFilterButton}>
-                    Hyväksy
-                  </div>
+                <div className="apply-button" onClick={toggleFilterPanel}>
+                  Hyväksy suodattimet
                 </div>
               </div>
-            )}
-          </div>
+            </div>
+          )}
+        </div>
 
           <div
             className={`pagination-arrows ${isCreateEventOpen ? "hide" : ""}`}
