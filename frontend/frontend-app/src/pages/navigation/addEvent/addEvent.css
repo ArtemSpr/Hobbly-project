@@ -30,7 +30,7 @@
     flex-direction: column;
     width: 100%;
     max-width: 1000px;
-    margin: 20px auto;
+    margin: 20px 0 0 30vw;
     box-sizing: border-box;
     padding: 20px;
     background-color: rgba(7, 59, 58, 0.4);
