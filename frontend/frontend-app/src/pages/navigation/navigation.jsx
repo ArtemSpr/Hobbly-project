@@ -37,12 +37,12 @@ import MapIcon from "../../assets/icons/map-white.png";
 import AccountIcon from "../../assets/icons/account-icon.png";
 import { divIcon } from "leaflet";
 
-// #TODO: Пошукове поле відкривається лише пілся натискання на іконку
+// #TODO: Search bar open only after pressing the search button
 
 // #TODO: Admine page
 // #TODO:   Dashboard
 
-// #TODO: Скопіювати стиль зміни пароля до мобільної версії
+// #TODO: Copy "change password" styles to account page
 // #FIXME: Change filter slider to list in tablets and desktop
 // #IDEA: User can like events
 
@@ -158,14 +158,13 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
   // ====== FUNCTION THAT FETCHES EVENTS FROM API ======
   const fetchEvents = async (page) => {
     setLoading(true);
-    let addedNew = false;
 
     try {
       let requestUrl;
       if (apiLink.includes("?")) {
-        requestUrl = `${apiLink}/&page=${page}`;
+        requestUrl = `${apiLink}&page=${page}`;
       } else {
-        requestUrl = `${apiLink}/?page=${page}`;
+        requestUrl = `${apiLink}?page=${page}`;
       }
 
       console.log("Request URL: " + requestUrl);
@@ -174,7 +173,7 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
       const now = new Date();
 
       if (response.status === 200) {
-        const newEvents = response.data.data.filter((event) => {
+        const newServerEvents = response.data.data.filter((event) => {
           const endTime = event.end_time ? new Date(event.end_time) : null;
           return (
             event.super_event === null && (endTime === null || endTime > now)
@@ -182,7 +181,7 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
         });
 
         setEvents((prev) => {
-          const combined = [...prev, ...newEvents];
+          const combined = [...newEvents, ...prev, ...newServerEvents];
           const unique = combined.filter(
             (e, index, self) => index === self.findIndex((ev) => ev.id === e.id)
           );
@@ -194,8 +193,6 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
     } finally {
       setLoading(false);
     }
-
-    return addedNew;
   };
 
   useEffect(() => {
@@ -343,13 +340,17 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
   };
 
   // ===== DATE & TIME SPLITTER =====
-  function getDay(dateString) {
-    return new Date(dateString).toISOString().split("T")[0];
-  }
+  const getDay = (dateString) => {
+    if (!dateString) return "—";
+    const d = new Date(dateString);
+    return isNaN(d) ? "—" : d.toISOString().split("T")[0];
+  };
 
-  function getTime(dateString) {
-    return new Date(dateString).toISOString().split("T")[1].slice(0, 5);
-  }
+  const getTime = (dateString) => {
+    if (!dateString) return "—";
+    const d = new Date(dateString);
+    return isNaN(d) ? "—" : d.toISOString().split("T")[1].slice(0, 5);
+  };
 
   // ===== SEARCH FUNCTIONALITY =====
   const handleSearch = (e) => {
@@ -734,6 +735,7 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
   const handleEventData = (formData, image) => {
     try {
       setNewEvents((prev) => [...prev, formData]);
+      setEvents((prev) => [...prev, formData]);
       setNewEventImage(image);
       // setEvents((prev) => [...prev, formData]);
       console.log("Form submitted:", { ...formData });
@@ -742,6 +744,10 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
       console.error("Error with setting new event data");
     }
   };
+
+  // useEffect(() => {
+  //   const didNewEventAdded = events.find((event)=>event);
+  // }, [newEvents]);
 
   const ownEventsCloser = () => {
     setIsOwnEventClosen(!isOwnEventClosen);
@@ -1332,7 +1338,11 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
         {/* ============ FOOTER START ============ */}
         <footer className="navigation-footer">
           <div className="footer-el">
-            <Link to="/navigation" className="active">
+            <Link
+              to="/navigation"
+              className="active"
+              onClick={() => setIsCreateEventOpen(!isCreateEventOpen)}
+            >
               <img src={HomeIcon} alt="Home" />
               <span>Kotisivu</span>
             </Link>

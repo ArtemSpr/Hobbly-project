@@ -288,7 +288,7 @@ select[name="eventType"]:focus {
 @media (max-width: 1200px) {
   .addEvent-form {
     width: 85vw;
-    margin: 20px auto;
+    margin: 10px 0 0 20vw;
     padding: 15px;
   }
 
@@ -313,6 +313,7 @@ select[name="eventType"]:focus {
   .addEvent-form {
     width: 95vw;
     margin: 15px auto;
+    transform: none;
     padding: 15px;
   }
 
@@ -434,11 +435,9 @@ select[name="eventType"]:focus {
 
 .publish-button {
   padding: 12px 40px;
-  background: linear-gradient(
-    135deg,
-    var(--color-green),
-    var(--color-event-start)
-  );
+  background: linear-gradient(135deg,
+      var(--color-green),
+      var(--color-event-start));
   color: var(--color-deep-green);
   border: none;
   border-radius: 8px;
@@ -631,6 +630,7 @@ body {
 
 /* phones: no fixed widths, no 100vw (which ignores parent padding) */
 @media (max-width: 480px) {
+
   .addEvent-page,
   .addEvent-form {
     width: auto !important;
@@ -667,6 +667,7 @@ body {
 
 /* small tablets: also ensure no sideways scroll */
 @media (max-width: 767px) {
+
   .form-image-preview,
   .image-block,
   .custom-upload {
@@ -677,6 +678,7 @@ body {
 
 /* Mobile: match inputs to Enter image width */
 @media (max-width: 768px) {
+
   .form-input,
   .form-textarea,
   .custom-upload {
