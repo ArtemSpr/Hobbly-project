@@ -141,6 +141,7 @@ body {
 .password-card-form {
     padding: 20px;
     width: 100%;
+    margin-top: 20px;
 }
 
 .passwordChange-title {
@@ -265,7 +266,7 @@ body {
     }
 }
 
-@media (max-width:767px) {
+@media (max-width:820px) {
     .account-passwordChange {
         display: flex;
         flex-direction: row;

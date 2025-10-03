@@ -1337,7 +1337,7 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
         </main>
         {/* ============ FOOTER START ============ */}
         <footer className="navigation-footer">
-          <div className="footer-el">
+          <div className="footer-el footer__el--home">
             <Link
               to="/navigation"
               className="active"
@@ -1348,7 +1348,7 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
             </Link>
           </div>
 
-          <div className="footer-el">
+          <div className="footer-el footer__el--map">
             <div className="mapButphone">
               <Link
                 to="/map"
@@ -1361,7 +1361,7 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
             </div>
           </div>
 
-          <div className="footer-el">
+          <div className="footer-el footer__el--account">
             <Link to="/account" className="active">
               <img src={AccountIcon} alt="Account" />
               <span>Account</span>
