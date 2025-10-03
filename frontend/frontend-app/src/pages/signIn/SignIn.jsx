@@ -140,6 +140,7 @@ const SignIn = ({ sendDataToParent }) => {
         <br />
         <Link to="/forgot-password">Forgot Password?</Link>
       </div>
+      <footer>© 2025 Hobbly. All rights reserved.</footer>
     </div>
   );
 };
