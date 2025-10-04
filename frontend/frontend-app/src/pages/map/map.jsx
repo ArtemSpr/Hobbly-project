@@ -1,25 +1,80 @@
 import { Link, useLocation } from "react-router-dom";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import markIcon from "../../assets/icons/yellow-logo.png";
+import markIcon from "../../assets/icons/account-icon.png";
 import MarkerClusterGroup from "react-leaflet-markercluster";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "./map.css";
+import { useEffect, useState, useRef } from "react";
+
+const LiveLocationMarker = ({ setPosition }) => {
+  const mapRef = useRef();
+
+  const pulsingIcon = L.divIcon({
+    className: "pulsing-icon",
+    iconSize: [40, 40],
+    iconAnchor: [20, 20],
+    popupAnchor: [0, -20],
+    html: `<div class="inner-icon"></div>`,
+  });
+
+  useEffect(() => {
+    if (!navigator.geolocation) return;
+
+    const watcher = navigator.geolocation.watchPosition(
+      (pos) => {
+        const { latitude, longitude } = pos.coords;
+        const newPos = [latitude, longitude];
+        setPosition(newPos);
+        mapRef.current?.setView(newPos, 14);
+      },
+      (err) => console.error("Geolocation error:", err),
+      { enableHighAccuracy: true }
+    );
+
+    return () => navigator.geolocation.clearWatch(watcher);
+  }, [setPosition]);
+
+  return null;
+};
+const MyPositionButton = ({ position }) => {
+  const map = useMap();
+
+  return (
+    <button
+      className="me-but"
+      onClick={() => {
+        if (position) {
+          map.flyTo(position, 14, { animate: true, duration: 1.5 });
+        }
+      }}
+    >
+      My position
+    </button>
+  );
+};
 
 const Map = () => {
   const { state } = useLocation();
   const locations = state?.locations || [];
-  console.log("Got locations:", locations);
+  const [position, setPosition] = useState(null);
 
-  console.log("LOCATIONS", locations);
+  const pulsingIcon = L.divIcon({
+    className: "pulsing-icon",
+    iconSize: [40, 40],
+    iconAnchor: [20, 20],
+    popupAnchor: [0, -20],
+    html: `<div class="inner-icon"></div>`,
+  });
 
+  const mapRef = useRef();
   return (
     <div className="map">
-      <div className="map-cont">
+      <div className="map-cont" style={{ position: "relative" }}>
         <MapContainer
-          center={[60.17, 24.93]} // Helsinki
+          center={[60.17, 24.93]}
           zoom={12}
           minZoom={11}
           maxZoom={17}
@@ -29,12 +84,8 @@ const Map = () => {
           ]}
           maxBoundsViscosity={1.0}
           scrollWheelZoom
-          doubleClickZoom
-          dragging
-          zoomControl
-          touchZoom
-          preferCanvas
           style={{ height: "100%", width: "100%" }}
+          whenCreated={(mapInstance) => (mapRef.current = mapInstance)}
         >
           <TileLayer
             url="https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoid2VsbG5vdGUiLCJhIjoiY205ODZuODJqMGV4eDJsc2VwZ3hraHAzaSJ9.Ei8toDcIcpyPbVlu6BLkvw"
@@ -43,6 +94,15 @@ const Map = () => {
             tileSize={512}
             zoomOffset={-1}
           />
+
+          <LiveLocationMarker setPosition={setPosition} />
+
+          {position && (
+            <Marker position={position} icon={pulsingIcon}>
+              <Popup>You are here</Popup>
+            </Marker>
+          )}
+
           <MarkerClusterGroup
             spiderfyOnClick
             showCoverageOnHover
@@ -86,8 +146,10 @@ const Map = () => {
                 </Marker>
               ))}
           </MarkerClusterGroup>
+          <MyPositionButton position={position} />
         </MapContainer>
       </div>
+
       <div className="but">
         <Link to="/navigation" className="back-button">
           &lt;

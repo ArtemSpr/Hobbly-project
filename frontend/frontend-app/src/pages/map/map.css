@@ -17,7 +17,7 @@
 
   /* Font Variables */
   --font-heading: "Montserrat Alternates", sans-serif;
-  --font-body: 'Inter', sans-serif;
+  --font-body: "Inter", sans-serif;
 }
 
 .map-cont {
@@ -70,7 +70,6 @@
   border-radius: 20px;
   background-clip: padding-box;
   opacity: 80%;
-
 }
 
 .marker-cluster-large div {
@@ -82,7 +81,6 @@
   border-radius: 20px;
   background-clip: padding-box;
   opacity: 80%;
-
 }
 
 .marker-cluster {
@@ -144,7 +142,6 @@
   left: 10px;
 }
 
-
 .back-button {
   position: absolute;
   right: 10px;
@@ -184,8 +181,6 @@
   margin-top: 40px;
 }
 
-
-
 .popup--name {
   color: var(--color-gray);
   font-family: var(--font-heading);
@@ -197,4 +192,72 @@
   color: var(--color-white);
   font-family: var(--font-body);
   margin-top: 10px;
+}
+.popup {
+  color: white;
+}
+.pulsing-icon {
+  width: 40px;
+  height: 40px;
+  position: relative;
+  background-color: #000000;
+  border-radius: 30px;
+}
+
+.pulsing-icon::after {
+  content: "";
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.7);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: pulse 1.5s infinite;
+  z-index: -1;
+}
+
+.inner-icon {
+  width: 40px;
+  height: 40px;
+  background-image: url("../../assets/icons/account-icon.png");
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+}
+
+@keyframes pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0;
+  }
+}
+.me-but {
+  cursor: pointer;
+  position: absolute;
+  bottom: 40px;
+  right: 70px;
+  z-index: 1000;
+  padding: 18px 20px;
+  font-size: larger;
+
+  background-color: #083b3a;
+  border-radius: var(--radius-large);
+  color: white;
+  border: 2px solid var(--color-green);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.me-but:hover {
+  transform: scale(1.1);
+  background-color: var(--color-green);
+  color: var(--color-deep-green);
 }
