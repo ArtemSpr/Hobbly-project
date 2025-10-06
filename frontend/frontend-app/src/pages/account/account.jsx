@@ -134,7 +134,7 @@ const Account = ({ userData, isCreateEventOpen, setIsCreateEventOpen }) => {
   useEffect(() => {
     const addEvents = document.querySelector(".add-events-cont");
 
-    if (userData?.role === "organizer") {
+    if (userData?.role === "organizer" || userData?.role === "admin") {
       addEvents.classList.add("shown");
     }
   }, []);

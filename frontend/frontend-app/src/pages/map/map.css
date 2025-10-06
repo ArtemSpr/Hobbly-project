@@ -110,7 +110,9 @@
   top: 0;
   right: 0;
   border: none;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 40px;
   height: 40px;
   font: 16px/24px Tahoma, Verdana, sans-serif;
@@ -127,10 +129,15 @@
 
 .leaflet-container a.leaflet-popup-close-button span {
   font-size: 30px;
-  background-color: var(--color-dark-teal);
-  border: 2px solid var(--color-green);
+  /* background-color: var(--color-dark-teal);   */
+  /* border: 2px solid var(--color-green); */
   padding: 0 9px;
   border-radius: 50px;
+}
+
+.leaflet-popup-content {
+  color: white;
+  margin-right: 40px;
 }
 
 .but {
@@ -193,9 +200,11 @@
   font-family: var(--font-body);
   margin-top: 10px;
 }
+
 .popup {
   color: white;
 }
+
 .pulsing-icon {
   width: 40px;
   height: 40px;
@@ -225,6 +234,8 @@
   background-size: cover;
   background-position: center;
   border-radius: 50%;
+  background-color: var(--color-dark-teal);
+
 }
 
 @keyframes pulse {
@@ -232,15 +243,18 @@
     transform: translate(-50%, -50%) scale(1);
     opacity: 0.7;
   }
+
   50% {
     transform: translate(-50%, -50%) scale(1.5);
     opacity: 0;
   }
+
   100% {
     transform: translate(-50%, -50%) scale(1);
     opacity: 0;
   }
 }
+
 .me-but {
   cursor: pointer;
   position: absolute;
@@ -256,6 +270,7 @@
   border: 2px solid var(--color-green);
   transition: transform 0.2s ease, background 0.2s ease;
 }
+
 .me-but:hover {
   transform: scale(1.1);
   background-color: var(--color-green);
