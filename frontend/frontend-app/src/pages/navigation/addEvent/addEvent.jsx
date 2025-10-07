@@ -306,7 +306,7 @@ const AddEvent = ({ userData, onData }) => {
 
           {/* Phone Input */}
           <div className="input-group">
-            <label htmlFor="phone">Phone Number</label>
+            <label htmlFor="phone">Phone Number 🇫🇮</label>
             <input
               type="tel"
               id="phone"

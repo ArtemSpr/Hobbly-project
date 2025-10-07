@@ -953,7 +953,7 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
             <div className="search-input-wrapper">
               <input
                 type="text"
-                placeholder="Hae tapahtumia..."
+                placeholder="Search for events..."
                 value={searchTerm}
                 onChange={(e) => handleSearch(e)}
               />
@@ -1078,17 +1078,17 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
                         <div className="event-contact">
                           <div className="event-email">
                             <img src={EventEmail} alt="Event Email" />
-                            {eventLocation.contactEmail || "Tuntematon"}
+                            {eventLocation.contactEmail || "Unknown"}
                           </div>
                           <div className="event-phone">
                             <img src={EventPhone} alt="Event Phone" />
-                            {eventLocation.contactPhone || "Tuntematon"}
+                            {eventLocation.contactPhone || "Unknown"}
                           </div>
                         </div>
                         <div className="event-bonus-info">
                           <div className="event-address">
                             <img src={EventLocation} alt="Event Address" />
-                            {eventLocation.address || "Tuntematon"}
+                            {eventLocation.address || "Unknown"}
                           </div>
 
                           <div
@@ -1097,7 +1097,7 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
                             }`}
                           >
                             <img src={EventCapa} alt="Event Capacity" />
-                            {event.maximum_capacity || "Tuntematon"}
+                            {event.maximum_capacity || "Unknown"}
                           </div>
                           <div
                             className={`event-free ${
@@ -1105,7 +1105,7 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
                             }`}
                           >
                             <img src={EventPrice} alt="Event Free" />
-                            {event.is_free ? "Ilmainen" : "Maksullinen"}{" "}
+                            {event.is_free ? "Free" : "Paid"}{" "}
                           </div>
                         </div>
                       </div>
@@ -1147,7 +1147,7 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
                               activeEventId === event.id ? "shown" : ""
                             }`}
                           />
-                          Lue lisää linkistä
+                          Read more at the link
                         </a>
                       ) : (
                         <a
@@ -1164,7 +1164,7 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
                               activeEventId === event.id ? "shown" : ""
                             }`}
                           />
-                          Linkki lisätään myöhemmin
+                          Link will be added later.
                         </a>
                       )}
 
@@ -1231,13 +1231,13 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
                   }}
                 >
                   <SplideSlide>
-                    <div className="filter-title">Aika</div>
+                    <div className="filter-title">Time</div>
                   </SplideSlide>
                   <SplideSlide>
-                    <div className="filter-title">Paikkakunta</div>
+                    <div className="filter-title">Place</div>
                   </SplideSlide>
                   <SplideSlide>
-                    <div className="filter-title">Avainsanat</div>
+                    <div className="filter-title">Keyword</div>
                   </SplideSlide>
                 </Splide>
                 <div className="filter-rows-container">
@@ -1307,10 +1307,10 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
                 </div>
                 <div id="filter-buttons" className="filter-button-container">
                   <div className="discard-button" onClick={declineFilterButton}>
-                    Hylkää
+                    Discard
                   </div>
                   <div className="apply-button" onClick={applyFilterButton}>
-                    Hyväksy
+                    Apply
                   </div>
                 </div>
               </div>
@@ -1344,7 +1344,7 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
               onClick={() => setIsCreateEventOpen(!isCreateEventOpen)}
             >
               <img src={HomeIcon} alt="Home" />
-              <span>Kotisivu</span>
+              <span>Home</span>
             </Link>
           </div>
 
@@ -1356,7 +1356,7 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
                 className="active"
               >
                 <img src={MapIcon} alt="Map" />
-                <span>Kartta</span>
+                <span>Map</span>
               </Link>
             </div>
           </div>
