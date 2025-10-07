@@ -148,17 +148,21 @@ const Account = ({ userData, isCreateEventOpen, setIsCreateEventOpen }) => {
         <img src={ProfileImage} alt="Profile" />
         <div className="profile-info">
           <span className="profile-name" onClick={copyToClipboard}>
-            {userData?.name || "user"}{" "}
+            {userData?.name || userData?.newUser.name || "user"}{" "}
           </span>
           <span className="profile-email">
-            {userData?.email || "userEmail@gmail.com"}{" "}
+            {userData?.email ||
+              userData?.newUser.email ||
+              "userEmail@gmail.com"}{" "}
             <img
               src={copyIcon}
               alt="Copy email"
               style={{ cursor: "pointer", width: "18px" }}
             />
           </span>
-          <div className="profile-role">{userData?.role || "guest"}</div>
+          <div className="profile-role">
+            {userData?.role || userData?.newUser.role || "guest"}
+          </div>
         </div>
       </div>
 

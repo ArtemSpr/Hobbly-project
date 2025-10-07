@@ -803,13 +803,13 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
               {userData?.name || userData?.newUser.name || "user"}{" "}
             </span>
             <span className="profile-email">
-              {userData?.name ||
+              {userData?.email ||
                 userData?.newUser.email ||
                 "userEmail@gmail.com"}{" "}
             </span>
           </div>
           <div className="profile-role">
-            {userData?.name || userData?.newUser.role || "guest"}
+            {userData?.role || userData?.newUser.role || "guest"}
           </div>
         </div>
 
