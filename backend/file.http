@@ -1,4 +1,4 @@
-GET  http://localhost:5234/api/events
+GET  http://localhost:5234/api/user
 
 ###
 

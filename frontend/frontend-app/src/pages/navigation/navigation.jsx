@@ -800,14 +800,16 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
           <img src={ProfileImage} alt="Profile" />
           <div className="nav-profile-info">
             <span className="profile-name">
-              {userData?.newUser.name || "user"}{" "}
+              {userData?.name || userData?.newUser.name || "user"}{" "}
             </span>
             <span className="profile-email">
-              {userData?.newUser.email || "userEmail@gmail.com"}{" "}
+              {userData?.name ||
+                userData?.newUser.email ||
+                "userEmail@gmail.com"}{" "}
             </span>
           </div>
           <div className="profile-role">
-            {userData?.newUser.role || "guest"}
+            {userData?.name || userData?.newUser.role || "guest"}
           </div>
         </div>
 
