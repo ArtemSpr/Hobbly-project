@@ -78,10 +78,6 @@ const Map = () => {
           zoom={12}
           minZoom={11}
           maxZoom={17}
-          maxBounds={[
-            [59.8, 24.4],
-            [60.5, 25.5],
-          ]}
           maxBoundsViscosity={1.0}
           scrollWheelZoom
           style={{ height: "100%", width: "100%" }}

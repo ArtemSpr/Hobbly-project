@@ -136,7 +136,7 @@ const OwnEvents = ({ newEvents, setNewEvents, newEventImage }) => {
                     }`}
                   >
                     <img src={EventPrice} alt="Event Type" />
-                    {event.eventType === "free" ? "Ilmainen" : "Maksullinen"}
+                    {event.eventType === "free" ? "Free" : "Paid"}
                   </div>
                 </div>
               </div>
@@ -173,7 +173,7 @@ const OwnEvents = ({ newEvents, setNewEvents, newEventImage }) => {
                       activeEventId === (event.id || index) ? "shown" : ""
                     }`}
                   />
-                  Lue lisää linkistä
+                  Read more at the link
                 </a>
               ) : (
                 <div
@@ -188,7 +188,7 @@ const OwnEvents = ({ newEvents, setNewEvents, newEventImage }) => {
                       activeEventId === (event.id || index) ? "shown" : ""
                     }`}
                   />
-                  Linkki lisätään myöhemmin
+                  Link will be added later.
                 </div>
               )}
 
@@ -199,7 +199,7 @@ const OwnEvents = ({ newEvents, setNewEvents, newEventImage }) => {
                       activeEventId === (event.id || index) ? "shown" : ""
                     }`}
                   >
-                    Tai
+                    Or
                   </span>
                   <a
                     href={event.ticketUrl}
@@ -216,7 +216,7 @@ const OwnEvents = ({ newEvents, setNewEvents, newEventImage }) => {
                         activeEventId === (event.id || index) ? "shown" : ""
                       }`}
                     />
-                    Ostaa liput tästä
+                    Buy ticket here
                   </a>
                 </div>
               )}
