@@ -1019,7 +1019,7 @@ a.active img {
 .filter-wrapper {
   position: fixed;
   right: 22px;
-  top: 88%;
+  top: 70%;
   z-index: 1001;
 }
 
