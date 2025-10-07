@@ -189,6 +189,7 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
           );
         });
 
+        // console.log("EVENT", newEvents);
         setEvents((prev) => {
           const combined = [...newEvents, ...prev, ...newServerEvents];
           const unique = combined.filter(
@@ -323,7 +324,7 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
 
     setActiveEventId((prev) => (prev === event.id ? null : event.id));
 
-    const placeApiUrl = event.location["@id"];
+    const placeApiUrl = event._id || event.location["@id"];
     console.log("Place API URL:", placeApiUrl);
 
     try {
@@ -1053,7 +1054,7 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
                     <img
                       src={
                         event.images && event.images[0]
-                          ? event.images[0].url
+                          ? event.images[0].url || event.imageUrl
                           : ThirdEventImage
                       }
                       alt={
@@ -1069,12 +1070,14 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
                       {event.provider?.fi ||
                         event.provider?.sv ||
                         event.provider?.en ||
+                        event.companyName ||
                         "Company"}
                     </div>
                     <div className="event-title">
                       {event.name?.fi ||
                         event.name?.sv ||
                         event.name?.en ||
+                        event.title ||
                         "Event title"}
                     </div>
 
@@ -1086,15 +1089,21 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
                       >
                         <div className="event-date">
                           <img src={EventDate} alt="Event Date" />
-                          <span>{getDay(event.start_time)}</span>{" "}
+                          <span>
+                            {getDay(event.start_time || event.date)}
+                          </span>{" "}
                         </div>
                         <div className="event-start-time">
                           <img src={EventStart} alt="Start Time" />
-                          <span>{getTime(event.start_time)}</span>
+                          <span>
+                            {getTime(event.start_time || event.startTime)}
+                          </span>
                         </div>
                         <div className="event-end-time">
                           <img src={EventEnd} alt="End Time" />
-                          <span>{getTime(event.end_time)}</span>
+                          <span>
+                            {getTime(event.end_time || event.endTime)}
+                          </span>
                         </div>
                       </div>
 
@@ -1106,17 +1115,23 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
                         <div className="event-contact">
                           <div className="event-email">
                             <img src={EventEmail} alt="Event Email" />
-                            {eventLocation.contactEmail || "Unknown"}
+                            {eventLocation.contactEmail ||
+                              event.email ||
+                              "Unknown"}
                           </div>
                           <div className="event-phone">
                             <img src={EventPhone} alt="Event Phone" />
-                            {eventLocation.contactPhone || "Unknown"}
+                            {eventLocation.contactPhone ||
+                              event.phone ||
+                              "Unknown"}
                           </div>
                         </div>
                         <div className="event-bonus-info">
                           <div className="event-address">
                             <img src={EventLocation} alt="Event Address" />
-                            {eventLocation.address || "Unknown"}
+                            {eventLocation.address ||
+                              event.address ||
+                              "Unknown"}
                           </div>
 
                           <div
@@ -1125,7 +1140,9 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
                             }`}
                           >
                             <img src={EventCapa} alt="Event Capacity" />
-                            {event.maximum_capacity || "Unknown"}
+                            {event.maximum_capacity ||
+                              event.maxCapacity ||
+                              "Unknown"}
                           </div>
                           <div
                             className={`event-free ${
@@ -1150,7 +1167,7 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
                         dangerouslySetInnerHTML={{
                           __html: getTruncatedText(
                             activeEventId === event.id
-                              ? event.description?.fi
+                              ? event.description?.fi || event.description
                               : event.short_description?.fi,
                             1200,
                             eventLocation.info_url.fi ||
@@ -1205,7 +1222,7 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
                               activeEventId === event.id ? "shown" : ""
                             }`}
                           >
-                            Tai
+                            Or
                           </span>
                           <a
                             href={event.offers?.[0]?.info_url.fi}
@@ -1221,7 +1238,7 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
                                 activeEventId === event.id ? "shown" : ""
                               }`}
                             />
-                            Ostaa liput tästä
+                            Buy ticket here
                           </a>
                         </div>
                       ) : null}

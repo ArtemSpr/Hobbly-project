@@ -342,7 +342,6 @@ select[name="eventType"]:focus {
 
   .image-block img {
     width: 100%;
-    height: auto;
     max-width: 100%;
   }
 
@@ -391,7 +390,7 @@ select[name="eventType"]:focus {
   }
 
   .image-block img {
-    height: 156px;
+    height: 100%;
   }
 
   .custom-upload {

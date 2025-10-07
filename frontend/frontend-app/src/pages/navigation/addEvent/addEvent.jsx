@@ -137,8 +137,8 @@ const AddEvent = ({ userData, onData }) => {
 
   const handleTimeValidation = () => {
     if (formData.startTime && formData.endTime) {
-      const start = new Date(`2000-01-01T${formData.startTime}`);
-      const end = new Date(`2000-01-01T${formData.endTime}`);
+      const start = `2000-01-01T${formData.startTime}`;
+      const end = `2000-01-01T${formData.endTime}`;
 
       if (start >= end) {
         setErrors((prev) => ({
