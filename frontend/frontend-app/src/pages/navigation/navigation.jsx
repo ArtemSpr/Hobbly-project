@@ -155,6 +155,15 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
     }
   };
 
+  // ====== FUNCTION THAT FETCHES EVENTS FROM DATABASE ======
+  const fetchEventsDB = async () => {
+    try {
+      const responseDB = await axios.get("/api/events");
+      setEvents(responseDB.data);
+    } catch (error) {
+      console.error("Error getting data:", error);
+    }
+  };
   // ====== FUNCTION THAT FETCHES EVENTS FROM API ======
   const fetchEvents = async (page) => {
     setLoading(true);
@@ -754,6 +763,19 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
   };
 
   useEffect(() => {
+    const fetchDBEvents = async () => {
+      try {
+        const responseDB = await axios.get("/api/events");
+        setNewEvents(responseDB.data);
+        console.log("Actual newEvents array:", responseDB.data);
+      } catch (error) {
+        console.error("Error getting data:", error);
+      }
+    };
+    fetchDBEvents();
+  }, []);
+
+  useEffect(() => {
     const noOwnEventsText = document.querySelector(".noOwnEvents");
 
     if (newEvents.length === 0 && userData) {
@@ -777,12 +799,16 @@ function Navigation({ userData, isCreateEventOpen, setIsCreateEventOpen }) {
         <div className="nav-account-profile">
           <img src={ProfileImage} alt="Profile" />
           <div className="nav-profile-info">
-            <span className="profile-name">{userData?.name || "user"} </span>
+            <span className="profile-name">
+              {userData?.newUser.name || "user"}{" "}
+            </span>
             <span className="profile-email">
-              {userData?.email || "userEmail@gmail.com"}{" "}
+              {userData?.newUser.email || "userEmail@gmail.com"}{" "}
             </span>
           </div>
-          <div className="profile-role">{userData?.role || "guest"}</div>
+          <div className="profile-role">
+            {userData?.newUser.role || "guest"}
+          </div>
         </div>
 
         {/* --------- PASSWORD CHANGING --------- */}

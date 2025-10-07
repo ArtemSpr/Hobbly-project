@@ -22,7 +22,7 @@ function App() {
 
   const handleChildData = (data) => {
     setUserData(data);
-    console.log("Main router get an info");
+    console.log("Main router get an info", data);
   };
 
   const handleOpenCreateEvent = (value) => {
