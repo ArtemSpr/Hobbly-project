@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import ThirdEventImage from "../../../assets/image/event-3.webp";
-// Імпорти іконок (потрібно додати шляхи до ваших іконок)
+import axios from "axios";
 import EventDate from "../../../assets/icons/date-icon.png";
 import EventStart from "../../../assets/icons/clock-icon.png";
 import EventEnd from "../../../assets/icons/clock-icon-close.png";
@@ -15,11 +15,22 @@ import "./ownEvents.css";
 
 const OwnEvents = ({ newEvents, setNewEvents, newEventImage }) => {
   const [activeEventId, setActiveEventId] = useState(null);
+  //const [newEvents, setNewEvents] = useState([]);
   const eventRefs = useRef({});
 
-  useEffect(() => {
-    console.log("Actual newEvents array:", newEvents);
-  }, [newEvents]);
+  // useEffect(() => {
+  //   const fetchDBEvents = async () => {
+  //     try {
+  //       const responseDB = await axios.get("/api/events");
+  //       setNewEvents(responseDB.data);
+  //       console.log("Actual newEvents array:", responseDB.data);
+  //     } catch (error) {
+  //       console.error("Error getting data:", error);
+  //     }
+  //   };
+
+  //   fetchDBEvents();
+  // }, []);
 
   const getDay = (date) => {
     return date || "TBD";

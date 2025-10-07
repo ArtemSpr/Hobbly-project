@@ -1,282 +1,290 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@500&family=Inter:wght@400;500;600;700&family=Crimson+Pro:wght@600;700&display=swap');
-
-
+@import url("https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@500&family=Inter:wght@400;500;600;700&family=Crimson+Pro:wght@600;700&display=swap");
 
 :root {
-    --color-dark-teal: #073b3a;
-    --color-yellow: #f5ff65;
-    --color-green: #65ff81;
-    --color-deep-green: #021919;
-    --color-white: #ffffff;
-    --color-gray: #8f8f8f;
-    --color-event-start: #4caf50;
-    --color-event-end: #f44336;
-    --color-address: #1976d2;
-    --color-email: #e64a19;
-    --color-phone: #009688;
-    --color-link: #1565c0;
-    --color-capacity: #616161;
-    --color-price: #2e7d32;
-    --color-or: #20707f;
+  --color-dark-teal: #073b3a;
+  --color-yellow: #f5ff65;
+  --color-green: #65ff81;
+  --color-deep-green: #021919;
+  --color-white: #ffffff;
+  --color-gray: #8f8f8f;
+  --color-event-start: #4caf50;
+  --color-event-end: #f44336;
+  --color-address: #1976d2;
+  --color-email: #e64a19;
+  --color-phone: #009688;
+  --color-link: #1565c0;
+  --color-capacity: #616161;
+  --color-price: #2e7d32;
+  --color-or: #20707f;
 
-    --font-heading: "Montserrat Alternates", sans-serif;
-    --font-body: 'Inter', sans-serif;
+  --font-heading: "Montserrat Alternates", sans-serif;
+  --font-body: "Inter", sans-serif;
 }
 
 html {
-    margin: 0px;
-    padding: 0px;
+  margin: 0px;
+  padding: 0px;
 }
 
 body {
-    background-image: url("../../assets/image/bg_pattern.png");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
+  background-image: url("../../assets/image/bg_pattern.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
 }
 
 .account-container {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 .account-profile {
-    display: flex;
-    flex-direction: row;
-    background-color: rgba(7, 59, 58, 0.4);
-    backdrop-filter: blur(12px) saturate(150%);
-    -webkit-backdrop-filter: blur(12px) saturate(150%);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-    border-radius: 16px;
-    width: 90%;
-    height: 120px;
-    margin: 20px 5% 0 5%;
-    padding: 10px;
+  display: flex;
+  flex-direction: row;
+  background-color: rgba(7, 59, 58, 0.4);
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  border-radius: 16px;
+  width: 90%;
+  height: 120px;
+  margin: 20px 5% 0 5%;
+  padding: 10px;
 }
 
 .account-profile img {
-    height: 100px;
-    border-radius: 50px;
+  height: 100px;
+  border-radius: 50px;
 }
 
 .profile-info {
-    display: flex;
-    flex-direction: column;
-    font-size: 15px;
-    border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  font-size: 15px;
+  border-radius: 12px;
 }
 
 .profile-info span {
-    line-height: 1.6;
-    letter-spacing: 0.3px;
-    padding: 3px 10px;
-    transition: all 0.3s ease;
+  line-height: 1.6;
+  letter-spacing: 0.3px;
+  padding: 3px 10px;
+  transition: all 0.3s ease;
 }
 
 .profile-name {
-    font-size: 20px;
-    font-family: var(--font-heading);
-    font-weight: 700;
-    margin-left: -5px;
+  font-size: 20px;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  margin-left: -5px;
 }
 
 .profile-email {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    font-family: var(--font-body);
-    font-weight: 400;
-    color: var(--color-phone);
-    margin-left: 12px;
-
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-family: var(--font-body);
+  font-weight: 400;
+  color: var(--color-phone);
+  margin-left: 12px;
 }
 
 .profile-email:hover {
-    color: var(--color-white);
-    transform: translateY(-4px);
-    cursor: pointer;
+  color: var(--color-white);
+  transform: translateY(-4px);
+  cursor: pointer;
 }
 
 .profile-email img {
-    height: 15px;
-    border-radius: none;
-    margin-left: 5px;
+  height: 15px;
+  border-radius: none;
+  margin-left: 5px;
 }
 
 .profile-role {
-    color: rgba(128, 128, 128, 0.462);
-    display: flex;
-    align-items: end;
-    justify-items: end;
-    margin-right: 5%;
+  color: rgba(128, 128, 128, 0.462);
+  display: flex;
+  align-items: end;
+  justify-items: end;
+  margin-right: 5%;
 }
 
-
-
 .account-passwordChange.hidden {
-    display: none;
+  display: none;
 }
 
 .account-passwordChange.hidden::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 90%;
-    height: 90%;
-    background: rgba(192, 192, 192, 0.5);
-    pointer-events: none;
-    z-index: 1;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 90%;
+  height: 90%;
+  background: rgba(192, 192, 192, 0.5);
+  pointer-events: none;
+  z-index: 1;
 }
 
 .password-card-form {
-    padding: 20px;
-    width: 100%;
-    margin-top: 20px;
+  padding: 20px;
+  width: 100%;
+  margin-top: 20px;
 }
 
 .passwordChange-title {
-    font-size: 20px;
-    font-family: var(--font-heading);
-    margin-bottom: 20px;
+  font-size: 20px;
+  font-family: var(--font-heading);
+  margin-bottom: 20px;
 }
 
 .password-checklist.hidden {
-    display: none;
+  display: none;
 }
 
 .passwordChange-buttons {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 20px;
 }
 
 .passwordChange-cancel {
-    padding: 12px 20px;
-    background: linear-gradient(145deg, rgba(120, 120, 120, 0.35), rgba(97, 97, 97, 0.25));
-    backdrop-filter: blur(14px) saturate(130%);
-    -webkit-backdrop-filter: blur(14px) saturate(130%);
-    border-radius: 16px;
-    border: 1px solid rgba(97, 97, 97, 0.5);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
-    width: 150px;
-    text-align: center;
-    font-family: var(--font-body);
-    font-weight: 600;
-    color: #ffffff;
-    cursor: pointer;
-    transition: all 0.3s ease;
+  padding: 12px 20px;
+  background: linear-gradient(
+    145deg,
+    rgba(120, 120, 120, 0.35),
+    rgba(97, 97, 97, 0.25)
+  );
+  backdrop-filter: blur(14px) saturate(130%);
+  -webkit-backdrop-filter: blur(14px) saturate(130%);
+  border-radius: 16px;
+  border: 1px solid rgba(97, 97, 97, 0.5);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+  width: 150px;
+  text-align: center;
+  font-family: var(--font-body);
+  font-weight: 600;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .passwordChange-cancel:hover {
-    background: linear-gradient(145deg, rgba(97, 97, 97, 0.5), rgba(120, 120, 120, 0.35));
-    transform: translateY(-2px);
-    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
+  background: linear-gradient(
+    145deg,
+    rgba(97, 97, 97, 0.5),
+    rgba(120, 120, 120, 0.35)
+  );
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
 }
 
 .passwordChange-save {
-    padding: 12px 20px;
-    background: linear-gradient(145deg, rgba(102, 205, 102, 0.35), rgba(76, 175, 80, 0.25));
-    backdrop-filter: blur(14px) saturate(130%);
-    -webkit-backdrop-filter: blur(14px) saturate(130%);
-    border-radius: 16px;
-    border: 1px solid rgba(76, 175, 80, 0.5);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
-    width: 150px;
-    text-align: center;
-    font-family: var(--font-body);
-    font-weight: 600;
-    color: #ffffff;
-    cursor: pointer;
-    transition: all 0.3s ease;
+  padding: 12px 20px;
+  background: linear-gradient(
+    145deg,
+    rgba(102, 205, 102, 0.35),
+    rgba(76, 175, 80, 0.25)
+  );
+  backdrop-filter: blur(14px) saturate(130%);
+  -webkit-backdrop-filter: blur(14px) saturate(130%);
+  border-radius: 16px;
+  border: 1px solid rgba(76, 175, 80, 0.5);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+  width: 150px;
+  text-align: center;
+  font-family: var(--font-body);
+  font-weight: 600;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .passwordChange-save:hover {
-    background: linear-gradient(145deg, rgba(76, 175, 80, 0.5), rgba(102, 205, 102, 0.35));
-    transform: translateY(-2px);
-    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
+  background: linear-gradient(
+    145deg,
+    rgba(76, 175, 80, 0.5),
+    rgba(102, 205, 102, 0.35)
+  );
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
 }
-
 
 .account-create-event {
-    text-align: center;
+  text-align: center;
 }
 
-
 .logOut-cont {
+  background-color: rgba(7, 59, 58, 0.4);
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  border-radius: 16px;
+  color: var(--color-event-end);
+  width: 90%;
+  left: 5%;
+  bottom: 10vh;
+  padding: 20px;
+  position: absolute;
+}
+
+.logOut-el a {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+  transition: 0.5s;
+}
+
+.logOut-el:hover {
+  cursor: pointer;
+}
+
+.logOut-el img {
+  height: 30px;
+}
+
+@media (min-width: 1024px) {
+  .account-passwordChange {
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+    width: 90%;
+    margin: 20px 5% 0 5%;
+  }
+
+  .password-card-form {
+    padding: 20px;
+    width: 100%;
+    background-color: rgba(32, 112, 127, 0.35);
+    backdrop-filter: blur(10px) saturate(120%);
+    -webkit-backdrop-filter: blur(10px) saturate(120%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 6px 18px rgba(16, 24, 32, 0.25);
+    border-radius: 8px;
+    z-index: 1;
+  }
+}
+
+@media (max-width: 820px) {
+  .account-passwordChange {
+    display: flex;
+    flex-direction: row;
     background-color: rgba(7, 59, 58, 0.4);
     backdrop-filter: blur(12px) saturate(150%);
     -webkit-backdrop-filter: blur(12px) saturate(150%);
     border: 1px solid rgba(255, 255, 255, 0.25);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
     border-radius: 16px;
-    color: var(--color-event-end);
     width: 90%;
-    left: 5%;
-    bottom: 10vh;
-    padding: 20px;
-    position: absolute;
-}
-
-.logOut-el a {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 5px;
-    transition: 0.5s;
-}
-
-.logOut-el:hover {
-    cursor: pointer;
-}
-
-.logOut-el img {
-    height: 30px;
-}
-
-
-@media (min-width: 1024px) {
-    .account-passwordChange {
-        display: flex;
-        flex-direction: column;
-        border-radius: 8px;
-        width: 90%;
-        margin: 20px 5% 0 5%;
-    }
-
-    .password-card-form {
-        padding: 20px;
-        width: 100%;
-        background-color: rgba(32, 112, 127, 0.35);
-        backdrop-filter: blur(10px) saturate(120%);
-        -webkit-backdrop-filter: blur(10px) saturate(120%);
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        box-shadow: 0 6px 18px rgba(16, 24, 32, 0.25);
-        border-radius: 8px;
-    }
-}
-
-@media (max-width:820px) {
-    .account-passwordChange {
-        display: flex;
-        flex-direction: row;
-        background-color: rgba(7, 59, 58, 0.4);
-        backdrop-filter: blur(12px) saturate(150%);
-        -webkit-backdrop-filter: blur(12px) saturate(150%);
-        border: 1px solid rgba(255, 255, 255, 0.25);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-        border-radius: 16px;
-        width: 90%;
-        margin: 20px 5% 0 5%;
-    }
+    margin: 20px 5% 0 5%;
+  }
 }
