@@ -77,6 +77,7 @@ const UserForm = ({ sendDataToParent }) => {
         password,
       });
       sendDataToParent(response.data.user);
+      console.log("DATA SENDED", response.data.user);
 
       if (response.status === 201) {
         console.log("Registration successful:", response.data);
